@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Build
+dist/
+
+# Logs & caches
+*.log
+npm-debug.log*
+.DS_Store
+.vite/
+*.tsbuildinfo
+
+# Env (secrets)
+.env
+.env.*
+
+# Scraper backup (regenerated locally)
+public/data/restaurants.backup.json
+
+# IDE
+.idea/
+*.swp
+*.swo

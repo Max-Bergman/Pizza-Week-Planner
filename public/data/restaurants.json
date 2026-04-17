@@ -1,0 +1,1265 @@
+[
+  {
+    "id": "spuds-mackenzie-e234557",
+    "name": "10 Barrel Brewing",
+    "address": "1411 NW Flanders, Portland, Oregon",
+    "lat": 45.5261047,
+    "lng": -122.6747179,
+    "special": "Spuds Mackenzie",
+    "description": "Whipped potato base, shredded mozzarella and cheddar cheese, smoked bacon, pickled jalapeños topped with green onions, garden herbs, parmesan cheese and sour cream.",
+    "dietaryTags": [
+      "gluten_free"
+    ],
+    "closedDays": [],
+    "pizzaServing": "whole_pie",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE1MjM5MDY2NjI0NS0xMC1CYXJyZWwuanBnIiwgImVkaXRzIjogeyJyZXNpemUiOiB7ImZpdCI6ICJpbnNpZGUiLCAicG9zaXRpb24iOiAiY2VudHJlIiwgIndpZHRoIjogOTYwLCAiaGVpZ2h0IjogNjAwLCAid2l0aG91dEVubGFyZ2VtZW50IjogZmFsc2V9LCAicm90YXRlIjogbnVsbH19"
+  },
+  {
+    "id": "the-farm-feast-e235015",
+    "name": "21st Century Pizza",
+    "address": "1221 SW Jefferson, Portland, Oregon 97201",
+    "lat": 45.5167853,
+    "lng": -122.6866585,
+    "special": "The Farm Feast",
+    "description": "Spinach, sun-dried tomatoes, chicken, topped with Italian seasoning. Made with house marinara red sauce.",
+    "dietaryTags": [],
+    "closedDays": [
+      0
+    ],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://21stcenturypizza.com",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE0NTA2MTc2OTAyNC0yMXN0LUNlbnR1cnkuanBnIiwgImVkaXRzIjogeyJyZXNpemUiOiB7ImZpdCI6ICJpbnNpZGUiLCAicG9zaXRpb24iOiAiY2VudHJlIiwgIndpZHRoIjogOTYwLCAiaGVpZ2h0IjogNjAwLCAid2l0aG91dEVubGFyZ2VtZW50IjogZmFsc2V9LCAicm90YXRlIjogbnVsbH19"
+  },
+  {
+    "id": "crema-my-pork-e236080",
+    "name": "48 NORTH PIZZERIA & PUB",
+    "address": "6500 S VIRGINIA AVE, PORTLAND, OR 97239",
+    "lat": 45.4770365,
+    "lng": -122.6736915,
+    "special": "Crema My Pork",
+    "description": "Carolina Gold BBQ base, slow-cooked pulled pork, perfectly pickled red onions, fresh jalapeños, whole milk mozzarella, finished with a lime-cilantro crema drizzle.",
+    "dietaryTags": [
+      "gluten_free"
+    ],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://everout.com/portland/events/the-portland-mercurys-pizza-week-2026/e222744/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE3MjIxNjMxODI1OS00OC1Ob3J0aC5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "the-hot-date-e235171",
+    "name": "Atlas Pizza Division",
+    "address": "3570 SE Division, Portland, Oregon 97202",
+    "lat": 45.5046379,
+    "lng": -122.6269611,
+    "special": "The Hot Date",
+    "description": "Candied bacon, chopped dates, caramelized onion, chèvre, balsamic glaze, arugula salad tossed in Newk’s Elderfire Mango Habanero hot sauce",
+    "dietaryTags": [],
+    "closedDays": [],
+    "pizzaServing": "slice",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "http://atlaspizzapdx.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTgwOTQyOTg4MS1BdGxhcy1QaXp6YS1EaXZpc2lvbi5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "schwilly-pie-e235165",
+    "name": "Atlas Pizza Foster",
+    "address": "6535 SE Foster, Portland, Oregon 97206",
+    "lat": 45.4891183,
+    "lng": -122.595065,
+    "special": "Schwilly Pie",
+    "description": "We got tiny little slices of pizza on top of a big ol' slice of pizza.",
+    "dietaryTags": [
+      "vegetarian"
+    ],
+    "closedDays": [],
+    "pizzaServing": "slice",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://atlaspizzapdx.com",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTc1NjIwOTg1LUF0bGFzLVBpenphLUZvc3Rlci5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "the-kim-chi-possible-e235167",
+    "name": "Atlas Pizza Killingsworth",
+    "address": "710 N Killingsworth, Portland, Oregon",
+    "lat": 45.5614224,
+    "lng": -122.5653896,
+    "special": "The Kim(chi)-Possible",
+    "description": "The Kim(chi)-possible pie: garlic base, spicy pork belly bulgogi, onion, baechu-kimchi, gochujang aioli drizzle, and scallions",
+    "dietaryTags": [],
+    "closedDays": [],
+    "pizzaServing": "slice",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://atlaspizzapdx.com",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTc4NDEwNjgwOS1BdGxhcy1QaXp6YS1LaWxsaW5nc3dvcnRoLmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "a-reuben-jamaica-ooh-i-wanna-take-ya-to-baby-doll-pizza-e235793",
+    "name": "Baby Doll Pizza",
+    "address": "2835 SE Stark, Portland, Oregon 97214",
+    "lat": 45.5194213,
+    "lng": -122.6365397,
+    "special": "A-Reuben, Jamaica, Ooh I Wanna Take Ya (To Baby Doll Pizza)",
+    "description": "Corned beef, sauerkraut, provolone & mozzarella cheese, green onion on a pepperoncini aioli base. (Allergy alert for Paprika)",
+    "dietaryTags": [
+      "vegetarian"
+    ],
+    "closedDays": [],
+    "pizzaServing": "slice",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE3MjMyMjY3MzAwNi1CYWJ5ZG9sbC1Tb3V0aGVhc3QuanBnIiwgImVkaXRzIjogeyJyZXNpemUiOiB7ImZpdCI6ICJpbnNpZGUiLCAicG9zaXRpb24iOiAiY2VudHJlIiwgIndpZHRoIjogOTYwLCAiaGVpZ2h0IjogNjAwLCAid2l0aG91dEVubGFyZ2VtZW50IjogZmFsc2V9LCAicm90YXRlIjogbnVsbH19"
+  },
+  {
+    "id": "belly-of-the-beast-e235792",
+    "name": "Baby Doll Pizza Northeast",
+    "address": "5201 NE Martin Luther King Jr Blvd, Portland, OR 97211",
+    "lat": 45.5606518,
+    "lng": -122.6618128,
+    "special": "Belly of the Beast",
+    "description": "Slow-roasted pork belly, caramelized onions, arugula tossed in lemon vinaigrette, topped with herb aioli.",
+    "dietaryTags": [],
+    "closedDays": [],
+    "pizzaServing": "slice",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://babydollpizza.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE3MjI3Mzc1MDUzMy1CYWJ5ZG9sbC1NTEsuanBnIiwgImVkaXRzIjogeyJyZXNpemUiOiB7ImZpdCI6ICJpbnNpZGUiLCAicG9zaXRpb24iOiAiY2VudHJlIiwgIndpZHRoIjogOTYwLCAiaGVpZ2h0IjogNjAwLCAid2l0aG91dEVubGFyZ2VtZW50IjogZmFsc2V9LCAicm90YXRlIjogbnVsbH19"
+  },
+  {
+    "id": "triple-mac-cheese-pizza-e235020",
+    "name": "Barbur World Foods",
+    "address": "9845 SW Barbur Blvd., Portland, Oregon 97219",
+    "lat": 45.4543862,
+    "lng": -122.7200123,
+    "special": "Triple (Mac &) Cheese Pizza",
+    "description": "Monterey Jack, cheddar, cream cheese, chiles, cream, poblano, dough, butter, flour, milk.",
+    "dietaryTags": [
+      "vegetarian"
+    ],
+    "closedDays": [],
+    "pizzaServing": "slice",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "http://www.barburworldfoods.com",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTY1ODI4NjIxMy1CYXJidXItV29ybGQtRm9vZHMuanBnIiwgImVkaXRzIjogeyJyZXNpemUiOiB7ImZpdCI6ICJpbnNpZGUiLCAicG9zaXRpb24iOiAiY2VudHJlIiwgIndpZHRoIjogOTYwLCAiaGVpZ2h0IjogNjAwLCAid2l0aG91dEVubGFyZ2VtZW50IjogZmFsc2V9LCAicm90YXRlIjogbnVsbH19"
+  },
+  {
+    "id": "chicken-bacon-ranch-pizza-e234548",
+    "name": "Blind Onion",
+    "address": "6031 SE Belmont St, Portland, OR 97215",
+    "lat": 45.5168927,
+    "lng": -122.601361,
+    "special": "Chicken Bacon Ranch Pizza",
+    "description": "Ranch base with chicken, mozzarella cheese, crispy bacon, and a light dusting of cheddar. Finished with a ranch drizzle and fresh herbs.",
+    "dietaryTags": [],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://www.blindonion.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MDQ0NzExNTcwMS1CbGluZC1Pbmlvbi1CZWxtb250LmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "the-caeza-e234547",
+    "name": "Blind Onion Pizza Pub",
+    "address": "3345 NE Broadway, Portland, OR 97232",
+    "lat": 45.5353661,
+    "lng": -122.6298027,
+    "special": "The Cae'Za",
+    "description": "Caesar dressing base, spinach, chicken, mozzarella, and shredded Parmesan, finished with lemon vinaigrette",
+    "dietaryTags": [
+      "vegetarian",
+      "gluten_free"
+    ],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "http://www.blindonion.com",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MDQxMTYzMjg0Mi1CbGluZC1Pbmlvbi1Ccm9hZHdheS5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "banh-to-be-wild-e234094",
+    "name": "Boxcar Pizza",
+    "address": "2701 NE Sandy Blvd, Portland, OR 97232",
+    "lat": 45.5289041,
+    "lng": -122.6382278,
+    "special": "Banh To Be Wild",
+    "description": "Mozzarella-cheddar blend, yellow curry chicken, jalapeño, pickled carrot & daikon, cilantro, sweet chili mayo",
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free"
+    ],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://www.boxcarpizzapdx.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MDEzODk4ODE4Ny1Cb3hjYXItUGl6emEuanBnIiwgImVkaXRzIjogeyJyZXNpemUiOiB7ImZpdCI6ICJpbnNpZGUiLCAicG9zaXRpb24iOiAiY2VudHJlIiwgIndpZHRoIjogOTYwLCAiaGVpZ2h0IjogNjAwLCAid2l0aG91dEVubGFyZ2VtZW50IjogZmFsc2V9LCAicm90YXRlIjogbnVsbH19"
+  },
+  {
+    "id": "thai-chicken-pizza-e235009",
+    "name": "Brix Tavern",
+    "address": "1338 NW Hoyt St, Portland, OR 97209",
+    "lat": 45.5270778,
+    "lng": -122.6848826,
+    "special": "Thai Chicken Pizza",
+    "description": "Hand-stretched crust with savory peanut sauce, mozzarella, marinated chicken, and roasted peppers. Topped with fresh bean sprouts, Sriracha, cilantro, and a crunchy crushed peanut finish.",
+    "dietaryTags": [],
+    "closedDays": [],
+    "pizzaServing": "whole_pie",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://brixtavern.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE0NjMxODQ2MjI4NC1Ccml4LmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "snyder-weccacoe-e234340",
+    "name": "Checkerboard Pizza",
+    "address": "159 Buxton Rd, Troutdale, OR 97060",
+    "lat": 45.51,
+    "lng": -122.68,
+    "special": "Snyder Weccacoe",
+    "description": "White Pie (garlic + evoo), Roasted Pork, Rapini, Calabrian Chili, Caciocavallo",
+    "dietaryTags": [
+      "gluten_free"
+    ],
+    "closedDays": [
+      1,
+      2
+    ],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://checkerboard.pizza/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MDI1MDczNDU3NS1DaGVja2VyYm9hcmQuanBnIiwgImVkaXRzIjogeyJyZXNpemUiOiB7ImZpdCI6ICJpbnNpZGUiLCAicG9zaXRpb24iOiAiY2VudHJlIiwgIndpZHRoIjogOTYwLCAiaGVpZ2h0IjogNjAwLCAid2l0aG91dEVubGFyZ2VtZW50IjogZmFsc2V9LCAicm90YXRlIjogbnVsbH19"
+  },
+  {
+    "id": "mediterranean-mojo-lamb-e233600",
+    "name": "Clarklewis",
+    "address": "1001 SE Water Ave., Portland, OR 97214",
+    "lat": 45.5154655,
+    "lng": -122.6661595,
+    "special": "Mediterranean Mojo Lamb",
+    "description": "Mojo braised Anderson Ranch lamb, harissa spiced tomato sauce, feta, kalamata olive tapenade, Mama Lil's peppers",
+    "dietaryTags": [
+      "gluten_free"
+    ],
+    "closedDays": [],
+    "pizzaServing": "whole_pie",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "http://www.clarklewispdx.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MDA4MDc5NDI5Ni1DbGFya2xld2lzLmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "pepperoni-pony-e234899",
+    "name": "Dante's PizzaSlut",
+    "address": "1 SW Third Ave, Portland, OR 97204",
+    "lat": 45.51,
+    "lng": -122.68,
+    "special": "Pepperoni Pony!",
+    "description": "Double pepperoni",
+    "dietaryTags": [],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://www.facebook.com/PizzaSlutPDX/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MDgxNzE4NTI0NC1EYW50ZXMuanBnIiwgImVkaXRzIjogeyJyZXNpemUiOiB7ImZpdCI6ICJpbnNpZGUiLCAicG9zaXRpb24iOiAiY2VudHJlIiwgIndpZHRoIjogOTYwLCAiaGVpZ2h0IjogNjAwLCAid2l0aG91dEVubGFyZ2VtZW50IjogZmFsc2V9LCAicm90YXRlIjogbnVsbH19"
+  },
+  {
+    "id": "pizza-scarp-no-chicken-e235174",
+    "name": "Dick's Pizza",
+    "address": "7738 SE 13th Ave, Portland, OR 97202",
+    "lat": 45.4688457,
+    "lng": -122.6528103,
+    "special": "PIZZA SCARP, NO CHICKEN",
+    "description": "Sausage, pickled hot peppers, red bell peppers, onion, garlic and parsley.",
+    "dietaryTags": [],
+    "closedDays": [
+      2,
+      3
+    ],
+    "pizzaServing": "slice",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://www.dicks.pizza/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTg0MzU4ODQzMy1EaWNrcy1QaXp6YS5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "the-drunken-pig-e234903",
+    "name": "Dimo's Apizza",
+    "address": "701 E Burnside, Portland, Oregon",
+    "lat": 45.5233431,
+    "lng": -122.6583963,
+    "special": "The Drunken Pig",
+    "description": "Spicy vodka sauce, bacon, fermented chili hot honey, mozzarella, Grana Padano, Pecorino, and fried basil",
+    "dietaryTags": [
+      "vegetarian"
+    ],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://dimosapizza.square.site/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MDkxOTIxMjg3My1EaW1vcy1BcGl6emEuanBnIiwgImVkaXRzIjogeyJyZXNpemUiOiB7ImZpdCI6ICJpbnNpZGUiLCAicG9zaXRpb24iOiAiY2VudHJlIiwgIndpZHRoIjogOTYwLCAiaGVpZ2h0IjogNjAwLCAid2l0aG91dEVubGFyZ2VtZW50IjogZmFsc2V9LCAicm90YXRlIjogbnVsbH19"
+  },
+  {
+    "id": "taos-e235001",
+    "name": "Double Mountain Overlook Taproom",
+    "address": "1700 N Killingsworth Street, Portland, OR 97217",
+    "lat": 45.5625216,
+    "lng": -122.6851196,
+    "special": "Taos",
+    "description": "Cilantro pesto, mozzarella, southwest marinated pork belly lardons, oven roasted corn and onions, sliced roasted red peppers, finished with cotija cheese.",
+    "dietaryTags": [
+      "gluten_free"
+    ],
+    "closedDays": [],
+    "pizzaServing": "whole_pie",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://www.doublemountainbrewery.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE0NTE2MDQ4MzI3NC1Eb3VibGUtTW91bnRhaW4tT3Zlcmxvb2suanBnIiwgImVkaXRzIjogeyJyZXNpemUiOiB7ImZpdCI6ICJpbnNpZGUiLCAicG9zaXRpb24iOiAiY2VudHJlIiwgIndpZHRoIjogOTYwLCAiaGVpZ2h0IjogNjAwLCAid2l0aG91dEVubGFyZ2VtZW50IjogZmFsc2V9LCAicm90YXRlIjogbnVsbH19"
+  },
+  {
+    "id": "belly-up-to-the-orchard-e235002",
+    "name": "Double Mountain Woodstock Taproom",
+    "address": "4436 SE Woodstock, Portland, Oregon 97206",
+    "lat": 45.4790909,
+    "lng": -122.6162138,
+    "special": "Belly Up to the Orchard",
+    "description": "Olive oil, mozzarella, thinly sliced apples and pears, braised brown sugar pork belly slices, pulled burrata, hard cheese, finished and topped with candied walnuts, hot honey, and light arugula.",
+    "dietaryTags": [
+      "gluten_free"
+    ],
+    "closedDays": [],
+    "pizzaServing": "whole_pie",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "http://www.doublemountainbrewery.com/taproom/woodstock-taproom/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE0NTI3NzAzMDE3My1Eb3VibGUtTW91bnRhaW4tV29vZHN0b2NrLmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "heated-rivalry-e235018",
+    "name": "East Glisan Pizza Lounge",
+    "address": "8001 NE Glisan, Portland, Oregon 97213",
+    "lat": 45.5265883,
+    "lng": -122.5812413,
+    "special": "Heated Rivalry",
+    "description": "3 cheese blend, roasted pepper cream cheese, house-pickled jalapeño, berry drizzle, house hot jalapeño honey, Frito crumbs, with or without bacon.",
+    "dietaryTags": [
+      "vegetarian",
+      "gluten_free"
+    ],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "http://eastglisan.com",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTU5ODg5ODc1Ny1FYXN0LUdsaXNhbi1QaXp6YS1Mb3VuZ2UuanBnIiwgImVkaXRzIjogeyJyZXNpemUiOiB7ImZpdCI6ICJpbnNpZGUiLCAicG9zaXRpb24iOiAiY2VudHJlIiwgIndpZHRoIjogOTYwLCAiaGVpZ2h0IjogNjAwLCAid2l0aG91dEVubGFyZ2VtZW50IjogZmFsc2V9LCAicm90YXRlIjogbnVsbH19"
+  },
+  {
+    "id": "smoky-4-2026-e235006",
+    "name": "Edan Pizza",
+    "address": "204 SW Yamhill St, Portland, OR 97204",
+    "lat": 45.5172657,
+    "lng": -122.6751891,
+    "special": "Smoky 4/2026",
+    "description": "Fennel sausage, garlic confit, fresh tomato, smoked peppers, smoked mozzarella, hot honey. Vegetarian sausage available.",
+    "dietaryTags": [
+      "vegetarian"
+    ],
+    "closedDays": [
+      0
+    ],
+    "pizzaServing": "whole_pie",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://edanpizza.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE0NTg0MzUxMDMxMy1FZGFuLVBpenphLmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "tater-tot-hot-dish-pizza-e235010",
+    "name": "Fast Times Pizza & Soft Serve",
+    "address": "624 E Burnside, Portland, OR 97214",
+    "lat": 45.5227049,
+    "lng": -122.6590729,
+    "special": "TATER TOT HOT DISH Pizza",
+    "description": "Creamy garlic sauce, house cheese blend, cheddar cheese, tater tots, bacon & green onions",
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free"
+    ],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://fasttimespdx.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTM4MjkyMzk0Mi1GYXN0LVRpbWVzLmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "alliuminati-e234906",
+    "name": "Fino Bistro & Pizzeria",
+    "address": "8225 N. Denver Ave, Portland, OR 97217",
+    "lat": 45.5828617,
+    "lng": -122.6872554,
+    "special": "Alliuminati",
+    "description": "The Alliuminati features a rich roasted garlic cream base topped with caramelized onions, sautéed mushrooms, crispy bacon, tender potato, and a generous dusting of parmesan, finished with fresh chives",
+    "dietaryTags": [],
+    "closedDays": [],
+    "pizzaServing": "slice",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MDk1MTEwMTc1My1GaW5vLmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "the-goat-father-e234898",
+    "name": "Fire on the Mountain",
+    "address": "3443 NE 57th, Portland, OR 97213",
+    "lat": 45.547998,
+    "lng": -122.6048592,
+    "special": "The GOAT Father",
+    "description": "Capicola ham, hot cherry bomb peppers, chèvre, hot honey.",
+    "dietaryTags": [],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "http://portlandwings.com",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE1MjM0NjkyMjI1Ny1GaXJlLW9udGhlLU1vdW50YWluLmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "haters-gonna-hate-e235007",
+    "name": "Gabby's Next Door",
+    "address": "5425 NE 30th Ave, Portland, OR 97211",
+    "lat": 45.5624004,
+    "lng": -122.635069,
+    "special": "Haters Gonna Hate",
+    "description": "Housemade focaccia, red sauce, mortadella, pineapple, jalapeño, fontina, parmesan, Italian chile crisp",
+    "dietaryTags": [],
+    "closedDays": [
+      0,
+      6
+    ],
+    "pizzaServing": "slice",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://www.instagram.com/gabbysnextdoorpdx/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTMzMzc3OTkyLUdhYnlzLU5leHQtRG9vci5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "hot-honey-hog-e235928",
+    "name": "Good Neighbor Pizzeria",
+    "address": "800 NE Dekum St., Portland, OR 97211",
+    "lat": 45.5715651,
+    "lng": -122.6572071,
+    "special": "Hot Honey Hog",
+    "description": "Red sauce base, pepperoni, pulled pork, crushed red pepper flakes and jalapeños, finished with a honey drizzle and fresh lemon zest.",
+    "dietaryTags": [],
+    "closedDays": [],
+    "pizzaServing": "slice",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "http://goodneighborpizzeria.com",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE0NjI0NTM5OTc1NS1Hb29kLU5laWdoYm9yLmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "miso-apple-pizza-e235004",
+    "name": "Hapa Pizza",
+    "address": "12755 SW Broadway Street, Portland, OR 97005",
+    "lat": 45.51,
+    "lng": -122.68,
+    "special": "Miso Apple Pizza",
+    "description": "Apple butter, apple compote, mint, shiso, miso vinaigrette, whipped lemon ricotta, house taro chips",
+    "dietaryTags": [
+      "vegetarian"
+    ],
+    "closedDays": [
+      1
+    ],
+    "pizzaServing": "whole_pie",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://www.hapapizza.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTI1OTk4NjMxNi1IYXBhLVBpenphLmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "the-wurst-pizza-ever-e235013",
+    "name": "Hopworks Brewery",
+    "address": "2944 SE Powell, Portland, OR 97202",
+    "lat": 45.4968753,
+    "lng": -122.6348432,
+    "special": "The Wurst Pizza Ever",
+    "description": "Beer cheese & stone ground mustard, mozzarella, caramelized onion, sauerkraut, and beer sausage.",
+    "dietaryTags": [],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "http://www.hopworksbeer.com",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE0NDI2MDIyNDc0Ni1Ib3B3b3Jrcy5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "the-lilia-e234900",
+    "name": "Humdinger Pizza",
+    "address": "9201 SE Foster Rd, Portland, OR 97266",
+    "lat": 45.4799163,
+    "lng": -122.568391,
+    "special": "The Lilia",
+    "description": "Guajillo chipotle sauce, mozzarella, potato, chorizo, red onion, roasted red pepper, crema, salsa cerde, cilantro",
+    "dietaryTags": [],
+    "closedDays": [],
+    "pizzaServing": "slice",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://www.humdingerpizza.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MDg1MTE1MTQ5MS1IdW1kaW5nZXIuanBnIiwgImVkaXRzIjogeyJyZXNpemUiOiB7ImZpdCI6ICJpbnNpZGUiLCAicG9zaXRpb24iOiAiY2VudHJlIiwgIndpZHRoIjogOTYwLCAiaGVpZ2h0IjogNjAwLCAid2l0aG91dEVubGFyZ2VtZW50IjogZmFsc2V9LCAicm90YXRlIjogbnVsbH19"
+  },
+  {
+    "id": "you-asked-for-it-e235164",
+    "name": "Lazy Days Brewing",
+    "address": "2326 N. Flint Ave, Portland, OR 97227",
+    "lat": 45.5400205,
+    "lng": -122.6684146,
+    "special": "You Asked for It",
+    "description": "It's a burger. On a pizza. We took a Detroit-style pizza and built a burger on top. A miniature beef slider patty on every slice, topped with American cheese, shredded lettuce, our burger sauce and dill pickles, and a tiny little bun.",
+    "dietaryTags": [],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE0NTk2Njk0MzMzOS1MYXp5LURheXMtUG9ydGxhbmQuanBnIiwgImVkaXRzIjogeyJyZXNpemUiOiB7ImZpdCI6ICJpbnNpZGUiLCAicG9zaXRpb24iOiAiY2VudHJlIiwgIndpZHRoIjogOTYwLCAiaGVpZ2h0IjogNjAwLCAid2l0aG91dEVubGFyZ2VtZW50IjogZmFsc2V9LCAicm90YXRlIjogbnVsbH19"
+  },
+  {
+    "id": "taco-the-town-e235162",
+    "name": "Lazy Days Brewing - Beaverton",
+    "address": "4505 SW Watson Ave, Beaverton, OR 97005",
+    "lat": 45.51,
+    "lng": -122.68,
+    "special": "Taco The Town",
+    "description": "Detroit-style pizza base, refried beans, brick cheese, slow simmered spiced beef, lettuce, tomato, lime crema, tortilla chips, oven roasted salsa and lime on side. Can be ordered without beef to be vegetarian.",
+    "dietaryTags": [
+      "vegetarian"
+    ],
+    "closedDays": [],
+    "pizzaServing": "whole_pie",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE0NjAzMjcwOTg2Ni1MYXp5LURheXMtQmVhdmVydG9uLmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "the-gravy-train-e234894",
+    "name": "Loowit Brewing - Ole's Outpost",
+    "address": "11202 NE Fourth Plain Blvd, Vancouver, WA 98662",
+    "lat": 45.51,
+    "lng": -122.68,
+    "special": "The Gravy Train",
+    "description": "Chorizo gravy base, mozzarella and white cheddar, bright pickled corn, a warm yolk drizzle designed to break over each slice, finished with fresh chives—inspired by classic biscuits and gravy.",
+    "dietaryTags": [],
+    "closedDays": [],
+    "pizzaServing": "whole_pie",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://loowitbrewing.com/oles-outpost",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MDcwNjM2NDA5NS1Mb293aXQtQnJld2luZy5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "chicken-piccata-e234709",
+    "name": "Meta Pizza",
+    "address": "3541 SE Milwaukie, Portland, OR 97202",
+    "lat": 45.4968561,
+    "lng": -122.6538323,
+    "special": "Chicken Piccata",
+    "description": "Chicken thigh, capers, Taggiasca olives, provolone, parsley, pecorino",
+    "dietaryTags": [
+      "gluten_free"
+    ],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://www.metapizzapdx.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MDY2NjA3OTA2MS1NZXRhLVBpenphLmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "whipped-mascarpone-smoked-salmon-pizza-e235008",
+    "name": "Metropolitan Tavern",
+    "address": "1021 NE Grand Avenue, Portland, OR 97232",
+    "lat": 45.5303388,
+    "lng": -122.6609299,
+    "special": "Whipped Mascarpone & Smoked Salmon Pizza",
+    "description": "Whipped mascarpone, smoked salmon, broccoli raab, shaved fennel, arugula, sweet vermouth reduction.",
+    "dietaryTags": [],
+    "closedDays": [],
+    "pizzaServing": "whole_pie",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "http://www.mettavern.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE0NDU2MTU1Njk5My1NZXRyb3BvbGl0YW4tVGF2ZXJuLmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "zingo-starr-it-dont-come-cheesy-e235022",
+    "name": "Mississippi Pizza Pub & Atlantis Lounge",
+    "address": "3552 N Mississippi, Portland, OR 97227",
+    "lat": 45.54863,
+    "lng": -122.675279,
+    "special": "Zingo Starr (It don't come cheesy)",
+    "description": "Tomato sauce, fresh basil, pickled asparagus, diced cherry peppers, cauliflower, nutritional yeast.",
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free"
+    ],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "http://mississippipizza.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTUwMTIyNzQzNjYyOC1NaXNzaXNzaXBwaS1QaXp6YS5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "primavera-e235016",
+    "name": "Mucca Pizzeria",
+    "address": "1026 SW Morrison St, Portland, OR 97205",
+    "lat": 45.5200715,
+    "lng": -122.6828134,
+    "special": "Primavera",
+    "description": "Pesto, mozzarella, roasted cherry tomatoes, burrata, basil",
+    "dietaryTags": [
+      "vegetarian"
+    ],
+    "closedDays": [],
+    "pizzaServing": "whole_pie",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://www.muccapizzeria.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTUyMzcxNjYxMS1NdWNjYS5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "fig-me-up-before-you-prosciutto-e235005",
+    "name": "NASO",
+    "address": "1744 SE Hawthorne Blvd, Portland, OR 97214",
+    "lat": 45.5118161,
+    "lng": -122.6483995,
+    "special": "Fig Me Up Before You Prosciutto",
+    "description": "Sweet, salty, and just a little bit seductive. Creamy brie melts into a golden base, layered with jammy figs, roasted red grapes, and ribbons of delicate prosciutto. Finished with a balsamic reduction crema, a drizzle of honey, fresh rosemary, and a crack of black pepper for that perfect bite. Rich. Balanced. Completely irresistible.",
+    "dietaryTags": [
+      "vegetarian"
+    ],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://everout.com/portland/events/the-portland-mercurys-pizza-week-2026/e222744/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTI5MjQ2OTgxNS1OYXNvLVdpbmUtQmFyLmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "gluten-free-buffalo-blue-cheese-chicken-pizza-e234546",
+    "name": "New Cascadia Traditional",
+    "address": "2502 SE Division St, Portland, OR 97202",
+    "lat": 45.5045945,
+    "lng": -122.6402368,
+    "special": "Gluten-Free Buffalo Blue Cheese Chicken Pizza",
+    "description": "Built on our artisan gluten-free crust, this pizza is topped with a bold Buffalo blue cheese sauce, butter-and-cheesy cracker-battered chicken baked to perfection, then finished with fresh scallions and crumbled blue cheese.",
+    "dietaryTags": [
+      "gluten_free"
+    ],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://newcascadiatraditional.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MDI4NDE4MjAxOS1OZXctQ2FzY2FkaWEuanBnIiwgImVkaXRzIjogeyJyZXNpemUiOiB7ImZpdCI6ICJpbnNpZGUiLCAicG9zaXRpb24iOiAiY2VudHJlIiwgIndpZHRoIjogOTYwLCAiaGVpZ2h0IjogNjAwLCAid2l0aG91dEVubGFyZ2VtZW50IjogZmFsc2V9LCAicm90YXRlIjogbnVsbH19"
+  },
+  {
+    "id": "shatta-pizza-e235392",
+    "name": "Nicholas Restaurant",
+    "address": "1109 SE Madison St, Portland, OR 98104",
+    "lat": 45.5133391,
+    "lng": -122.6544984,
+    "special": "Shatta Pizza",
+    "description": "A tender, flaky crust covered with fermented red chili paste and topped with a blend of imported Lebanese cheeses. Can be made vegan by omitting the cheese.",
+    "dietaryTags": [
+      "vegan",
+      "vegetarian"
+    ],
+    "closedDays": [],
+    "pizzaServing": "whole_pie",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "http://nicholasrestaurant.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE0NjE2OTQ1MzMzNy1OaWNob2xhcy5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "lets-get-baked-potato-pizza-e234907",
+    "name": "Oakshire Beer Hall",
+    "address": "5013 NE 42nd Ave, Portland, Oregon 97218",
+    "lat": 45.5593238,
+    "lng": -122.6206284,
+    "special": "Let's Get Baked Potato Pizza",
+    "description": "Potatoes, smoked bacon, mozzarella and cheddar cheese, green onion, sour cream.",
+    "dietaryTags": [],
+    "closedDays": [],
+    "pizzaServing": "whole_pie",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://oakbrew.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MDk3OTAxOTIyNi1PYWtzaGlyZS5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "the-carmela-e235273",
+    "name": "Original Dream Pizza",
+    "address": "4620 NE Glisan St, Portland, OR 97213",
+    "lat": 45.5263562,
+    "lng": -122.6154891,
+    "special": "The Carmela",
+    "description": "Original Dream marinara, garlic-parsley ricotta dollops and spicy Italian sausage. All atop our house-made dough with a honey-butter hand-braided crust.",
+    "dietaryTags": [],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://www.originaldreampizza.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTkwNjM4MTM0LU9yaWdpbmFsLURyZWFtLmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "bend-and-snap-e235012",
+    "name": "Oven & Shaker",
+    "address": "1134 NW Everett St. , Portland, OR 97209",
+    "lat": 45.5249598,
+    "lng": -122.6827897,
+    "special": "Bend and Snap!",
+    "description": "Rhubarb and strawberry base, goat cheese, fresh snap peas, Pecorino, and kaiware.",
+    "dietaryTags": [
+      "vegetarian",
+      "gluten_free"
+    ],
+    "closedDays": [],
+    "pizzaServing": "whole_pie",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTQyMTkyNDA0LU92ZW4tU2hha2VyLmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "the-pauper-prince-e235003",
+    "name": "Paladin Pie",
+    "address": "1027 NE Alberta St, Portland, OR 97211",
+    "lat": 45.5592283,
+    "lng": -122.6549426,
+    "special": "The Pauper Prince",
+    "description": "Bacon jam, pickled jalapeños, calabrian chili pimento cheese, and garlic chili Cheez-It crumble. All house-made.",
+    "dietaryTags": [],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://everout.com/portland/events/the-portland-mercurys-pizza-week-2026/e222744/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTIzNDUwMjU4LVBhbGFkaW4tUGllLmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "say-when-e234997",
+    "name": "Pizza Machine",
+    "address": "2216 SE 50th Ave., Portland, OR 97215",
+    "lat": 45.5070788,
+    "lng": -122.6109609,
+    "special": "Say When",
+    "description": "Garlic butter brushed crust, minestrone sauce, mozzarella, romaine lettuce, sliced Roma tomatoes, red onion, black olives, pepperoncini, grated Romano cheese, Italian dressing.",
+    "dietaryTags": [
+      "vegetarian"
+    ],
+    "closedDays": [],
+    "pizzaServing": "slice",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://pizzamachinepdx.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTA5MDY3MjcyOC1QaXp6YS1NYWNoaW5lLmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "rossa-pizza-caesar-e234999",
+    "name": "Pizza Thief",
+    "address": "1126 SE Division St Unit 200, Portland, OR 97202",
+    "lat": 45.51,
+    "lng": -122.68,
+    "special": "Rossa Pizza Caesar",
+    "description": "Tomato sauce, Pecorino, garlic bread crumbs, oregano & chile flakes, topped with our kale caesar salad",
+    "dietaryTags": [
+      "vegetarian"
+    ],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://pizzathief.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTE0OTc5NTYwMS1QaXp6YS1UaGllZi5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "rossa-pizza-caesar-e235000",
+    "name": "Pizza Thief @ Great Notion",
+    "address": "2444 NW 28th Ave, Portland, OR 97210",
+    "lat": 45.5401002,
+    "lng": -122.7088712,
+    "special": "Rossa Pizza Caesar",
+    "description": "Tomato sauce, Pecorino, garlic bread crumbs, oregano & chile flakes, topped with our kale caesar salad.",
+    "dietaryTags": [
+      "vegetarian"
+    ],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://pizzathief.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTE4NjE0MTY4LVBpenphLVRoZWlmX0dyZWF0LU5vdGlvbi5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "peace-love-n-chicken-e234897",
+    "name": "PLS on Sixth",
+    "address": "515 SW Clay St, Portland, OR 97201",
+    "lat": 45.5140127,
+    "lng": -122.6807667,
+    "special": "Peace, Love, 'n Chicken",
+    "description": "Grilled chicken, tangy BBQ, red onion, fresh basil, crispy bacon, mozzarella cheese, garlic oil",
+    "dietaryTags": [
+      "gluten_free"
+    ],
+    "closedDays": [
+      0,
+      1
+    ],
+    "pizzaServing": "whole_pie",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://www.plsonsixth.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MDc0NzAzMzkwNy1QTFMtU2l4dGguanBnIiwgImVkaXRzIjogeyJyZXNpemUiOiB7ImZpdCI6ICJpbnNpZGUiLCAicG9zaXRpb24iOiAiY2VudHJlIiwgIndpZHRoIjogOTYwLCAiaGVpZ2h0IjogNjAwLCAid2l0aG91dEVubGFyZ2VtZW50IjogZmFsc2V9LCAicm90YXRlIjogbnVsbH19"
+  },
+  {
+    "id": "prosciutto-broccoli-rabe-e235017",
+    "name": "Pop Pizza",
+    "address": "610 SE Morrison St, Portland, OR 97214",
+    "lat": 45.5170756,
+    "lng": -122.6595573,
+    "special": "Prosciutto Broccoli Rabe",
+    "description": "Prosciutto di Parma, broccoli rabe, house white sauce, our three cheese blend, mushroom confit, Calabrian chilies",
+    "dietaryTags": [
+      "vegetarian",
+      "gluten_free"
+    ],
+    "closedDays": [
+      1,
+      2
+    ],
+    "pizzaServing": "whole_pie",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://www.poppizza.co/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTU1ODMwODIyOC1Qb3AtUGl6emEuanBnIiwgImVkaXRzIjogeyJyZXNpemUiOiB7ImZpdCI6ICJpbnNpZGUiLCAicG9zaXRpb24iOiAiY2VudHJlIiwgIndpZHRoIjogOTYwLCAiaGVpZ2h0IjogNjAwLCAid2l0aG91dEVubGFyZ2VtZW50IjogZmFsc2V9LCAicm90YXRlIjogbnVsbH19"
+  },
+  {
+    "id": "you-gotta-ricotta-e234996",
+    "name": "Portland Cider Company",
+    "address": "8925 SE Jannsen, Building F, Clackamas, Oregon 97015",
+    "lat": 45.51,
+    "lng": -122.68,
+    "special": "You Gotta Ricotta",
+    "description": "Seasoned whipped ricotta, basil, and homemade red pepper aioli over red sauce.",
+    "dietaryTags": [
+      "vegetarian",
+      "gluten_free"
+    ],
+    "closedDays": [
+      1,
+      2
+    ],
+    "pizzaServing": "whole_pie",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTA1NDUzMTkxNy1Qb3J0bGFuZC1DaWRlci5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "artichoke-garlic-pizza-e235634",
+    "name": "Rialto",
+    "address": "529 SW 4th, Portland, OR 97204",
+    "lat": 45.5194403,
+    "lng": -122.6763238,
+    "special": "Artichoke Garlic Pizza",
+    "description": "Garlic parmesan base topped with artichoke hearts, spinach, and green onion, finished with a garlic herb crust.",
+    "dietaryTags": [
+      "vegetarian"
+    ],
+    "closedDays": [],
+    "pizzaServing": "slice",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "http://rialtopoolroom.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE1MzExNTg5NTAwOC1SaWFsdG8uanBnIiwgImVkaXRzIjogeyJyZXNpemUiOiB7ImZpdCI6ICJpbnNpZGUiLCAicG9zaXRpb24iOiAiY2VudHJlIiwgIndpZHRoIjogOTYwLCAiaGVpZ2h0IjogNjAwLCAid2l0aG91dEVubGFyZ2VtZW50IjogZmFsc2V9LCAicm90YXRlIjogbnVsbH19"
+  },
+  {
+    "id": "super-mario-galaxy-pizza-e234226",
+    "name": "Rudy's Gourmet Pizza",
+    "address": "2443 SE Powell Blvd, Portland, OR 97202",
+    "lat": 45.4984062,
+    "lng": -122.6408784,
+    "special": "Super Mario Galaxy Pizza",
+    "description": "Red sauce base loaded with mozzarella cheese, Italian sausage, red and green bell peppers, mushrooms, peaches and basil.",
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free"
+    ],
+    "closedDays": [],
+    "pizzaServing": "whole_pie",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "http://rudysgourmetpizza.com",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MDIxODgwOTQwNS1SdWR5cy5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "one-hit-wonder-e235272",
+    "name": "Ruse Brewing",
+    "address": "1505 NW 21st Ave., OR, 97210 USA",
+    "lat": 45.51,
+    "lng": -122.68,
+    "special": "One Hit Wonder",
+    "description": "Mozzarella, brick cheddar, sweet corn, green chili, crema Mexicana, Flaming Hot Cheetos, lime pickled onion, cilantro",
+    "dietaryTags": [
+      "vegetarian",
+      "gluten_free"
+    ],
+    "closedDays": [],
+    "pizzaServing": "whole_pie",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://www.rusebrewing.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTg3NDk0MjE0OS1SdXNlLUJyZXdpbmcuanBnIiwgImVkaXRzIjogeyJyZXNpemUiOiB7ImZpdCI6ICJpbnNpZGUiLCAicG9zaXRpb24iOiAiY2VudHJlIiwgIndpZHRoIjogOTYwLCAiaGVpZ2h0IjogNjAwLCAid2l0aG91dEVubGFyZ2VtZW50IjogZmFsc2V9LCAicm90YXRlIjogbnVsbH19"
+  },
+  {
+    "id": "sausage-pesto-e236082",
+    "name": "Satellite Tavern",
+    "address": "5101 N Interstate Ave, Portland, OR 97117",
+    "lat": 45.5599513,
+    "lng": -122.6825642,
+    "special": "Sausage Pesto",
+    "description": "Creamy pesto base, house made sausage on a garlic herb crust, topped with fresh basil, mushrooms, and parmesean.",
+    "dietaryTags": [],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://www.satellitetavern.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTUwMTM0NTMwNDMzLVNhdGVsbGl0ZS1UYXZlcm4uanBnIiwgImVkaXRzIjogeyJyZXNpemUiOiB7ImZpdCI6ICJpbnNpZGUiLCAicG9zaXRpb24iOiAiY2VudHJlIiwgIndpZHRoIjogOTYwLCAiaGVpZ2h0IjogNjAwLCAid2l0aG91dEVubGFyZ2VtZW50IjogZmFsc2V9LCAicm90YXRlIjogbnVsbH19"
+  },
+  {
+    "id": "bada-bing-e235637",
+    "name": "Scottie's Pizza Parlor NW",
+    "address": "685 NW 21st Avenue, Portland, OR 97209",
+    "lat": 45.5276012,
+    "lng": -122.6947443,
+    "special": "Bada Bing!",
+    "description": "Cherry pizza with brie, lemon zesty pistachio pesto, and balsamic drizzle.",
+    "dietaryTags": [
+      "vegetarian"
+    ],
+    "closedDays": [
+      0,
+      1
+    ],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE0NDczNjY2NzIwMy1TY290dGllcy5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "bada-bing-e235636",
+    "name": "Scottie's Pizza Parlor SE",
+    "address": "2128 SE Division, Portland, Oregon 97202",
+    "lat": 45.5046752,
+    "lng": -122.6439469,
+    "special": "Bada Bing!",
+    "description": "Cherry pizza with brie, lemon zesty pistachio pesto, and balsamic drizzle.",
+    "dietaryTags": [
+      "vegetarian"
+    ],
+    "closedDays": [
+      0,
+      1
+    ],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "http://www.scottiespizzaparlor.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE0NDc5NDQxNTU1My1TY290dGllcy5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "havana-slice-e234901",
+    "name": "Signal Station Pizza",
+    "address": "8302 N Lombard St., Portland, OR 97203",
+    "lat": 45.5892075,
+    "lng": -122.7523183,
+    "special": "Havana Slice",
+    "description": "Olive oil, mozzarella, mojo-marinated pulled pork, ham, dill pickles, Swiss cheese, and squirt of classic yellow mustard.",
+    "dietaryTags": [
+      "gluten_free"
+    ],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "http://www.signalstationpizza.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MDg4MDY3MjUyMS1TaWduYWwtU3RhdGlvbi5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "happiness-is-a-shawarm-gun-e235394",
+    "name": "Straight From New York Pizza",
+    "address": "3701 SE Hawthorne, Potland, Oregon 97214",
+    "lat": 45.51,
+    "lng": -122.68,
+    "special": "Happiness is a Shawarm Gun",
+    "description": "Tzatziki, ground lamb, red onion, pickled turnip, diced tomato, feta.",
+    "dietaryTags": [
+      "gluten_free"
+    ],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "http://www.sfnypizza.com/hawthorne",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE0NDIwNjU5NDE5My1TRk5ZLUhhd3Rob3JuZS5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "the-pork-store-e235393",
+    "name": "Straight From New York Pizza",
+    "address": "3330 SE Belmont, Portland, Oregon",
+    "lat": 45.5155593,
+    "lng": -122.6302362,
+    "special": "The Pork Store",
+    "description": "House marinara, provolone, capocollo, salami, vinegar peppers.",
+    "dietaryTags": [
+      "gluten_free"
+    ],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "http://www.sfnypizza.com/belmont/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE0NDA5MjQ1Mzg4Ni1TRk5ZLUJlbG1vbnQuanBnIiwgImVkaXRzIjogeyJyZXNpemUiOiB7ImZpdCI6ICJpbnNpZGUiLCAicG9zaXRpb24iOiAiY2VudHJlIiwgIndpZHRoIjogOTYwLCAiaGVpZ2h0IjogNjAwLCAid2l0aG91dEVubGFyZ2VtZW50IjogZmFsc2V9LCAicm90YXRlIjogbnVsbH19"
+  },
+  {
+    "id": "chicken-breast-and-artichoke-pizza-e235011",
+    "name": "Taylor Street Tavern",
+    "address": "808 SW Taylor Street, Portland, OR 97205",
+    "lat": 45.5181266,
+    "lng": -122.6817193,
+    "special": "Chicken Breast and Artichoke Pizza",
+    "description": "Roasted chicken breast, garlic oil, mozzarella cheese, artichoke hearts, pickled peppers, and pesto sauce.",
+    "dietaryTags": [],
+    "closedDays": [],
+    "pizzaServing": "whole_pie",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "http://taylorstreettavern.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE0NTczMzEzODI5NC1UYXlsb3ItU3RyZWV0LmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "staten-island-trio-e234995",
+    "name": "The Focacceria",
+    "address": "1613 SE Bybee Blvd, Portland, OR 97202",
+    "lat": 45.473836,
+    "lng": -122.6496214,
+    "special": "Staten Island Trio",
+    "description": "Focaccia topped with mozzarella, provolone, red sauce, pesto, vodka sauce",
+    "dietaryTags": [
+      "vegetarian"
+    ],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://www.montelupo.co/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTU5Mzc0MDE1MDU4MS1Gb2NhY2NlcmlhLmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "taumoeba-e235633",
+    "name": "The Secret Pizza Society",
+    "address": "7201 NE Glisan, Portland, Oregon 97213",
+    "lat": 45.5266123,
+    "lng": -122.5884362,
+    "special": "TAUMOEBA",
+    "description": "Artichoke, spinach, garlic, tomato, onion, parsley, and parmesan.",
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free"
+    ],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://secretpizzasociety.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE0NDQ4ODkyMzk4Ny1TZWNyZXQtUGl6emEtU29jaWV0eS5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "cash-rules-everything-guanciale-creme-fraiche-get-salami-pickled-pickled-fennel-yall-e234708",
+    "name": "The Social Spoon",
+    "address": "550 SW Oak St, Portland, OR 97204",
+    "lat": 45.5212997,
+    "lng": -122.6769322,
+    "special": "Cash Rules Everything Guanciale / Creme Fraiche / Get Salami / Pickled Pickled Fennel Y'all",
+    "description": "Olympia Provisions Soppressata, Mama Lil's Peppers, pickled fennel, creme fraiche, parsley, mozzarella, provolone, Asiago, and a guanciale-Calabrian chile marinara",
+    "dietaryTags": [],
+    "closedDays": [
+      0
+    ],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MDU5ODcyNzQyNi1Tb2NpYWwtU3Bvb24uanBnIiwgImVkaXRzIjogeyJyZXNpemUiOiB7ImZpdCI6ICJpbnNpZGUiLCAicG9zaXRpb24iOiAiY2VudHJlIiwgIndpZHRoIjogOTYwLCAiaGVpZ2h0IjogNjAwLCAid2l0aG91dEVubGFyZ2VtZW50IjogZmFsc2V9LCAicm90YXRlIjogbnVsbH19"
+  },
+  {
+    "id": "country-reuben-pizza-e235014",
+    "name": "The Star",
+    "address": "1309 NW Hoyt, Portland, Oregon",
+    "lat": 45.5273446,
+    "lng": -122.68462,
+    "special": "Country Reuben Pizza",
+    "description": "Homemade thousand island dressing, classic mozzarella, corned beef, sauerkraut, red onions, and Swiss cheese.",
+    "dietaryTags": [
+      "gluten_free"
+    ],
+    "closedDays": [],
+    "pizzaServing": "whole_pie",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://www.thestarportland.com",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTQ3NTczMTUwNC1TdGFyLVBpenphLmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "athena-dion-e234994",
+    "name": "Via Chicago",
+    "address": "1465 NE Prescott St, Portland, OR 97211",
+    "lat": 45.5556045,
+    "lng": -122.6502939,
+    "special": "Athena Dion",
+    "description": "Homemade arugula pesto, feta and sliced red onions",
+    "dietaryTags": [
+      "vegetarian"
+    ],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "http://viachicagopizza.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTAwNjYxNzYxMy1WaWEtQ2hpY2Fnby5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "flaming-mac-n-cheeto-e234553",
+    "name": "Von Ebert Brewing",
+    "address": "11800 NW Cedar Falls Dr #110, Portland, OR 97229",
+    "lat": 45.521288,
+    "lng": -122.8013785,
+    "special": "Flaming Mac N' Cheeto",
+    "description": "We want to highlight comfort food all on one pie! Pizza, mac' n cheese, and Flaming Hots are a trio guaranteed to bring you a few moments of comfort and nostalgia!",
+    "dietaryTags": [
+      "vegetarian"
+    ],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://www.vonebertbrewing.com/welcome/#locations-section",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MDUzNjI4NTUtVm9uLUViZXJ0LUJlYXZlcnRvbi5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "everything-but-the-bagel-e234998",
+    "name": "Von Ebert Brewing Glendoveer + Kitchen",
+    "address": "14021 NE Glisan St, Portland, OR 97230",
+    "lat": 45.5270564,
+    "lng": -122.5183898,
+    "special": "Everything But The Bagel",
+    "description": "Whipped lemony cream cheese, mozzarella, smoked salmon, capers, fresh red onion, dill, dressed arugula, and everything bagel seasoning",
+    "dietaryTags": [
+      "gluten_free"
+    ],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://www.vonebertbrewing.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTEyMDA3NzYxNy1Wb24tRWJlcnQtR2xlbmRvdmVlci5qcGciLCAiZWRpdHMiOiB7InJlc2l6ZSI6IHsiZml0IjogImluc2lkZSIsICJwb3NpdGlvbiI6ICJjZW50cmUiLCAid2lkdGgiOiA5NjAsICJoZWlnaHQiOiA2MDAsICJ3aXRob3V0RW5sYXJnZW1lbnQiOiBmYWxzZX0sICJyb3RhdGUiOiBudWxsfX0="
+  },
+  {
+    "id": "the-garden-father-e235021",
+    "name": "World Foods",
+    "address": "830 NW Everett St, Portland, Oregon 97209",
+    "lat": 45.5249212,
+    "lng": -122.6798449,
+    "special": "The Garden Father",
+    "description": "Red pepper, feta, eggplant, artichokes, sausage, mint, dough, olive oil.",
+    "dietaryTags": [],
+    "closedDays": [],
+    "pizzaServing": "slice",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "http://www.worldfoodsportland.com",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTY4ODA0MDM2Mi1Xb3JsZC1Gb29kcy1FdmVyZXR0LmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  },
+  {
+    "id": "baa-baa-boom-e235019",
+    "name": "Ya Hala",
+    "address": "8005 SE Stark St., Portland, OR 97215",
+    "lat": 45.5192603,
+    "lng": -122.5813084,
+    "special": "“Baa Baa” Boom",
+    "description": "Tomato, harissa, lamb, onions, feta, pomegranate molasses, mint, dough, olive oil.",
+    "dietaryTags": [],
+    "closedDays": [],
+    "pizzaServing": "both",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "http://www.yahalarestaurant.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NDY1MTYyNzk4MDk5LVlhLUhhbGEuanBnIiwgImVkaXRzIjogeyJyZXNpemUiOiB7ImZpdCI6ICJpbnNpZGUiLCAicG9zaXRpb24iOiAiY2VudHJlIiwgIndpZHRoIjogOTYwLCAiaGVpZ2h0IjogNjAwLCAid2l0aG91dEVubGFyZ2VtZW50IjogZmFsc2V9LCAicm90YXRlIjogbnVsbH19"
+  },
+  {
+    "id": "the-italian-big-mac-e234225",
+    "name": "Yum's of PDX",
+    "address": "830 SE 8th Ave, Portland, OR 97214",
+    "lat": 45.5167618,
+    "lng": -122.6575363,
+    "special": "The Italian Big Mac",
+    "description": "Provolone, mozzarella, romano, crumbled Italian fennel sausage, picked red onion, toasted sesame, kosher dill pickles, and a secret burger sauce.",
+    "dietaryTags": [
+      "vegetarian",
+      "gluten_free"
+    ],
+    "closedDays": [
+      1,
+      2
+    ],
+    "pizzaServing": "whole_pie",
+    "priceSlice": 4,
+    "priceWhole": 25,
+    "website": "https://www.yumsofpdx.com/",
+    "imageUrl": "https://d2sa0osf92td39.cloudfront.net/eyJidWNrZXQiOiAiZXZlcm91dC1pbWFnZXMtcHJvZHVjdGlvbiIsICJrZXkiOiAiaW1hZ2UtMTc3NTE0NDMxMTYzNjcyNi1ZdW1zLmpwZyIsICJlZGl0cyI6IHsicmVzaXplIjogeyJmaXQiOiAiaW5zaWRlIiwgInBvc2l0aW9uIjogImNlbnRyZSIsICJ3aWR0aCI6IDk2MCwgImhlaWdodCI6IDYwMCwgIndpdGhvdXRFbmxhcmdlbWVudCI6IGZhbHNlfSwgInJvdGF0ZSI6IG51bGx9fQ=="
+  }
+]

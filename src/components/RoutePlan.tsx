@@ -1,0 +1,99 @@
+import type { RoutePlan as RoutePlanType, LatLng } from "../types";
+import { DayItinerary } from "./DayItinerary";
+
+interface RoutePlanProps {
+  plan: RoutePlanType;
+  userLocation: LatLng;
+  onBack: () => void;
+}
+
+export function RoutePlan({ plan, userLocation, onBack }: RoutePlanProps) {
+  const hours = Math.floor(plan.totalDriveMinutes / 60);
+  const mins = plan.totalDriveMinutes % 60;
+  const driveLabel = hours > 0 ? `${hours}h ${mins}m` : `${mins} min`;
+
+  return (
+    <div>
+      {/* Summary bar */}
+      <div className="bg-white rounded-2xl shadow-sm border border-orange-100 p-5 mb-6">
+        <div className="flex flex-wrap justify-between items-start gap-4">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">Your Pizza Routes</h2>
+            <p className="text-gray-500 text-sm mt-1">
+              April 20–26, 2026 &middot; $4 per slice
+            </p>
+          </div>
+          <button
+            onClick={onBack}
+            className="px-4 py-2 border-2 border-gray-200 rounded-xl text-gray-700 text-sm font-medium hover:border-orange-300 transition-colors"
+          >
+            ← Back to Browsing
+          </button>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
+          <Stat
+            value={plan.totalRestaurants.toString()}
+            label="Total Stops"
+            color="text-red-700"
+          />
+          <Stat value={driveLabel} label="Total Driving" color="text-orange-600" />
+          <Stat
+            value={`${plan.mustEatsCovered}/${plan.mustEatsTotal}`}
+            label="Must-Eats Covered"
+            color="text-green-700"
+          />
+          <Stat
+            value={plan.days.filter((d) => d.stops.length > 0).length.toString()}
+            label="Active Days"
+            color="text-blue-600"
+          />
+        </div>
+      </div>
+
+      {/* Warnings */}
+      {plan.warnings.length > 0 && (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6">
+          <p className="font-semibold text-yellow-800 text-sm mb-1">
+            ⚠ A few things to note:
+          </p>
+          <ul className="space-y-1">
+            {plan.warnings.map((w, i) => (
+              <li key={i} className="text-sm text-yellow-700 list-disc list-inside">
+                {w}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Day itineraries */}
+      <div className="space-y-6">
+        {plan.days.map((day) => (
+          <DayItinerary
+            key={day.date.toISOString()}
+            day={day}
+            userLocation={userLocation}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Stat({
+  value,
+  label,
+  color,
+}: {
+  value: string;
+  label: string;
+  color: string;
+}) {
+  return (
+    <div className="bg-orange-50 rounded-xl p-3 text-center">
+      <p className={`text-2xl font-bold ${color}`}>{value}</p>
+      <p className="text-xs text-gray-500 mt-0.5">{label}</p>
+    </div>
+  );
+}
