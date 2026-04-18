@@ -6,7 +6,7 @@ import { totalNNDepotTourMiles } from "./tsp";
  * Respects locked restaurant IDs (single-day must-eats), closed days, and per-day max.
  */
 export function optimizeAssignmentsForGlobalDriving(
-  userLoc: LatLng,
+  dayStarts: LatLng[],
   days: Date[],
   assignments: Restaurant[][],
   lockedIds: ReadonlySet<string>,
@@ -21,14 +21,14 @@ export function optimizeAssignmentsForGlobalDriving(
   const canBeOnDay = (r: Restaurant, dayIdx: number) =>
     !r.closedDays.includes(dayOfWeek(dayIdx));
 
-  let bestScore = totalNNDepotTourMiles(userLoc, assignments);
+  let bestScore = totalNNDepotTourMiles(dayStarts, assignments);
 
   for (let iter = 0; iter < iterations; iter++) {
     const moveOrSwap = Math.random() < 0.55 ? "move" : "swap";
 
     if (moveOrSwap === "move") {
       tryRandomMove(
-        userLoc,
+        dayStarts,
         assignments,
         lockedIds,
         maxPerDay,
@@ -43,7 +43,7 @@ export function optimizeAssignmentsForGlobalDriving(
       );
     } else {
       tryRandomSwap(
-        userLoc,
+        dayStarts,
         assignments,
         lockedIds,
         canBeOnDay,
@@ -60,7 +60,7 @@ export function optimizeAssignmentsForGlobalDriving(
 }
 
 function tryRandomMove(
-  userLoc: LatLng,
+  dayStarts: LatLng[],
   assignments: Restaurant[][],
   lockedIds: ReadonlySet<string>,
   maxPerDay: number[],
@@ -93,7 +93,7 @@ function tryRandomMove(
     fromArr.splice(pos, 1);
     toArr.push(r);
 
-    const score = totalNNDepotTourMiles(userLoc, assignments);
+    const score = totalNNDepotTourMiles(dayStarts, assignments);
     if (accept(score)) return;
 
     toArr.pop();
@@ -102,7 +102,7 @@ function tryRandomMove(
 }
 
 function tryRandomSwap(
-  userLoc: LatLng,
+  dayStarts: LatLng[],
   assignments: Restaurant[][],
   lockedIds: ReadonlySet<string>,
   canBeOnDay: (r: Restaurant, dayIdx: number) => boolean,
@@ -130,7 +130,7 @@ function tryRandomSwap(
   a[ia] = r2;
   b[ib] = r1;
 
-  const score = totalNNDepotTourMiles(userLoc, assignments);
+  const score = totalNNDepotTourMiles(dayStarts, assignments);
   if (accept(score)) return;
 
   a[ia] = r1;

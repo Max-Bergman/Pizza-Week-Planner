@@ -39,14 +39,33 @@ export interface DayStopsBounds {
 /** Key: local calendar `YYYY-MM-DD` (see `dayKeyLocal`). Omitted keys use app defaults. */
 export type StopsPerDayMap = Record<string, DayStopsBounds>;
 
+export type PlanningMode = "simple" | "advanced";
+
+/** Per calendar day when using advanced planning (key = YYYY-MM-DD). */
+export interface DayAdvancedPrefs {
+  address: string;
+  location: LatLng | null;
+  radiusMiles: number;
+  minStops: number;
+  maxStops: number;
+}
+
+export type AdvancedDayPrefsMap = Record<string, DayAdvancedPrefs>;
+
 export interface UserPreferences {
+  /** Simple = one address/radius/stops pattern; Advanced = per-day controls. */
+  planningMode: PlanningMode;
   selectedDays: Date[];
   address: string;
   location: LatLng | null;
   radiusMiles: number;
   dietaryFilters: DietaryTag[];
-  /** Per selected calendar day; missing keys use defaults (min 2, max 5). */
+  /** Simple mode: per-day min/max (defaults 2–5). Ignored for min/max when advanced row exists. */
   stopsPerDay: StopsPerDayMap;
+  /** Simple mode only: single min/max applied to every selected day. */
+  simpleStops: DayStopsBounds;
+  /** Advanced: fine-grained prefs per Pizza Week day. */
+  advancedDayPrefs: AdvancedDayPrefsMap;
 }
 
 export interface LatLng {
@@ -67,6 +86,8 @@ export interface RoutePlan {
 
 export interface DayRoute {
   date: Date;
+  /** Start/end point used for this day's driving route. */
+  routeStart: LatLng;
   stops: RouteStop[];
   totalDriveMinutes: number;
   routeGeometry: GeoJSON.LineString | null; // OSRM polyline for map display

@@ -1,33 +1,35 @@
 import { useState, useMemo } from "react";
 import type { BrowseFilters } from "../lib/browseFilter";
-import type { Restaurant, Rating, RatingsMap, LatLng } from "../types";
-import { haversineDistance } from "../lib/geo";
+import type { Restaurant, Rating, RatingsMap, UserPreferences } from "../types";
 import { BrowseFiltersBar } from "./BrowseFiltersBar";
 import { RestaurantCard } from "./RestaurantCard";
 import { RestaurantMap } from "./RestaurantMap";
+import {
+  browseMapCenter,
+  browseMapRadiusZones,
+  distanceFromNearestBrowseAnchor,
+} from "../lib/planningContext";
 
 interface RestaurantListProps {
+  prefs: UserPreferences;
   restaurants: Restaurant[];
   /** Count after step 1 prefs only (before browse filters). */
   totalInRange: number;
   browseFilters: BrowseFilters;
   onBrowseFiltersChange: (next: BrowseFilters) => void;
   ratings: RatingsMap;
-  userLocation: LatLng | null;
-  radiusMiles: number;
   onRatingChange: (id: string, rating: Rating) => void;
   onPlanRoutes: () => void;
   loading: boolean;
 }
 
 export function RestaurantList({
+  prefs,
   restaurants,
   totalInRange,
   browseFilters,
   onBrowseFiltersChange,
   ratings,
-  userLocation,
-  radiusMiles,
   onRatingChange,
   onPlanRoutes,
   loading,
@@ -51,14 +53,15 @@ export function RestaurantList({
     [restaurants, ratings]
   );
 
+  const mapZones = useMemo(() => browseMapRadiusZones(prefs), [prefs]);
+  const mapCenter = useMemo(() => browseMapCenter(prefs), [prefs]);
+
   const sorted = useMemo(() => {
-    if (!userLocation) return restaurants;
-    return [...restaurants].sort(
-      (a, b) =>
-        haversineDistance(userLocation, { lat: a.lat, lng: a.lng }) -
-        haversineDistance(userLocation, { lat: b.lat, lng: b.lng })
-    );
-  }, [restaurants, userLocation]);
+    if (!mapCenter || mapZones.length === 0) return restaurants;
+    const dist = (r: Restaurant) =>
+      distanceFromNearestBrowseAnchor(prefs, { lat: r.lat, lng: r.lng }) ?? Infinity;
+    return [...restaurants].sort((a, b) => dist(a) - dist(b));
+  }, [restaurants, prefs, mapCenter, mapZones.length]);
 
   const plannable = useMemo(() => {
     return restaurants.filter((r) => {
@@ -135,7 +138,11 @@ export function RestaurantList({
                 key={r.id}
                 restaurant={r}
                 rating={ratings.get(r.id) ?? "neutral"}
-                userLocation={userLocation}
+                userLocation={mapCenter}
+                distanceMilesOverride={distanceFromNearestBrowseAnchor(prefs, {
+                  lat: r.lat,
+                  lng: r.lng,
+                })}
                 onRatingChange={(rating) => onRatingChange(r.id, rating)}
                 highlighted={hoveredId === r.id}
                 onHover={setHoveredId}
@@ -144,18 +151,22 @@ export function RestaurantList({
           )}
         </div>
 
-        {userLocation && sorted.length > 0 && (
+        {mapCenter && mapZones.length > 0 && sorted.length > 0 && (
           <div className="order-1 md:order-2 md:w-96 md:shrink-0">
             <div className="md:sticky md:top-4 h-72 md:h-[calc(100vh-180px)] rounded-xl overflow-hidden shadow-sm border border-orange-100">
               <RestaurantMap
                 restaurants={sorted}
                 ratings={ratings}
-                center={userLocation}
-                radiusMiles={radiusMiles}
+                zones={mapZones}
                 highlightedId={hoveredId}
                 onMarkerClick={setHoveredId}
               />
             </div>
+            {prefs.planningMode === "advanced" && mapZones.length > 1 && (
+              <p className="text-xs text-gray-500 mt-2 px-1">
+                Each colored ring is that day&apos;s start point and search radius.
+              </p>
+            )}
           </div>
         )}
       </div>

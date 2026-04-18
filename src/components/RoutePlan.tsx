@@ -1,13 +1,12 @@
-import type { RoutePlan as RoutePlanType, LatLng } from "../types";
+import type { RoutePlan as RoutePlanType } from "../types";
 import { DayItinerary } from "./DayItinerary";
 
 interface RoutePlanProps {
   plan: RoutePlanType;
-  userLocation: LatLng;
   onBack: () => void;
 }
 
-export function RoutePlan({ plan, userLocation, onBack }: RoutePlanProps) {
+export function RoutePlan({ plan, onBack }: RoutePlanProps) {
   const hours = Math.floor(plan.totalDriveMinutes / 60);
   const mins = plan.totalDriveMinutes % 60;
   const driveLabel = hours > 0 ? `${hours}h ${mins}m` : `${mins} min`;
@@ -70,11 +69,7 @@ export function RoutePlan({ plan, userLocation, onBack }: RoutePlanProps) {
       {/* Day itineraries */}
       <div className="space-y-6">
         {plan.days.map((day) => (
-          <DayItinerary
-            key={day.date.toISOString()}
-            day={day}
-            userLocation={userLocation}
-          />
+          <DayItinerary key={day.date.toISOString()} day={day} />
         ))}
       </div>
     </div>

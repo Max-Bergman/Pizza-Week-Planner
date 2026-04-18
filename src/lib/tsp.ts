@@ -108,13 +108,15 @@ export function planRestaurantVisitOrder(
   return refineTourWithTwoOpt(start, seed);
 }
 
-/** Total miles across days, each day scored with NN depot tour (fast objective). */
+/** Total miles across days; each day uses its own start for the NN depot tour. */
 export function totalNNDepotTourMiles(
-  start: LatLng,
+  dayStarts: LatLng[],
   perDay: Restaurant[][]
 ): number {
   let sum = 0;
-  for (const day of perDay) {
+  for (let d = 0; d < perDay.length; d++) {
+    const day = perDay[d]!;
+    const start = dayStarts[d]!;
     if (day.length === 0) continue;
     const ord = solveNearestNeighborTSP(start, day);
     sum += depotTourMiles(start, ord);

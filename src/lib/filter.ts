@@ -1,8 +1,10 @@
 import type { Restaurant, UserPreferences, DietaryTag } from "../types";
 import { isWithinRadius } from "./geo";
+import { resolveDayRoutingPrefs } from "./planningContext";
 
 /**
  * Filter restaurants based on user preferences (radius + dietary).
+ * Simple: one home + radius. Advanced: in range of any selected day's home + radius.
  * Does NOT filter by day/closure — that happens during route planning.
  */
 export function filterRestaurants(
@@ -10,17 +12,24 @@ export function filterRestaurants(
   prefs: UserPreferences
 ): Restaurant[] {
   return restaurants.filter((r) => {
-    if (!prefs.location) return true;
-
-    if (!isWithinRadius({ lat: r.lat, lng: r.lng }, prefs.location, prefs.radiusMiles)) {
-      return false;
-    }
+    const p = { lat: r.lat, lng: r.lng };
 
     if (!matchesDietary(r.dietaryTags, prefs.dietaryFilters)) {
       return false;
     }
 
-    return true;
+    if (prefs.planningMode === "simple") {
+      if (!prefs.location) return true;
+      return isWithinRadius(p, prefs.location, prefs.radiusMiles);
+    }
+
+    for (const d of prefs.selectedDays) {
+      const ctx = resolveDayRoutingPrefs(prefs, d);
+      if (ctx.location && isWithinRadius(p, ctx.location, ctx.radiusMiles)) {
+        return true;
+      }
+    }
+    return false;
   });
 }
 

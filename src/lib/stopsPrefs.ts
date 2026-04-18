@@ -45,3 +45,34 @@ export function setStopsForDay(
     stopsPerDay: { ...prefs.stopsPerDay, [key]: { min, max } },
   };
 }
+
+/** Simple mode: set the same min/max on every currently selected day. */
+export function applyGlobalStopsToSelectedDays(
+  prefs: UserPreferences,
+  min: number,
+  max: number
+): UserPreferences {
+  let m = Math.max(1, Math.min(15, min));
+  let M = Math.max(1, Math.min(15, max));
+  if (m > M) M = m;
+  const next: StopsPerDayMap = { ...prefs.stopsPerDay };
+  for (const d of prefs.selectedDays) {
+    next[dayKeyLocal(d)] = { min: m, max: M };
+  }
+  return { ...prefs, stopsPerDay: next };
+}
+
+export function setSimpleStopsBounds(
+  prefs: UserPreferences,
+  min: number,
+  max: number
+): UserPreferences {
+  let m = Math.max(1, Math.min(15, min));
+  let M = Math.max(1, Math.min(15, max));
+  if (m > M) M = m;
+  return applyGlobalStopsToSelectedDays(
+    { ...prefs, simpleStops: { min: m, max: M } },
+    m,
+    M
+  );
+}

@@ -7,6 +7,8 @@ interface RestaurantCardProps {
   restaurant: Restaurant;
   rating: Rating;
   userLocation: LatLng | null;
+  /** When set, shown instead of distance from `userLocation`. */
+  distanceMilesOverride?: number | null;
   onRatingChange: (rating: Rating) => void;
   highlighted?: boolean;
   onHover?: (id: string | null) => void;
@@ -24,13 +26,17 @@ export function RestaurantCard({
   restaurant,
   rating,
   userLocation,
+  distanceMilesOverride,
   onRatingChange,
   highlighted = false,
   onHover,
 }: RestaurantCardProps) {
-  const distance = userLocation
-    ? haversineDistance(userLocation, { lat: restaurant.lat, lng: restaurant.lng })
-    : null;
+  const distance =
+    distanceMilesOverride !== undefined && distanceMilesOverride !== null
+      ? distanceMilesOverride
+      : userLocation
+        ? haversineDistance(userLocation, { lat: restaurant.lat, lng: restaurant.lng })
+        : null;
 
   const closedText =
     restaurant.closedDays.length > 0

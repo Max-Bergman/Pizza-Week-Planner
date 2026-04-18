@@ -8,20 +8,23 @@ import {
   type BrowseFilters,
 } from "../lib/browseFilter";
 import { filterRestaurants } from "../lib/filter";
+import { prefsHasValidLocations } from "../lib/planningContext";
+import { PIZZA_WEEK_DAY_DATES } from "../constants/pizzaWeek";
 import { Stepper } from "./Stepper";
 import { PreferencesForm } from "./PreferencesForm";
 import { RestaurantList } from "./RestaurantList";
 import { RoutePlan } from "./RoutePlan";
 
-const PIZZA_WEEK_DAYS = Array.from({ length: 7 }, (_, i) => new Date(2026, 3, 20 + i));
-
 const DEFAULT_PREFS: UserPreferences = {
-  selectedDays: [...PIZZA_WEEK_DAYS],
+  planningMode: "simple",
+  selectedDays: [...PIZZA_WEEK_DAY_DATES],
   address: "",
   location: null,
   radiusMiles: 10,
   dietaryFilters: [] as DietaryTag[],
   stopsPerDay: {},
+  simpleStops: { min: 2, max: 5 },
+  advancedDayPrefs: {},
 };
 
 export function App() {
@@ -45,7 +48,7 @@ export function App() {
   );
 
   const handlePrefsSubmit = useCallback(() => {
-    if (!prefs.location) return;
+    if (!prefsHasValidLocations(prefs)) return;
     const initialRatings = new Map<string, Rating>();
     filtered.forEach((r) => initialRatings.set(r.id, "neutral"));
     setRatings(initialRatings);
@@ -113,13 +116,12 @@ export function App() {
         )}
         {step === 2 && (
           <RestaurantList
+            prefs={prefs}
             restaurants={visibleRestaurants}
             totalInRange={filtered.length}
             browseFilters={browseFilters}
             onBrowseFiltersChange={setBrowseFilters}
             ratings={ratings}
-            userLocation={prefs.location}
-            radiusMiles={prefs.radiusMiles}
             onRatingChange={(id, rating) =>
               setRatings((prev) => new Map(prev).set(id, rating))
             }
@@ -127,12 +129,8 @@ export function App() {
             loading={planLoading}
           />
         )}
-        {step === 3 && plan && prefs.location && (
-          <RoutePlan
-            plan={plan}
-            userLocation={prefs.location}
-            onBack={() => setStep(2)}
-          />
+        {step === 3 && plan && (
+          <RoutePlan plan={plan} onBack={() => setStep(2)} />
         )}
       </main>
     </div>

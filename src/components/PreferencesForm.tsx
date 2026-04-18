@@ -1,7 +1,17 @@
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import type { UserPreferences, DietaryTag } from "../types";
-import { useGeocoding } from "../hooks/useGeocoding";
-import { getStopsBounds, setStopsForDay } from "../lib/stopsPrefs";
+import { PIZZA_WEEK_GRID_DAYS } from "../constants/pizzaWeek";
+import {
+  mergeAdvancedIntoSimpleBaseline,
+  prefsHasValidLocations,
+  seedAdvancedDayPrefsFromSimple,
+} from "../lib/planningContext";
+import {
+  applyGlobalStopsToSelectedDays,
+  dayKeyLocal,
+  setSimpleStopsBounds,
+} from "../lib/stopsPrefs";
+import { AddressWithGeocode } from "./AddressWithGeocode";
 
 interface PreferencesFormProps {
   prefs: UserPreferences;
@@ -10,20 +20,10 @@ interface PreferencesFormProps {
   matchCount: number;
 }
 
-const PIZZA_WEEK_DAYS = [
-  { date: new Date(2026, 3, 20), label: "Mon", sublabel: "Apr 20" },
-  { date: new Date(2026, 3, 21), label: "Tue", sublabel: "Apr 21" },
-  { date: new Date(2026, 3, 22), label: "Wed", sublabel: "Apr 22" },
-  { date: new Date(2026, 3, 23), label: "Thu", sublabel: "Apr 23" },
-  { date: new Date(2026, 3, 24), label: "Fri", sublabel: "Apr 24" },
-  { date: new Date(2026, 3, 25), label: "Sat", sublabel: "Apr 25" },
-  { date: new Date(2026, 3, 26), label: "Sun", sublabel: "Apr 26" },
-];
-
-const DIETARY_OPTIONS: { value: DietaryTag; label: string; color: string }[] = [
-  { value: "vegetarian", label: "Vegetarian", color: "green" },
-  { value: "vegan", label: "Vegan", color: "emerald" },
-  { value: "gluten_free", label: "Gluten Free", color: "amber" },
+const DIETARY_OPTIONS: { value: DietaryTag; label: string }[] = [
+  { value: "vegetarian", label: "Vegetarian" },
+  { value: "vegan", label: "Vegan" },
+  { value: "gluten_free", label: "Gluten Free" },
 ];
 
 export function PreferencesForm({
@@ -32,178 +32,151 @@ export function PreferencesForm({
   onSubmit,
   matchCount,
 }: PreferencesFormProps) {
-  const [inputValue, setInputValue] = useState(prefs.address);
-  const [locationConfirmed, setLocationConfirmed] = useState(!!prefs.location);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  const geocodeQuery = locationConfirmed ? "" : inputValue;
-  const { results: suggestions, loading: geocodingLoading } = useGeocoding(geocodeQuery);
-
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target as Node) &&
-        !inputRef.current?.contains(e.target as Node)
-      ) {
-        setShowSuggestions(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  const sortedSelectedDays = useMemo(
+    () => [...prefs.selectedDays].sort((a, b) => a.getTime() - b.getTime()),
+    [prefs.selectedDays]
+  );
 
   const isDaySelected = (date: Date) =>
     prefs.selectedDays.some((d) => d.toDateString() === date.toDateString());
+
+  const setPlanningMode = (mode: "simple" | "advanced") => {
+    if (mode === prefs.planningMode) return;
+    if (mode === "advanced") {
+      onChange({
+        ...prefs,
+        planningMode: "advanced",
+        advancedDayPrefs: seedAdvancedDayPrefsFromSimple(prefs),
+      });
+    } else {
+      onChange({
+        ...prefs,
+        planningMode: "simple",
+        ...mergeAdvancedIntoSimpleBaseline(prefs),
+      });
+    }
+  };
 
   const toggleDay = (date: Date) => {
     const selected = isDaySelected(date);
     const newDays = selected
       ? prefs.selectedDays.filter((d) => d.toDateString() !== date.toDateString())
       : [...prefs.selectedDays, date].sort((a, b) => a.getTime() - b.getTime());
-    onChange({ ...prefs, selectedDays: newDays });
+
+    let next: UserPreferences = { ...prefs, selectedDays: newDays };
+    if (next.planningMode === "simple") {
+      next = applyGlobalStopsToSelectedDays(
+        next,
+        next.simpleStops.min,
+        next.simpleStops.max
+      );
+    } else if (!selected) {
+      const key = dayKeyLocal(date);
+      if (!next.advancedDayPrefs[key]) {
+        next = {
+          ...next,
+          advancedDayPrefs: {
+            ...next.advancedDayPrefs,
+            [key]: {
+              address: next.address,
+              location: next.location,
+              radiusMiles: next.radiusMiles,
+              minStops: next.simpleStops.min,
+              maxStops: next.simpleStops.max,
+            },
+          },
+        };
+      }
+    }
+    onChange(next);
   };
 
-  const handleAddressChange = (val: string) => {
-    setInputValue(val);
-    setLocationConfirmed(false);
-    setShowSuggestions(true);
-    onChange({ ...prefs, address: val, location: null });
-  };
+  const canSubmit = prefs.selectedDays.length > 0 && prefsHasValidLocations(prefs);
 
-  const handleSuggestionSelect = (result: { displayName: string; location: { lat: number; lng: number } }) => {
-    const shortName = result.displayName.split(",").slice(0, 3).join(",").trim();
-    setInputValue(shortName);
-    setLocationConfirmed(true);
-    setShowSuggestions(false);
-    onChange({ ...prefs, address: shortName, location: result.location });
-  };
-
-  const toggleDietary = (tag: DietaryTag) => {
-    const has = prefs.dietaryFilters.includes(tag);
-    onChange({
-      ...prefs,
-      dietaryFilters: has
-        ? prefs.dietaryFilters.filter((t) => t !== tag)
-        : [...prefs.dietaryFilters, tag],
-    });
-  };
-
-  const canSubmit = !!prefs.location && prefs.selectedDays.length > 0;
-
-  const sortedSelectedDays = useMemo(
-    () => [...prefs.selectedDays].sort((a, b) => a.getTime() - b.getTime()),
-    [prefs.selectedDays]
-  );
+  const submitHint = !prefs.selectedDays.length
+    ? "Select at least one day"
+    : !prefsHasValidLocations(prefs)
+      ? prefs.planningMode === "advanced"
+        ? "Confirm an address (✓) for each selected day"
+        : "Enter and confirm your address"
+      : "";
 
   return (
     <div className="max-w-xl mx-auto space-y-8 pb-8">
-      {/* Address */}
-      <section>
-        <label className="block text-sm font-semibold text-gray-700 mb-1">
-          Your Starting Address
-        </label>
-        <p className="text-xs text-gray-500 mb-2">
-          We'll filter to restaurants within your drive radius.
+      {/* Planning style */}
+      <section className="rounded-2xl border-2 border-orange-100 bg-white p-4 shadow-sm">
+        <p className="text-sm font-semibold text-gray-800 mb-1">Planning style</p>
+        <p className="text-xs text-gray-500 mb-3">
+          <strong>Simple</strong> uses one start address, one radius, and the same min/max stops
+          for every day you pick. <strong>Advanced</strong> lets you tune each day separately.
         </p>
-        <div className="relative">
-          <input
-            ref={inputRef}
-            type="text"
-            value={inputValue}
-            onChange={(e) => handleAddressChange(e.target.value)}
-            onFocus={() => !locationConfirmed && setShowSuggestions(true)}
-            placeholder="1234 SE Division St, Portland, OR"
-            className={`w-full px-4 py-3 rounded-xl border-2 text-sm focus:outline-none transition-colors ${
-              locationConfirmed
-                ? "border-green-500 bg-green-50"
-                : "border-gray-200 focus:border-orange-400 bg-white"
+        <div className="flex rounded-xl border border-gray-200 p-1 bg-gray-50 gap-1">
+          <button
+            type="button"
+            onClick={() => setPlanningMode("simple")}
+            className={`flex-1 rounded-lg py-2.5 text-sm font-semibold transition-colors ${
+              prefs.planningMode === "simple"
+                ? "bg-white text-red-800 shadow-sm"
+                : "text-gray-600 hover:text-gray-900"
             }`}
-          />
-          {locationConfirmed && (
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600 text-lg">
-              ✓
-            </span>
-          )}
-          {geocodingLoading && !locationConfirmed && (
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
-              …
-            </span>
-          )}
-
-          {showSuggestions && suggestions.length > 0 && (
-            <div
-              ref={dropdownRef}
-              className="absolute z-50 w-full mt-1 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
-            >
-              {suggestions.map((s, i) => (
-                <button
-                  key={i}
-                  onClick={() => handleSuggestionSelect(s)}
-                  className="w-full text-left px-4 py-3 text-sm hover:bg-orange-50 transition-colors border-b border-gray-50 last:border-0"
-                >
-                  <span className="font-medium text-gray-900">
-                    {s.displayName.split(",")[0]}
-                  </span>
-                  <span className="text-gray-500">
-                    {", "}
-                    {s.displayName.split(",").slice(1, 3).join(",")}
-                  </span>
-                </button>
-              ))}
-            </div>
-          )}
+          >
+            Simple
+          </button>
+          <button
+            type="button"
+            onClick={() => setPlanningMode("advanced")}
+            className={`flex-1 rounded-lg py-2.5 text-sm font-semibold transition-colors ${
+              prefs.planningMode === "advanced"
+                ? "bg-white text-red-800 shadow-sm"
+                : "text-gray-600 hover:text-gray-900"
+            }`}
+          >
+            Advanced
+          </button>
         </div>
       </section>
 
-      {/* Drive Radius */}
-      <section>
-        <div className="flex justify-between items-center mb-2">
-          <label className="text-sm font-semibold text-gray-700">
-            Max Drive Radius
-          </label>
-          <span className="text-sm font-bold text-orange-600">
-            {prefs.radiusMiles} miles
-          </span>
-        </div>
-        <input
-          type="range"
-          min={1}
-          max={20}
-          value={prefs.radiusMiles}
-          onChange={(e) =>
-            onChange({ ...prefs, radiusMiles: Number(e.target.value) })
-          }
-          className="w-full accent-red-700"
-        />
-        <div className="flex justify-between text-xs text-gray-400 mt-1">
-          <span>1 mi</span>
-          <span>20 mi</span>
-        </div>
-      </section>
-
-      {/* Days */}
+      {/* Days first — applies to both modes */}
       <section>
         <div className="flex justify-between items-center mb-3">
-          <label className="text-sm font-semibold text-gray-700">
-            Available Days
-          </label>
+          <label className="text-sm font-semibold text-gray-700">Available days</label>
           <div className="flex gap-2">
             <button
-              onClick={() =>
-                onChange({
-                  ...prefs,
-                  selectedDays: PIZZA_WEEK_DAYS.map((d) => d.date),
-                })
-              }
+              type="button"
+              onClick={() => {
+                const newDays = PIZZA_WEEK_GRID_DAYS.map((d) => d.date);
+                let next: UserPreferences = { ...prefs, selectedDays: newDays };
+                if (next.planningMode === "simple") {
+                  next = applyGlobalStopsToSelectedDays(
+                    next,
+                    next.simpleStops.min,
+                    next.simpleStops.max
+                  );
+                } else {
+                  const adv = { ...prefs.advancedDayPrefs };
+                  for (const d of newDays) {
+                    const k = dayKeyLocal(d);
+                    if (!adv[k]) {
+                      adv[k] = {
+                        address: prefs.address,
+                        location: prefs.location,
+                        radiusMiles: prefs.radiusMiles,
+                        minStops: prefs.simpleStops.min,
+                        maxStops: prefs.simpleStops.max,
+                      };
+                    }
+                  }
+                  next = { ...next, advancedDayPrefs: adv };
+                }
+                onChange(next);
+              }}
               className="text-xs text-orange-600 hover:underline"
             >
               All
             </button>
             <span className="text-gray-300">|</span>
             <button
+              type="button"
               onClick={() => onChange({ ...prefs, selectedDays: [] })}
               className="text-xs text-gray-400 hover:underline"
             >
@@ -212,11 +185,12 @@ export function PreferencesForm({
           </div>
         </div>
         <div className="grid grid-cols-7 gap-1">
-          {PIZZA_WEEK_DAYS.map(({ date, label, sublabel }) => {
+          {PIZZA_WEEK_GRID_DAYS.map(({ date, label, sublabel }) => {
             const selected = isDaySelected(date);
             return (
               <button
                 key={date.toISOString()}
+                type="button"
                 onClick={() => toggleDay(date)}
                 className={`flex flex-col items-center py-2 px-1 rounded-xl border-2 transition-colors text-center ${
                   selected
@@ -225,7 +199,9 @@ export function PreferencesForm({
                 }`}
               >
                 <span className="text-xs font-bold">{label}</span>
-                <span className={`text-xs mt-0.5 ${selected ? "text-red-200" : "text-gray-400"}`}>
+                <span
+                  className={`text-xs mt-0.5 ${selected ? "text-red-200" : "text-gray-400"}`}
+                >
                   {sublabel}
                 </span>
               </button>
@@ -237,11 +213,256 @@ export function PreferencesForm({
         )}
       </section>
 
-      {/* Dietary */}
+      {prefs.planningMode === "simple" ? (
+        <>
+          <section>
+            <label className="block text-sm font-semibold text-gray-700 mb-1" htmlFor="simple-address">
+              Starting address
+            </label>
+            <p className="text-xs text-gray-500 mb-2">
+              Used for distance sorting, the map ring, and route planning for every selected day.
+            </p>
+            <AddressWithGeocode
+              id="simple-address"
+              address={prefs.address}
+              location={prefs.location}
+              onChange={({ address, location }) =>
+                onChange({ ...prefs, address, location })
+              }
+              onConfirm={({ address, location }) =>
+                onChange({ ...prefs, address, location })
+              }
+            />
+          </section>
+
+          <section>
+            <div className="flex justify-between items-center mb-2">
+              <label className="text-sm font-semibold text-gray-700">Max drive radius</label>
+              <span className="text-sm font-bold text-orange-600">{prefs.radiusMiles} mi</span>
+            </div>
+            <input
+              type="range"
+              min={1}
+              max={20}
+              value={prefs.radiusMiles}
+              onChange={(e) =>
+                onChange({ ...prefs, radiusMiles: Number(e.target.value) })
+              }
+              className="w-full accent-red-700"
+            />
+            <div className="flex justify-between text-xs text-gray-400 mt-1">
+              <span>1 mi</span>
+              <span>20 mi</span>
+            </div>
+          </section>
+
+          <section>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              Stops per day
+            </label>
+            <p className="text-xs text-gray-500 mb-3">
+              Same minimum and maximum for every selected day.
+            </p>
+            <div className="flex flex-wrap items-center gap-6 rounded-xl border border-gray-200 bg-white px-4 py-3">
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-gray-500 w-12">Min</span>
+                <button
+                  type="button"
+                  onClick={() =>
+                    onChange(
+                      setSimpleStopsBounds(prefs, prefs.simpleStops.min - 1, prefs.simpleStops.max)
+                    )
+                  }
+                  className="w-8 h-8 rounded-lg border-2 border-gray-200 text-gray-600 font-bold hover:border-orange-400"
+                >
+                  −
+                </button>
+                <span className="w-8 text-center font-bold">{prefs.simpleStops.min}</span>
+                <button
+                  type="button"
+                  onClick={() =>
+                    onChange(
+                      setSimpleStopsBounds(prefs, prefs.simpleStops.min + 1, prefs.simpleStops.max)
+                    )
+                  }
+                  className="w-8 h-8 rounded-lg border-2 border-gray-200 text-gray-600 font-bold hover:border-orange-400"
+                >
+                  +
+                </button>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-gray-500 w-12">Max</span>
+                <button
+                  type="button"
+                  onClick={() =>
+                    onChange(
+                      setSimpleStopsBounds(prefs, prefs.simpleStops.min, prefs.simpleStops.max - 1)
+                    )
+                  }
+                  className="w-8 h-8 rounded-lg border-2 border-gray-200 text-gray-600 font-bold hover:border-orange-400"
+                >
+                  −
+                </button>
+                <span className="w-8 text-center font-bold">{prefs.simpleStops.max}</span>
+                <button
+                  type="button"
+                  onClick={() =>
+                    onChange(
+                      setSimpleStopsBounds(prefs, prefs.simpleStops.min, prefs.simpleStops.max + 1)
+                    )
+                  }
+                  className="w-8 h-8 rounded-lg border-2 border-gray-200 text-gray-600 font-bold hover:border-orange-400"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </section>
+        </>
+      ) : (
+        <section className="space-y-4">
+          <p className="text-sm text-gray-600">
+            Dietary filters apply to the whole list. Below, set <strong>start</strong>,{" "}
+            <strong>radius</strong>, and <strong>stops</strong> for each day you selected.
+          </p>
+          {sortedSelectedDays.length === 0 ? (
+            <p className="text-xs text-gray-500">Select days above to configure each one.</p>
+          ) : (
+            <div className="space-y-4 max-h-[520px] overflow-y-auto pr-1">
+              {sortedSelectedDays.map((date) => {
+                const key = dayKeyLocal(date);
+                const row = prefs.advancedDayPrefs[key];
+                if (!row) {
+                  return (
+                    <p key={key} className="text-xs text-amber-700">
+                      Missing settings for {key}. Toggle the day off and on to reset.
+                    </p>
+                  );
+                }
+                const meta = PIZZA_WEEK_GRID_DAYS.find(
+                  (x) => x.date.toDateString() === date.toDateString()
+                );
+                const title = meta
+                  ? `${meta.label} · ${meta.sublabel}`
+                  : date.toLocaleDateString("en-US", {
+                      weekday: "short",
+                      month: "short",
+                      day: "numeric",
+                    });
+                const patch = (partial: Partial<typeof row>) =>
+                  onChange({
+                    ...prefs,
+                    advancedDayPrefs: {
+                      ...prefs.advancedDayPrefs,
+                      [key]: { ...row, ...partial },
+                    },
+                  });
+
+                return (
+                  <div
+                    key={key}
+                    className="rounded-2xl border-2 border-orange-100 bg-white shadow-sm overflow-hidden"
+                  >
+                    <div className="px-4 py-2.5 bg-orange-50/80 border-b border-orange-100">
+                      <span className="font-semibold text-gray-900 text-sm">{title}</span>
+                    </div>
+                    <div className="p-4 space-y-4">
+                      <div>
+                        <label className="text-xs font-semibold text-gray-600 block mb-1">
+                          Start address
+                        </label>
+                        <AddressWithGeocode
+                          id={`adv-addr-${key}`}
+                          address={row.address}
+                          location={row.location}
+                          compact
+                          onChange={({ address, location }) => patch({ address, location })}
+                          onConfirm={({ address, location }) => patch({ address, location })}
+                        />
+                      </div>
+                      <div>
+                        <div className="flex justify-between text-xs mb-1">
+                          <span className="font-semibold text-gray-600">Max drive radius</span>
+                          <span className="font-bold text-orange-600">{row.radiusMiles} mi</span>
+                        </div>
+                        <input
+                          type="range"
+                          min={1}
+                          max={20}
+                          value={row.radiusMiles}
+                          onChange={(e) =>
+                            patch({ radiusMiles: Number(e.target.value) })
+                          }
+                          className="w-full accent-red-700"
+                        />
+                      </div>
+                      <div className="flex flex-wrap gap-4 items-center">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-gray-500 w-8">Min</span>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              patch({
+                                minStops: Math.max(1, row.minStops - 1),
+                              })
+                            }
+                            className="w-7 h-7 rounded-lg border border-gray-200 text-sm font-bold text-gray-600"
+                          >
+                            −
+                          </button>
+                          <span className="w-6 text-center text-sm font-bold">{row.minStops}</span>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              patch({
+                                minStops: Math.min(row.maxStops, row.minStops + 1),
+                              })
+                            }
+                            className="w-7 h-7 rounded-lg border border-gray-200 text-sm font-bold text-gray-600"
+                          >
+                            +
+                          </button>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-gray-500 w-8">Max</span>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              patch({
+                                maxStops: Math.max(row.minStops, row.maxStops - 1),
+                              })
+                            }
+                            className="w-7 h-7 rounded-lg border border-gray-200 text-sm font-bold text-gray-600"
+                          >
+                            −
+                          </button>
+                          <span className="w-6 text-center text-sm font-bold">{row.maxStops}</span>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              patch({
+                                maxStops: Math.min(15, row.maxStops + 1),
+                              })
+                            }
+                            className="w-7 h-7 rounded-lg border border-gray-200 text-sm font-bold text-gray-600"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* Dietary — shared */}
       <section>
         <label className="block text-sm font-semibold text-gray-700 mb-3">
-          Dietary Preferences{" "}
-          <span className="font-normal text-gray-400">(optional)</span>
+          Dietary preferences <span className="font-normal text-gray-400">(optional)</span>
         </label>
         <div className="flex flex-wrap gap-2">
           {DIETARY_OPTIONS.map(({ value, label }) => {
@@ -249,7 +470,16 @@ export function PreferencesForm({
             return (
               <button
                 key={value}
-                onClick={() => toggleDietary(value)}
+                type="button"
+                onClick={() => {
+                  const has = prefs.dietaryFilters.includes(value);
+                  onChange({
+                    ...prefs,
+                    dietaryFilters: has
+                      ? prefs.dietaryFilters.filter((t) => t !== value)
+                      : [...prefs.dietaryFilters, value],
+                  });
+                }}
                 className={`px-4 py-2 rounded-full border-2 text-sm font-medium transition-colors ${
                   active
                     ? "border-green-600 bg-green-600 text-white"
@@ -268,109 +498,14 @@ export function PreferencesForm({
         )}
       </section>
 
-      {/* Stops per day (per calendar day) */}
-      <section>
-        <label className="block text-sm font-semibold text-gray-700 mb-1">
-          Stops per day
-        </label>
-        <p className="text-xs text-gray-500 mb-3">
-          Set min and max for each day you selected (defaults 2–5 until you change a day).
-        </p>
-        {sortedSelectedDays.length === 0 ? (
-          <p className="text-xs text-gray-500">Select at least one day above.</p>
-        ) : (
-          <div className="space-y-3 max-h-64 overflow-y-auto pr-1">
-            {sortedSelectedDays.map((date) => {
-              const bounds = getStopsBounds(prefs.stopsPerDay, date);
-              const meta = PIZZA_WEEK_DAYS.find(
-                (x) => x.date.toDateString() === date.toDateString()
-              );
-              const dayTitle = meta
-                ? `${meta.label} · ${meta.sublabel}`
-                : date.toLocaleDateString("en-US", {
-                    weekday: "short",
-                    month: "short",
-                    day: "numeric",
-                  });
-              return (
-                <div
-                  key={date.toISOString()}
-                  className="flex flex-wrap items-center gap-3 rounded-xl border border-gray-200 bg-white px-3 py-2"
-                >
-                  <span className="text-sm font-semibold text-gray-800 min-w-[5.5rem]">
-                    {dayTitle}
-                  </span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-gray-500">Min</span>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        onChange(
-                          setStopsForDay(prefs, date, { min: bounds.min - 1 })
-                        )
-                      }
-                      className="w-7 h-7 rounded-lg border-2 border-gray-200 text-gray-600 text-sm font-bold hover:border-orange-400 transition-colors"
-                    >
-                      −
-                    </button>
-                    <span className="w-6 text-center text-sm font-bold text-gray-900">
-                      {bounds.min}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        onChange(
-                          setStopsForDay(prefs, date, { min: bounds.min + 1 })
-                        )
-                      }
-                      className="w-7 h-7 rounded-lg border-2 border-gray-200 text-gray-600 text-sm font-bold hover:border-orange-400 transition-colors"
-                    >
-                      +
-                    </button>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-gray-500">Max</span>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        onChange(
-                          setStopsForDay(prefs, date, { max: bounds.max - 1 })
-                        )
-                      }
-                      className="w-7 h-7 rounded-lg border-2 border-gray-200 text-gray-600 text-sm font-bold hover:border-orange-400 transition-colors"
-                    >
-                      −
-                    </button>
-                    <span className="w-6 text-center text-sm font-bold text-gray-900">
-                      {bounds.max}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        onChange(
-                          setStopsForDay(prefs, date, { max: bounds.max + 1 })
-                        )
-                      }
-                      className="w-7 h-7 rounded-lg border-2 border-gray-200 text-gray-600 text-sm font-bold hover:border-orange-400 transition-colors"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </section>
-
-      {/* Submit */}
       <button
+        type="button"
         onClick={onSubmit}
         disabled={!canSubmit}
         className="w-full py-4 bg-red-700 hover:bg-red-800 text-white rounded-xl font-bold text-lg shadow-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
       >
-        {!prefs.location
-          ? "Enter your address to continue"
+        {!canSubmit
+          ? submitHint || "Complete setup to continue"
           : `Find Pizza — ${matchCount} spot${matchCount !== 1 ? "s" : ""} in range`}
       </button>
     </div>

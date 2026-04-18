@@ -11,7 +11,8 @@ import { haversineDistance } from "./geo";
 import { clusterByDay } from "./cluster";
 import { planRestaurantVisitOrder } from "./tsp";
 import { fetchDrivingRoute } from "./routing";
-import { stopsBoundsForPrefs } from "./stopsPrefs";
+import { resolveDayRoutingPrefs } from "./planningContext";
+import { greedyAssignByNearestDayStart } from "./dayAssignment";
 import { optimizeAssignmentsForGlobalDriving } from "./assignmentOptimize";
 
 /**
@@ -19,9 +20,9 @@ import { optimizeAssignmentsForGlobalDriving } from "./assignmentOptimize";
  *
  * 1. Separate must-eat vs interested+neutral (drop skipped).
  * 2. Lock constrained must-eats to their only available days.
- * 3. Cluster remaining restaurants geographically across days (per-day max).
- * 4. Local search on assignments to reduce total NN depot-tour miles.
- * 5. Per day: NN + 2-opt visit order; optionally OSRM for map and drive times.
+ * 3. Assign to days: centroid clustering (simple) or nearest-day-start greedy (advanced).
+ * 4. Local search on assignments to reduce total NN depot-tour miles (per-day starts).
+ * 5. Per day: NN + 2-opt from that day’s start; optionally OSRM for map and drive times.
  */
 export async function planRoutes(
   restaurants: Restaurant[],
@@ -30,7 +31,6 @@ export async function planRoutes(
   fetchRealRoutes = true
 ): Promise<RoutePlan> {
   const warnings: string[] = [];
-  const userLoc = prefs.location!;
   const days = prefs.selectedDays;
 
   // Partition by rating
@@ -68,24 +68,49 @@ export async function planRoutes(
     }
   }
 
-  // Step 2: Cluster everything (unlocked must-eats + interested)
+  // Step 2: Assign to days (centroid clustering in simple mode; nearest-home greedy in advanced)
   const allForClustering = [...unlockedMustEats, ...interested];
-  const maxPerDayByIdx = days.map((d) => stopsBoundsForPrefs(prefs, d).max);
-  const clusters = clusterByDay(
-    allForClustering,
-    days,
-    preAssigned,
-    maxPerDayByIdx
-  );
+  const maxPerDayByIdx = days.map((d) => resolveDayRoutingPrefs(prefs, d).maxStops);
+
+  const dayStarts: LatLng[] = days.map((d) => {
+    const r = resolveDayRoutingPrefs(prefs, d);
+    const loc = r.location ?? prefs.location;
+    if (!loc) {
+      warnings.push(
+        `Missing start location for ${formatDay(d)} — using your primary address if set.`
+      );
+      return prefs.location ?? { lat: 45.52, lng: -122.68 };
+    }
+    return loc;
+  });
 
   const lockedIds = new Set(
     Array.from(preAssigned.values())
       .flat()
       .map((r) => r.id)
   );
-  const perDayLists = clusters.map((c) => [...c.restaurants]);
+
+  let perDayLists: Restaurant[][];
+  if (prefs.planningMode === "advanced") {
+    perDayLists = greedyAssignByNearestDayStart(
+      allForClustering,
+      days,
+      preAssigned,
+      dayStarts,
+      maxPerDayByIdx
+    );
+  } else {
+    const clusters = clusterByDay(
+      allForClustering,
+      days,
+      preAssigned,
+      maxPerDayByIdx
+    );
+    perDayLists = clusters.map((c) => [...c.restaurants]);
+  }
+
   optimizeAssignmentsForGlobalDriving(
-    userLoc,
+    dayStarts,
     days,
     perDayLists,
     lockedIds,
@@ -100,9 +125,11 @@ export async function planRoutes(
   for (let d = 0; d < days.length; d++) {
     const day = days[d]!;
     const dayRestaurants = perDayLists[d]!;
+    const dayUserLoc = dayStarts[d]!;
     if (dayRestaurants.length === 0) {
       dayRoutes.push({
         date: day,
+        routeStart: dayUserLoc,
         stops: [],
         totalDriveMinutes: 0,
         routeGeometry: null,
@@ -110,10 +137,10 @@ export async function planRoutes(
       continue;
     }
 
-    const dayBounds = stopsBoundsForPrefs(prefs, day);
-    if (dayRestaurants.length < dayBounds.min) {
+    const dayBounds = resolveDayRoutingPrefs(prefs, day);
+    if (dayRestaurants.length < dayBounds.minStops) {
       warnings.push(
-        `${formatDay(day)} has ${dayRestaurants.length} stop(s), below your minimum of ${dayBounds.min} for that day.`
+        `${formatDay(day)} has ${dayRestaurants.length} stop(s), below your minimum of ${dayBounds.minStops} for that day.`
       );
     }
 
@@ -121,12 +148,14 @@ export async function planRoutes(
       mustEatIds.has(r.id)
     ).length;
 
-    const ordered = planRestaurantVisitOrder(userLoc, dayRestaurants);
+    const ordered = planRestaurantVisitOrder(dayUserLoc, dayRestaurants);
 
     // Build stops with haversine estimates
     const stops: RouteStop[] = ordered.map((r, i) => {
       const prev: LatLng =
-        i === 0 ? userLoc : { lat: ordered[i - 1]!.lat, lng: ordered[i - 1]!.lng };
+        i === 0
+          ? dayUserLoc
+          : { lat: ordered[i - 1]!.lat, lng: ordered[i - 1]!.lng };
       const dist = haversineDistance(prev, { lat: r.lat, lng: r.lng });
       return {
         restaurant: r,
@@ -145,9 +174,9 @@ export async function planRoutes(
     // Fetch real route if enabled
     if (fetchRealRoutes) {
       const waypoints: LatLng[] = [
-        userLoc,
+        dayUserLoc,
         ...ordered.map((r) => ({ lat: r.lat, lng: r.lng })),
-        userLoc,
+        dayUserLoc,
       ];
 
       try {
@@ -173,6 +202,7 @@ export async function planRoutes(
 
     dayRoutes.push({
       date: day,
+      routeStart: dayUserLoc,
       stops,
       totalDriveMinutes: Math.round(totalDriveMinutes),
       routeGeometry,

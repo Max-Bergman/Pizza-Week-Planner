@@ -1,14 +1,13 @@
 import { useState } from "react";
-import type { DayRoute, LatLng } from "../types";
+import type { DayRoute } from "../types";
 import { pizzaServingLabel } from "../lib/pizzaServing";
 import { RouteMap } from "./RouteMap";
 
 interface DayItineraryProps {
   day: DayRoute;
-  userLocation: LatLng;
 }
 
-export function DayItinerary({ day, userLocation }: DayItineraryProps) {
+export function DayItinerary({ day }: DayItineraryProps) {
   const [showMap, setShowMap] = useState(true);
 
   if (day.stops.length === 0) return null;
@@ -43,7 +42,7 @@ export function DayItinerary({ day, userLocation }: DayItineraryProps) {
       {/* Route map */}
       {showMap && (
         <div className="h-64 border-b border-orange-100">
-          <RouteMap day={day} userLocation={userLocation} />
+          <RouteMap day={day} />
         </div>
       )}
 
@@ -78,7 +77,7 @@ export function DayItinerary({ day, userLocation }: DayItineraryProps) {
               <div className="flex flex-wrap gap-2 mt-2 text-xs text-gray-500 items-center">
                 <span className="flex items-center gap-1">
                   🚗 {stop.driveMinutesFromPrevious} min
-                  {idx === 0 ? " from home" : ` from ${day.stops[idx - 1]?.restaurant.name ?? "prev"}`}
+                  {idx === 0 ? " from start" : ` from ${day.stops[idx - 1]?.restaurant.name ?? "prev"}`}
                 </span>
                 <span>·</span>
                 <span>{stop.distanceMilesFromPrevious} mi</span>
@@ -132,7 +131,7 @@ export function DayItinerary({ day, userLocation }: DayItineraryProps) {
           <div className="w-7 h-7 rounded-full border-2 border-blue-600 flex items-center justify-center shrink-0">
             <span className="text-blue-600 text-xs">⌂</span>
           </div>
-          <p className="text-sm text-gray-600 self-center">Return home</p>
+          <p className="text-sm text-gray-600 self-center">Return to start</p>
         </li>
       </ol>
     </div>

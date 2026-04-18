@@ -1,11 +1,10 @@
 import { useEffect } from "react";
 import L from "leaflet";
 import { MapContainer, TileLayer, Marker, Polyline, useMap } from "react-leaflet";
-import type { DayRoute, LatLng } from "../types";
+import type { DayRoute } from "../types";
 
 interface RouteMapProps {
   day: DayRoute;
-  userLocation: LatLng;
 }
 
 function FitBoundsEffect({ bounds }: { bounds: L.LatLngBoundsExpression }) {
@@ -32,9 +31,10 @@ const homeIcon = L.divIcon({
   iconAnchor: [15, 15],
 });
 
-export function RouteMap({ day, userLocation }: RouteMapProps) {
+export function RouteMap({ day }: RouteMapProps) {
+  const home = day.routeStart;
   const allPoints: [number, number][] = [
-    [userLocation.lat, userLocation.lng],
+    [home.lat, home.lng],
     ...day.stops.map((s) => [s.restaurant.lat, s.restaurant.lng] as [number, number]),
   ];
 
@@ -42,9 +42,9 @@ export function RouteMap({ day, userLocation }: RouteMapProps) {
 
   // Fallback polyline through all stops (start → stops → home)
   const fallbackPositions: [number, number][] = [
-    [userLocation.lat, userLocation.lng],
+    [home.lat, home.lng],
     ...day.stops.map((s) => [s.restaurant.lat, s.restaurant.lng] as [number, number]),
-    [userLocation.lat, userLocation.lng],
+    [home.lat, home.lng],
   ];
 
   // Convert OSRM GeoJSON coordinates from [lng, lat] → [lat, lng]
@@ -56,7 +56,7 @@ export function RouteMap({ day, userLocation }: RouteMapProps) {
 
   return (
     <MapContainer
-      center={[userLocation.lat, userLocation.lng]}
+      center={[home.lat, home.lng]}
       zoom={12}
       style={{ height: "100%", width: "100%" }}
       scrollWheelZoom={false}
@@ -81,7 +81,7 @@ export function RouteMap({ day, userLocation }: RouteMapProps) {
       )}
 
       {/* Home marker */}
-      <Marker position={[userLocation.lat, userLocation.lng]} icon={homeIcon} />
+      <Marker position={[home.lat, home.lng]} icon={homeIcon} />
 
       {/* Numbered stop markers */}
       {day.stops.map((stop) => (
