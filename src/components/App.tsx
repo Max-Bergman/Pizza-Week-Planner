@@ -21,8 +21,7 @@ const DEFAULT_PREFS: UserPreferences = {
   location: null,
   radiusMiles: 10,
   dietaryFilters: [] as DietaryTag[],
-  minPerDay: 2,
-  maxPerDay: 5,
+  stopsPerDay: {},
 };
 
 export function App() {

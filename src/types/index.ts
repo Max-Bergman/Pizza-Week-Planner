@@ -31,14 +31,22 @@ export type Rating =
 
 // --- User Preferences ---
 
+export interface DayStopsBounds {
+  min: number;
+  max: number;
+}
+
+/** Key: local calendar `YYYY-MM-DD` (see `dayKeyLocal`). Omitted keys use app defaults. */
+export type StopsPerDayMap = Record<string, DayStopsBounds>;
+
 export interface UserPreferences {
   selectedDays: Date[];
   address: string;
   location: LatLng | null;
   radiusMiles: number;
   dietaryFilters: DietaryTag[];
-  minPerDay: number;
-  maxPerDay: number;
+  /** Per selected calendar day; missing keys use defaults (min 2, max 5). */
+  stopsPerDay: StopsPerDayMap;
 }
 
 export interface LatLng {

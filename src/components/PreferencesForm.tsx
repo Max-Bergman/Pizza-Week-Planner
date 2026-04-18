@@ -1,6 +1,7 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import type { UserPreferences, DietaryTag } from "../types";
 import { useGeocoding } from "../hooks/useGeocoding";
+import { getStopsBounds, setStopsForDay } from "../lib/stopsPrefs";
 
 interface PreferencesFormProps {
   prefs: UserPreferences;
@@ -91,6 +92,11 @@ export function PreferencesForm({
   };
 
   const canSubmit = !!prefs.location && prefs.selectedDays.length > 0;
+
+  const sortedSelectedDays = useMemo(
+    () => [...prefs.selectedDays].sort((a, b) => a.getTime() - b.getTime()),
+    [prefs.selectedDays]
+  );
 
   return (
     <div className="max-w-xl mx-auto space-y-8 pb-8">
@@ -262,70 +268,99 @@ export function PreferencesForm({
         )}
       </section>
 
-      {/* Stops per day */}
+      {/* Stops per day (per calendar day) */}
       <section>
-        <label className="block text-sm font-semibold text-gray-700 mb-3">
-          Stops Per Day
+        <label className="block text-sm font-semibold text-gray-700 mb-1">
+          Stops per day
         </label>
-        <div className="flex gap-6 items-center">
-          <div className="flex flex-col gap-1">
-            <span className="text-xs text-gray-500">Minimum</span>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() =>
-                  onChange({ ...prefs, minPerDay: Math.max(1, prefs.minPerDay - 1) })
-                }
-                className="w-8 h-8 rounded-lg border-2 border-gray-200 text-gray-600 font-bold hover:border-orange-400 transition-colors"
-              >
-                −
-              </button>
-              <span className="w-8 text-center font-bold text-gray-900">
-                {prefs.minPerDay}
-              </span>
-              <button
-                onClick={() =>
-                  onChange({
-                    ...prefs,
-                    minPerDay: Math.min(prefs.maxPerDay, prefs.minPerDay + 1),
-                  })
-                }
-                className="w-8 h-8 rounded-lg border-2 border-gray-200 text-gray-600 font-bold hover:border-orange-400 transition-colors"
-              >
-                +
-              </button>
-            </div>
+        <p className="text-xs text-gray-500 mb-3">
+          Set min and max for each day you selected (defaults 2–5 until you change a day).
+        </p>
+        {sortedSelectedDays.length === 0 ? (
+          <p className="text-xs text-gray-500">Select at least one day above.</p>
+        ) : (
+          <div className="space-y-3 max-h-64 overflow-y-auto pr-1">
+            {sortedSelectedDays.map((date) => {
+              const bounds = getStopsBounds(prefs.stopsPerDay, date);
+              const meta = PIZZA_WEEK_DAYS.find(
+                (x) => x.date.toDateString() === date.toDateString()
+              );
+              const dayTitle = meta
+                ? `${meta.label} · ${meta.sublabel}`
+                : date.toLocaleDateString("en-US", {
+                    weekday: "short",
+                    month: "short",
+                    day: "numeric",
+                  });
+              return (
+                <div
+                  key={date.toISOString()}
+                  className="flex flex-wrap items-center gap-3 rounded-xl border border-gray-200 bg-white px-3 py-2"
+                >
+                  <span className="text-sm font-semibold text-gray-800 min-w-[5.5rem]">
+                    {dayTitle}
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-gray-500">Min</span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onChange(
+                          setStopsForDay(prefs, date, { min: bounds.min - 1 })
+                        )
+                      }
+                      className="w-7 h-7 rounded-lg border-2 border-gray-200 text-gray-600 text-sm font-bold hover:border-orange-400 transition-colors"
+                    >
+                      −
+                    </button>
+                    <span className="w-6 text-center text-sm font-bold text-gray-900">
+                      {bounds.min}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onChange(
+                          setStopsForDay(prefs, date, { min: bounds.min + 1 })
+                        )
+                      }
+                      className="w-7 h-7 rounded-lg border-2 border-gray-200 text-gray-600 text-sm font-bold hover:border-orange-400 transition-colors"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-gray-500">Max</span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onChange(
+                          setStopsForDay(prefs, date, { max: bounds.max - 1 })
+                        )
+                      }
+                      className="w-7 h-7 rounded-lg border-2 border-gray-200 text-gray-600 text-sm font-bold hover:border-orange-400 transition-colors"
+                    >
+                      −
+                    </button>
+                    <span className="w-6 text-center text-sm font-bold text-gray-900">
+                      {bounds.max}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onChange(
+                          setStopsForDay(prefs, date, { max: bounds.max + 1 })
+                        )
+                      }
+                      className="w-7 h-7 rounded-lg border-2 border-gray-200 text-gray-600 text-sm font-bold hover:border-orange-400 transition-colors"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-
-          <div className="text-gray-300 text-2xl">—</div>
-
-          <div className="flex flex-col gap-1">
-            <span className="text-xs text-gray-500">Maximum</span>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() =>
-                  onChange({
-                    ...prefs,
-                    maxPerDay: Math.max(prefs.minPerDay, prefs.maxPerDay - 1),
-                  })
-                }
-                className="w-8 h-8 rounded-lg border-2 border-gray-200 text-gray-600 font-bold hover:border-orange-400 transition-colors"
-              >
-                −
-              </button>
-              <span className="w-8 text-center font-bold text-gray-900">
-                {prefs.maxPerDay}
-              </span>
-              <button
-                onClick={() =>
-                  onChange({ ...prefs, maxPerDay: Math.min(15, prefs.maxPerDay + 1) })
-                }
-                className="w-8 h-8 rounded-lg border-2 border-gray-200 text-gray-600 font-bold hover:border-orange-400 transition-colors"
-              >
-                +
-              </button>
-            </div>
-          </div>
-        </div>
+        )}
       </section>
 
       {/* Submit */}

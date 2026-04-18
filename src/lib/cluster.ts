@@ -12,14 +12,14 @@ export interface ClusterAssignment {
  * - Seeds initial centroids from any pre-assigned restaurants (must-eats locked to specific days).
  * - Falls back to k-means++ style initialization for empty days.
  * - Respects closedDays: a restaurant can only go into a day it's open.
- * - Respects maxPerDay capacity.
+ * - Respects per-day max capacity (`maxPerDay[d]`).
  * - Runs for a fixed number of iterations (convergence isn't critical at this scale).
  */
 export function clusterByDay(
   restaurants: Restaurant[],
   days: Date[],
   preAssigned: Map<number, Restaurant[]>, // dayIndex → already-locked restaurants
-  maxPerDay: number
+  maxPerDay: number[]
 ): ClusterAssignment[] {
   const k = days.length;
 
@@ -72,7 +72,7 @@ export function clusterByDay(
 
       for (let d = 0; d < k; d++) {
         if (r.closedDays.includes(dayOfWeek(d))) continue;
-        if (assignments[d]!.length >= maxPerDay) continue;
+        if (assignments[d]!.length >= (maxPerDay[d] ?? 15)) continue;
         const dist = haversineDistance(rPoint, centroids[d]!);
         if (dist < bestDist) {
           bestDist = dist;

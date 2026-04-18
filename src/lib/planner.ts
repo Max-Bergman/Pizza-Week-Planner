@@ -9,17 +9,19 @@ import type {
 } from "../types";
 import { haversineDistance } from "./geo";
 import { clusterByDay } from "./cluster";
-import { solveNearestNeighborTSP } from "./tsp";
+import { planRestaurantVisitOrder } from "./tsp";
 import { fetchDrivingRoute } from "./routing";
+import { stopsBoundsForPrefs } from "./stopsPrefs";
+import { optimizeAssignmentsForGlobalDriving } from "./assignmentOptimize";
 
 /**
  * Main route planning orchestrator.
  *
  * 1. Separate must-eat vs interested+neutral (drop skipped).
  * 2. Lock constrained must-eats to their only available days.
- * 3. Cluster remaining restaurants geographically across days.
- * 4. Solve TSP for each day.
- * 5. Optionally fetch OSRM routes for display.
+ * 3. Cluster remaining restaurants geographically across days (per-day max).
+ * 4. Local search on assignments to reduce total NN depot-tour miles.
+ * 5. Per day: NN + 2-opt visit order; optionally OSRM for map and drive times.
  */
 export async function planRoutes(
   restaurants: Restaurant[],
@@ -68,21 +70,36 @@ export async function planRoutes(
 
   // Step 2: Cluster everything (unlocked must-eats + interested)
   const allForClustering = [...unlockedMustEats, ...interested];
+  const maxPerDayByIdx = days.map((d) => stopsBoundsForPrefs(prefs, d).max);
   const clusters = clusterByDay(
     allForClustering,
     days,
     preAssigned,
-    prefs.maxPerDay
+    maxPerDayByIdx
   );
 
-  // Step 3: TSP each day
+  const lockedIds = new Set(
+    Array.from(preAssigned.values())
+      .flat()
+      .map((r) => r.id)
+  );
+  const perDayLists = clusters.map((c) => [...c.restaurants]);
+  optimizeAssignmentsForGlobalDriving(
+    userLoc,
+    days,
+    perDayLists,
+    lockedIds,
+    maxPerDayByIdx
+  );
+
+  // Step 3: Order stops per day + OSRM
   const dayRoutes: DayRoute[] = [];
   let totalMustEatsCovered = 0;
   const mustEatIds = new Set(mustEats.map((r) => r.id));
 
   for (let d = 0; d < days.length; d++) {
     const day = days[d]!;
-    const dayRestaurants = clusters[d]!.restaurants;
+    const dayRestaurants = perDayLists[d]!;
     if (dayRestaurants.length === 0) {
       dayRoutes.push({
         date: day,
@@ -93,10 +110,10 @@ export async function planRoutes(
       continue;
     }
 
-    // Enforce min per day warning
-    if (dayRestaurants.length < prefs.minPerDay) {
+    const dayBounds = stopsBoundsForPrefs(prefs, day);
+    if (dayRestaurants.length < dayBounds.min) {
       warnings.push(
-        `${formatDay(day)} has ${dayRestaurants.length} stop(s), below your minimum of ${prefs.minPerDay}.`
+        `${formatDay(day)} has ${dayRestaurants.length} stop(s), below your minimum of ${dayBounds.min} for that day.`
       );
     }
 
@@ -104,7 +121,7 @@ export async function planRoutes(
       mustEatIds.has(r.id)
     ).length;
 
-    const ordered = solveNearestNeighborTSP(userLoc, dayRestaurants);
+    const ordered = planRestaurantVisitOrder(userLoc, dayRestaurants);
 
     // Build stops with haversine estimates
     const stops: RouteStop[] = ordered.map((r, i) => {
