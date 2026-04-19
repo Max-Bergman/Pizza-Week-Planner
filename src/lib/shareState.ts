@@ -1,5 +1,9 @@
+import LZString from "lz-string";
 import type { UserPreferences, Rating, AppStep } from "../types";
 import type { BrowseFilters } from "./browseFilter";
+
+/** LZ-compressed JSON (URL-safe); legacy links are raw base64 without this prefix. */
+const SHARE_LZ_PREFIX = "z1.";
 
 export interface SharePayload {
   v: 2;
@@ -11,22 +15,29 @@ export interface SharePayload {
 
 export function encodeSharePayload(payload: SharePayload): string {
   const json = JSON.stringify(payload);
-  const bytes = new TextEncoder().encode(json);
-  let binary = "";
-  for (let i = 0; i < bytes.length; i++) {
-    binary += String.fromCharCode(bytes[i]!);
-  }
-  return btoa(binary);
+  return SHARE_LZ_PREFIX + LZString.compressToEncodedURIComponent(json);
 }
 
-export function decodeSharePayload(b64: string): SharePayload | null {
+function decodeLegacyBase64(b64: string): string {
+  const binary = atob(b64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return new TextDecoder().decode(bytes);
+}
+
+export function decodeSharePayload(encoded: string): SharePayload | null {
   try {
-    const binary = atob(b64);
-    const bytes = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) {
-      bytes[i] = binary.charCodeAt(i);
+    let json: string;
+    if (encoded.startsWith(SHARE_LZ_PREFIX)) {
+      const inner = encoded.slice(SHARE_LZ_PREFIX.length);
+      const decompressed = LZString.decompressFromEncodedURIComponent(inner);
+      if (!decompressed) return null;
+      json = decompressed;
+    } else {
+      json = decodeLegacyBase64(encoded);
     }
-    const json = new TextDecoder().decode(bytes);
     const data = JSON.parse(json) as SharePayload;
     if (data.v !== 2 || !data.prefs) return null;
     return data;

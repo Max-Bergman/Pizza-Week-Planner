@@ -14,6 +14,8 @@ export interface PersistedAppState {
   plan: RoutePlan | null;
   /** Local-only diary: restaurants you have visited with optional score (0–10) and review. */
   visitLog: Record<string, RestaurantVisitEntry>;
+  /** True after user locks the route (step 4); cleared when the plan is regenerated or stops change on step 3. */
+  routeLocked?: boolean;
 }
 
 function reviveCalendarDate(d: unknown): Date {
@@ -60,17 +62,22 @@ export function loadPersistedState(): PersistedAppState | null {
       plan?: RoutePlan | null;
       visitLog?: unknown;
       step?: AppStep;
+      routeLocked?: boolean;
     };
     if ((data.v !== 2 && data.v !== 3) || !data.prefs) return null;
     const visitLog = sanitizeVisitLogRecord(data.visitLog);
+    const step = data.step ?? 1;
+    const routeLocked =
+      data.routeLocked === true || step === 4;
     return {
       v: 3,
-      step: data.step ?? 1,
+      step,
       prefs: rehydrateUserPreferences(data.prefs),
       ratings: data.ratings ?? {},
       browseFilters: data.browseFilters ?? EMPTY_BROWSE_FILTERS,
       plan: revivePlan(data.plan ?? null),
       visitLog,
+      routeLocked,
     };
   } catch {
     return null;

@@ -102,7 +102,7 @@ export interface RouteStop {
 
 // --- App State ---
 
-export type AppStep = 1 | 2 | 3;
+export type AppStep = 1 | 2 | 3 | 4;
 
 export type RatingsMap = Map<string, Rating>;
 

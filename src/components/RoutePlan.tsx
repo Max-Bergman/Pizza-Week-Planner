@@ -17,7 +17,18 @@ interface RoutePlanProps {
   visitLog: VisitLogMap;
   onPatchVisit: (restaurantId: string, patch: RestaurantVisitPatch) => void;
   onDayStopsChange: (dayIndex: number, restaurants: Restaurant[]) => void;
+  /** Step 3: reorder/add stops. Step 4: read-only itinerary. */
+  routeEditing: boolean;
+  /** Visit diary / journal (step 4). */
+  showVisitTracker: boolean;
+  /** Print, PDF, PNG, share (step 4). */
+  showExports: boolean;
+  /** Step 3 only — advances to tracker step. */
+  onLockRoute?: () => void;
+  lockRouteDisabled?: boolean;
   onBack: () => void;
+  /** Optional second nav when following (e.g. back to browse). */
+  onBackToBrowse?: () => void;
   onPrint: () => void;
   onDownloadPdf: () => void;
   onDownloadPng: () => void;
@@ -31,7 +42,13 @@ export function RoutePlan({
   visitLog,
   onPatchVisit,
   onDayStopsChange,
+  routeEditing,
+  showVisitTracker,
+  showExports,
+  onLockRoute,
+  lockRouteDisabled,
   onBack,
+  onBackToBrowse,
   onPrint,
   onDownloadPdf,
   onDownloadPng,
@@ -51,60 +68,100 @@ export function RoutePlan({
     [filteredRestaurants, planIds]
   );
 
+  const title = routeEditing ? "Edit your routes" : "Your routes";
+  const subtitle = routeEditing
+    ? "Reorder stops, add from your in-range list, or pick on the map. When you are happy with the plan, lock it in to track visits and export."
+    : "Routes are locked. Use the diary as you go, then export or open each day in Google Maps or Apple Maps on your phone.";
+
   return (
     <div id="route-plan-print-root">
       <div className="bg-white rounded-2xl shadow-sm border border-orange-100 p-5 mb-6">
         <div className="flex flex-wrap justify-between items-start gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Your Pizza Routes</h2>
+            <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
             <p className="text-gray-500 text-sm mt-1">
               April 20–26, 2026 &middot; $4 slices &middot; $25 whole pies
             </p>
+            <p className="text-gray-600 text-sm mt-2 max-w-2xl leading-snug">{subtitle}</p>
           </div>
-          <div className="flex flex-wrap gap-2 export-exclude">
-            <button
-              type="button"
-              onClick={onPrint}
-              className="px-3 py-2 rounded-xl border-2 border-gray-200 text-gray-800 text-sm font-medium hover:border-orange-300"
-            >
-              Print / PDF
-            </button>
-            <button
-              type="button"
-              onClick={onDownloadPdf}
-              className="px-3 py-2 rounded-xl border-2 border-gray-200 text-gray-800 text-sm font-medium hover:border-orange-300"
-            >
-              Download PDF
-            </button>
-            <button
-              type="button"
-              onClick={onDownloadPng}
-              className="px-3 py-2 rounded-xl border-2 border-gray-200 text-gray-800 text-sm font-medium hover:border-orange-300"
-            >
-              Download PNG
-            </button>
-            <button
-              type="button"
-              onClick={onCopyShareLink}
-              className="px-3 py-2 rounded-xl border-2 border-orange-200 bg-orange-50 text-orange-900 text-sm font-medium hover:bg-orange-100"
-            >
-              Copy share link
-            </button>
-            <button
-              type="button"
-              onClick={onBack}
-              className="px-3 py-2 rounded-xl border-2 border-gray-200 text-gray-700 text-sm font-medium hover:border-orange-300"
-            >
-              ← Back
-            </button>
+          <div className="flex flex-col items-stretch sm:items-end gap-2 export-exclude">
+            {routeEditing && onLockRoute && (
+              <button
+                type="button"
+                disabled={lockRouteDisabled}
+                onClick={onLockRoute}
+                className="px-4 py-2.5 rounded-xl bg-red-700 text-white text-sm font-semibold shadow hover:bg-red-800 disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Save &amp; lock route →
+              </button>
+            )}
+            <div className="flex flex-wrap gap-2 justify-end">
+              {showExports && (
+                <>
+                  <button
+                    type="button"
+                    onClick={onPrint}
+                    className="px-3 py-2 rounded-xl border-2 border-gray-200 text-gray-800 text-sm font-medium hover:border-orange-300"
+                  >
+                    Print / PDF
+                  </button>
+                  <button
+                    type="button"
+                    onClick={onDownloadPdf}
+                    className="px-3 py-2 rounded-xl border-2 border-gray-200 text-gray-800 text-sm font-medium hover:border-orange-300"
+                  >
+                    Download PDF
+                  </button>
+                  <button
+                    type="button"
+                    onClick={onDownloadPng}
+                    className="px-3 py-2 rounded-xl border-2 border-gray-200 text-gray-800 text-sm font-medium hover:border-orange-300"
+                  >
+                    Download PNG
+                  </button>
+                  <button
+                    type="button"
+                    onClick={onCopyShareLink}
+                    className="px-3 py-2 rounded-xl border-2 border-orange-200 bg-orange-50 text-orange-900 text-sm font-medium hover:bg-orange-100"
+                  >
+                    Copy share link
+                  </button>
+                </>
+              )}
+              <button
+                type="button"
+                onClick={onBack}
+                className="px-3 py-2 rounded-xl border-2 border-gray-200 text-gray-700 text-sm font-medium hover:border-orange-300"
+              >
+                {routeEditing ? "← Back to browse" : "← Edit routes"}
+              </button>
+              {!routeEditing && onBackToBrowse && (
+                <button
+                  type="button"
+                  onClick={onBackToBrowse}
+                  className="px-3 py-2 rounded-xl border-2 border-transparent text-gray-600 text-sm font-medium hover:text-gray-900 underline-offset-2 hover:underline"
+                >
+                  Browse &amp; rate
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
-        <p className="text-xs text-gray-500 mt-3">
-          Edit: reorder with arrows, remove with ✕, or add stops from your in-range list. Use{" "}
-          <strong>Google Maps</strong> or <strong>Apple Maps</strong> on each day to send stops to your phone.
-          Download PDF or PNG for an offline copy. Changes save in this browser automatically.
-        </p>
+        {routeEditing && (
+          <p className="text-xs text-gray-500 mt-3 export-exclude">
+            After you lock the route, each day shows <strong>Google Maps</strong> and <strong>Apple Maps</strong>{" "}
+            links with stops in order (driving directions). Your edits still auto-save in this browser until you
+            lock.
+          </p>
+        )}
+
+        {!routeEditing && (
+          <p className="text-xs text-gray-500 mt-3 export-exclude">
+            Per day, use the <strong>Google Maps</strong> / <strong>Apple Maps</strong> buttons in each card to open
+            a multi-stop route on your phone. Add to saved places or customize pins there if you like.
+          </p>
+        )}
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
           <Stat
@@ -148,16 +205,19 @@ export function RoutePlan({
             addCandidates={filteredRestaurants}
             ratings={ratings}
             onChangeStops={onDayStopsChange}
+            routeEditing={routeEditing}
           />
         ))}
       </div>
 
-      <VisitTracker
-        planRestaurants={planRestaurants}
-        extraRestaurants={extraRestaurants}
-        visitLog={visitLog}
-        onPatchVisit={onPatchVisit}
-      />
+      {showVisitTracker && (
+        <VisitTracker
+          planRestaurants={planRestaurants}
+          extraRestaurants={extraRestaurants}
+          visitLog={visitLog}
+          onPatchVisit={onPatchVisit}
+        />
+      )}
     </div>
   );
 }

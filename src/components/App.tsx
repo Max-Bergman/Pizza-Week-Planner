@@ -61,6 +61,7 @@ const DEFAULT_PREFS: UserPreferences = {
 
 export function App() {
   const [step, setStep] = useState<AppStep>(1);
+  const [routeLocked, setRouteLocked] = useState(false);
   const [prefs, setPrefs] = useState<UserPreferences>(DEFAULT_PREFS);
   const [ratings, setRatings] = useState<RatingsMap>(new Map());
   const [visitLog, setVisitLog] = useState<VisitLogMap>(new Map());
@@ -125,9 +126,11 @@ export function App() {
         setPrefs(rehydrateUserPreferences(payload.prefs));
         setRatings(new Map(Object.entries(payload.ratings)));
         setBrowseFilters(payload.browseFilters ?? EMPTY_BROWSE_FILTERS);
-        setStep(payload.step ?? 1);
+        const shareStep = payload.step ?? 1;
+        setStep(shareStep >= 3 ? 2 : shareStep);
         setPlan(null);
         setVisitLog(new Map());
+        setRouteLocked(false);
         hydrationDone.current = true;
         allowSave.current = true;
         return;
@@ -141,7 +144,14 @@ export function App() {
       setVisitLog(new Map(Object.entries(saved.visitLog)));
       setBrowseFilters(saved.browseFilters);
       if (saved.plan) setPlan(saved.plan);
-      setStep(saved.step);
+      let restoredStep = saved.step;
+      if ((restoredStep === 3 || restoredStep === 4) && !saved.plan) {
+        restoredStep = 2;
+        setRouteLocked(false);
+      } else {
+        setRouteLocked(saved.routeLocked ?? false);
+      }
+      setStep(restoredStep);
     }
     hydrationDone.current = true;
     allowSave.current = true;
@@ -178,7 +188,7 @@ export function App() {
 
   useEffect(() => {
     if (!isCommunityBackendConfigured()) return;
-    if (step !== 3) return;
+    if (step !== 4) return;
     if (hasSentVisitSnapshotLocally()) return;
     const deviceId = getOrCreateDeviceId();
     if (!deviceId) return;
@@ -199,7 +209,7 @@ export function App() {
 
   useEffect(() => {
     if (!isCommunityBackendConfigured()) return;
-    if (step !== 3 || !plan) return;
+    if (step !== 4 || !plan) return;
     if (hasSentPlanSnapshotLocally()) return;
     const deviceId = getOrCreateDeviceId();
     if (!deviceId) return;
@@ -224,10 +234,11 @@ export function App() {
         browseFilters,
         plan,
         visitLog: Object.fromEntries(visitLog),
+        routeLocked,
       });
     }, 400);
     return () => clearTimeout(t);
-  }, [step, prefs, ratings, visitLog, browseFilters, plan, restaurantsLoading]);
+  }, [step, prefs, ratings, visitLog, browseFilters, plan, routeLocked, restaurantsLoading]);
 
   const handlePrefsSubmit = useCallback(() => {
     if (!prefsHasValidLocations(prefs)) return;
@@ -240,12 +251,14 @@ export function App() {
 
   const handlePlanRoutes = useCallback(async () => {
     await generatePlan(visibleRestaurants, ratings, prefs);
+    setRouteLocked(false);
     setStep(3);
   }, [visibleRestaurants, ratings, prefs, generatePlan]);
 
   const handleDayStopsChange = useCallback(
     async (dayIndex: number, restaurantsInOrder: Restaurant[]) => {
       if (!plan) return;
+      setRouteLocked(false);
       const day = plan.days[dayIndex]!;
       const updated = await rebuildDayRouteFromStops(
         day.date,
@@ -323,15 +336,46 @@ export function App() {
       step,
     };
     const enc = encodeSharePayload(payload);
-    if (enc.length > 4000) {
+    /** Very long URLs can still fail in some environments; PDF/PNG remain the fallback. */
+    const maxHashChars = 60000;
+    if (enc.length > maxHashChars) {
       window.alert(
         "This link would be too long for some browsers. Use Download PDF or Download PNG to share your route instead."
       );
       return;
     }
     const url = `${window.location.origin}${window.location.pathname}#share=${enc}`;
-    void navigator.clipboard.writeText(url);
-    window.alert("Share link copied. Paste it to open the same preferences on another device.");
+
+    const copyWithFallback = async () => {
+      try {
+        await navigator.clipboard.writeText(url);
+        return true;
+      } catch {
+        try {
+          const ta = document.createElement("textarea");
+          ta.value = url;
+          ta.setAttribute("readonly", "");
+          ta.style.position = "fixed";
+          ta.style.left = "-9999px";
+          document.body.appendChild(ta);
+          ta.select();
+          const ok = document.execCommand("copy");
+          document.body.removeChild(ta);
+          return ok;
+        } catch {
+          return false;
+        }
+      }
+    };
+
+    void (async () => {
+      const ok = await copyWithFallback();
+      if (ok) {
+        window.alert("Share link copied. Paste it to open the same preferences on another device.");
+      } else {
+        window.prompt("Copy this share link (Ctrl/Cmd+C):", url);
+      }
+    })();
   }, [prefs, ratings, browseFilters, step]);
 
   const handlePrint = useCallback(() => {
@@ -379,7 +423,13 @@ export function App() {
         </p>
       </header>
 
-      <Stepper currentStep={step} onStepClick={setStep} className="print:hidden" />
+      <Stepper
+        currentStep={step}
+        onStepClick={setStep}
+        canOpenRouteEditor={Boolean(plan)}
+        canOpenTrackFromBrowse={Boolean(plan) && routeLocked}
+        className="print:hidden"
+      />
 
       <main className="max-w-7xl mx-auto px-4 py-6">
         {step === 1 && (
@@ -409,7 +459,7 @@ export function App() {
             onCommunityLeaderboardUpdated={refreshCommunityBoard}
           />
         )}
-        {step === 3 && plan && (
+        {(step === 3 || step === 4) && plan && (
           <RoutePlan
             plan={plan}
             filteredRestaurants={filtered}
@@ -417,7 +467,13 @@ export function App() {
             visitLog={visitLog}
             onPatchVisit={patchVisitLog}
             onDayStopsChange={handleDayStopsChange}
-            onBack={() => setStep(2)}
+            routeEditing={step === 3}
+            showVisitTracker={step === 4}
+            showExports={step === 4}
+            onLockRoute={step === 3 ? () => { setRouteLocked(true); setStep(4); } : undefined}
+            lockRouteDisabled={plan.totalRestaurants === 0}
+            onBack={step === 3 ? () => setStep(2) : () => setStep(3)}
+            onBackToBrowse={step === 4 ? () => setStep(2) : undefined}
             onPrint={handlePrint}
             onDownloadPdf={handleDownloadPdf}
             onDownloadPng={handleDownloadPng}

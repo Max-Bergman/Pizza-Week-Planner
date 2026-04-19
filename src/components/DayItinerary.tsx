@@ -93,7 +93,8 @@ export function DayItinerary({
 
   const googleUrl = googleMapsDayUrl(day);
   const appleUrl = appleMapsDayUrl(day);
-  const showMapsLinks = Boolean(googleUrl && appleUrl);
+  /** Maps deep links are for the locked / follow step; keep edit mode focused on ordering stops. */
+  const showMapsLinks = Boolean(googleUrl && appleUrl) && !routeEditing;
   const showHeaderActions = showMapToggleInHeader || showMapsLinks;
 
   return (
