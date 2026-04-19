@@ -362,7 +362,7 @@ export function PreferencesForm({
             <p className="text-xs text-gray-500">Select days above to configure each one.</p>
           ) : (
             <div className="space-y-4 max-h-[520px] overflow-y-auto pr-1">
-              {sortedSelectedDays.map((date) => {
+              {sortedSelectedDays.map((date, dayIdx) => {
                 const key = dayKeyLocal(date);
                 const row = prefs.advancedDayPrefs[key];
                 if (!row) {
@@ -372,6 +372,10 @@ export function PreferencesForm({
                     </p>
                   );
                 }
+                const prevDate = dayIdx > 0 ? sortedSelectedDays[dayIdx - 1]! : null;
+                const prevKey = prevDate ? dayKeyLocal(prevDate) : null;
+                const prevRow = prevKey ? prefs.advancedDayPrefs[prevKey] : undefined;
+
                 const meta = PIZZA_WEEK_GRID_DAYS.find(
                   (x) => x.date.toDateString() === date.toDateString()
                 );
@@ -394,13 +398,42 @@ export function PreferencesForm({
                   });
                 };
 
+                const copyFromDayAbove = () => {
+                  if (!prevKey || !prevRow) return;
+                  const base = prefsRef.current;
+                  const source = base.advancedDayPrefs[prevKey];
+                  if (!source) return;
+                  onChange({
+                    ...base,
+                    advancedDayPrefs: {
+                      ...base.advancedDayPrefs,
+                      [key]: {
+                        address: source.address,
+                        location: source.location,
+                        radiusMiles: source.radiusMiles,
+                        minStops: source.minStops,
+                        maxStops: source.maxStops,
+                      },
+                    },
+                  });
+                };
+
                 return (
                   <div
                     key={key}
                     className="rounded-2xl border-2 border-orange-100 bg-white shadow-sm overflow-hidden"
                   >
-                    <div className="px-4 py-2.5 bg-orange-50/80 border-b border-orange-100">
+                    <div className="px-4 py-2.5 bg-orange-50/80 border-b border-orange-100 flex flex-wrap items-center justify-between gap-2">
                       <span className="font-semibold text-gray-900 text-sm">{title}</span>
+                      {dayIdx > 0 && prevRow && (
+                        <button
+                          type="button"
+                          onClick={copyFromDayAbove}
+                          className="text-xs font-medium text-orange-800 hover:text-orange-950 bg-white/80 border border-orange-200 rounded-lg px-2.5 py-1 shadow-sm"
+                        >
+                          Copy from day above
+                        </button>
+                      )}
                     </div>
                     <div className="p-4 space-y-4">
                       <div>

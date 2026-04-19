@@ -228,7 +228,8 @@ export function App() {
       <header className="bg-red-700 text-white py-5 px-4 text-center shadow-md print:hidden">
         <h1 className="text-3xl font-black tracking-tight">Portland Pizza Week 2026</h1>
         <p className="text-red-200 mt-1 text-sm">
-          April 20–26 &middot; $4 slices &middot; {restaurants.length} specials from EverOut
+          April 20–26 &middot; $4 slices &middot; $25 pies &middot;{" "}
+          {restaurants.length} specials organized by Portland Mercury
         </p>
       </header>
 

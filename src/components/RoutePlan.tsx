@@ -31,7 +31,7 @@ export function RoutePlan({
           <div>
             <h2 className="text-2xl font-bold text-gray-900">Your Pizza Routes</h2>
             <p className="text-gray-500 text-sm mt-1">
-              April 20–26, 2026 &middot; $4 per slice
+              April 20–26, 2026 &middot; $4 slices &middot; $25 whole pies
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
