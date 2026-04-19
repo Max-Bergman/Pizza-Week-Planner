@@ -24,6 +24,7 @@ import {
   loadPersistedState,
   savePersistedState,
   rehydrateUserPreferences,
+  clearPersistedState,
 } from "../lib/persistState";
 import { encodeSharePayload, decodeSharePayload } from "../lib/shareState";
 import {
@@ -31,10 +32,27 @@ import {
   rebuildDayRouteFromStops,
 } from "../lib/routeRebuild";
 import { clampVisitScore } from "../lib/visitLogHelpers";
+import {
+  readStorageConsent,
+  writeStorageConsent,
+  persistenceAllowed,
+  type StorageConsent,
+} from "../lib/storageConsent";
+import { getOrCreateDeviceId } from "../lib/deviceId";
+import {
+  fetchCommunityExcitementTop,
+  fetchCommunityFavoriteTop,
+  hasSentFavoritesLocally,
+  isCommunityBackendConfigured,
+  localTopFavoriteIds,
+  localTopMustEatIds,
+  submitCommunityFavorites,
+} from "../lib/communityLeaderboard";
 import { Stepper } from "./Stepper";
 import { PreferencesForm } from "./PreferencesForm";
 import { RestaurantList } from "./RestaurantList";
 import { RoutePlan } from "./RoutePlan";
+import { CookieConsentBanner } from "./CookieConsentBanner";
 
 const DEFAULT_PREFS: UserPreferences = {
   planningMode: "simple",
@@ -49,11 +67,16 @@ const DEFAULT_PREFS: UserPreferences = {
 };
 
 export function App() {
+  const [storageConsent, setStorageConsent] = useState<StorageConsent>(() =>
+    typeof window !== "undefined" ? readStorageConsent() : "unknown"
+  );
   const [step, setStep] = useState<AppStep>(1);
   const [prefs, setPrefs] = useState<UserPreferences>(DEFAULT_PREFS);
   const [ratings, setRatings] = useState<RatingsMap>(new Map());
   const [visitLog, setVisitLog] = useState<VisitLogMap>(new Map());
   const [browseFilters, setBrowseFilters] = useState<BrowseFilters>(EMPTY_BROWSE_FILTERS);
+  const [lbExcitement, setLbExcitement] = useState<string[]>([]);
+  const [lbFavorite, setLbFavorite] = useState<string[]>([]);
 
   const hydrationDone = useRef(false);
   const allowSave = useRef(false);
@@ -80,8 +103,63 @@ export function App() {
     return s;
   }, [ratings]);
 
+  const persistOk = persistenceAllowed(storageConsent);
+  const communityDeviceId = useMemo(() => getOrCreateDeviceId(storageConsent), [storageConsent]);
+
+  const localExcitementTop = useMemo(
+    () => localTopMustEatIds(prefs, filtered, ratings),
+    [prefs, filtered, ratings]
+  );
+  const localFavoriteTop = useMemo(() => localTopFavoriteIds(visitLog), [visitLog]);
+
+  const excitementDisplayIds = useMemo(() => {
+    if (isCommunityBackendConfigured() && lbExcitement.length > 0) return lbExcitement;
+    return localExcitementTop;
+  }, [lbExcitement, localExcitementTop]);
+
+  const favoriteDisplayIds = useMemo(() => {
+    const vis = new Set(visibleRestaurants.map((r) => r.id));
+    const base =
+      isCommunityBackendConfigured() && lbFavorite.length > 0 ? lbFavorite : localFavoriteTop;
+    return base.filter((id) => vis.has(id));
+  }, [lbFavorite, localFavoriteTop, visibleRestaurants]);
+
+  const highlightSource = useMemo((): "community" | "local" => {
+    if (isCommunityBackendConfigured() && (lbExcitement.length > 0 || lbFavorite.length > 0)) {
+      return "community";
+    }
+    return "local";
+  }, [lbExcitement.length, lbFavorite.length]);
+
+  const refreshCommunityBoard = useCallback(async () => {
+    if (!isCommunityBackendConfigured()) return;
+    const [ex, fav] = await Promise.all([fetchCommunityExcitementTop(), fetchCommunityFavoriteTop()]);
+    setLbExcitement(ex);
+    setLbFavorite(fav);
+  }, []);
+
+  const handleStorageConsentChoice = useCallback((choice: "accepted" | "declined") => {
+    writeStorageConsent(choice);
+    if (choice === "accepted") {
+      hydrationDone.current = false;
+    } else {
+      clearPersistedState();
+      setPrefs(DEFAULT_PREFS);
+      setRatings(new Map());
+      setVisitLog(new Map());
+      setBrowseFilters(EMPTY_BROWSE_FILTERS);
+      setPlan(null);
+      setStep(1);
+      hydrationDone.current = true;
+      allowSave.current = false;
+    }
+    setStorageConsent(choice);
+  }, []);
+
   useEffect(() => {
-    if (hydrationDone.current || restaurantsLoading || restaurants.length === 0) return;
+    if (storageConsent === "unknown") return;
+    if (restaurantsLoading || restaurants.length === 0) return;
+    if (hydrationDone.current) return;
 
     const rawHash = window.location.hash;
     if (rawHash.startsWith("#share=")) {
@@ -95,9 +173,15 @@ export function App() {
         setPlan(null);
         setVisitLog(new Map());
         hydrationDone.current = true;
-        allowSave.current = true;
+        allowSave.current = persistenceAllowed(storageConsent);
         return;
       }
+    }
+
+    if (!persistenceAllowed(storageConsent)) {
+      allowSave.current = false;
+      hydrationDone.current = true;
+      return;
     }
 
     const saved = loadPersistedState();
@@ -111,10 +195,60 @@ export function App() {
     }
     hydrationDone.current = true;
     allowSave.current = true;
-  }, [restaurantsLoading, restaurants.length]);
+  }, [storageConsent, restaurantsLoading, restaurants.length, setPlan]);
 
   useEffect(() => {
-    if (!allowSave.current || restaurantsLoading) return;
+    if (!persistOk || restaurantsLoading) return;
+    let cancelled = false;
+    void (async () => {
+      if (!isCommunityBackendConfigured()) {
+        if (!cancelled) {
+          setLbExcitement([]);
+          setLbFavorite([]);
+        }
+        return;
+      }
+      try {
+        const [ex, fav] = await Promise.all([fetchCommunityExcitementTop(), fetchCommunityFavoriteTop()]);
+        if (!cancelled) {
+          setLbExcitement(ex);
+          setLbFavorite(fav);
+        }
+      } catch {
+        if (!cancelled) {
+          setLbExcitement([]);
+          setLbFavorite([]);
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [persistOk, restaurantsLoading, restaurants.length]);
+
+  useEffect(() => {
+    if (!persistOk || !isCommunityBackendConfigured()) return;
+    if (step !== 3) return;
+    if (hasSentFavoritesLocally()) return;
+    const deviceId = getOrCreateDeviceId(storageConsent);
+    if (!deviceId) return;
+    const scores: Record<string, number> = {};
+    visitLog.forEach((entry, id) => {
+      if (entry.score !== undefined && Number.isFinite(entry.score)) {
+        scores[id] = entry.score;
+      }
+    });
+    if (Object.keys(scores).length === 0) return;
+    const t = window.setTimeout(() => {
+      void submitCommunityFavorites(deviceId, scores).then((ok) => {
+        if (ok) void refreshCommunityBoard();
+      });
+    }, 5000);
+    return () => window.clearTimeout(t);
+  }, [persistOk, step, storageConsent, visitLog, refreshCommunityBoard]);
+
+  useEffect(() => {
+    if (!allowSave.current || restaurantsLoading || !persistOk) return;
     const t = window.setTimeout(() => {
       savePersistedState({
         v: 3,
@@ -127,7 +261,7 @@ export function App() {
       });
     }, 400);
     return () => clearTimeout(t);
-  }, [step, prefs, ratings, visitLog, browseFilters, plan, restaurantsLoading]);
+  }, [step, prefs, ratings, visitLog, browseFilters, plan, restaurantsLoading, persistOk]);
 
   const handlePrefsSubmit = useCallback(() => {
     if (!prefsHasValidLocations(prefs)) return;
@@ -271,6 +405,8 @@ export function App() {
 
   return (
     <div className="min-h-screen bg-orange-50">
+      <CookieConsentBanner consent={storageConsent} onChoose={handleStorageConsentChoice} />
+
       <header className="bg-red-700 text-white py-5 px-4 text-center shadow-md print:hidden">
         <h1 className="text-3xl font-black tracking-tight">Portland Pizza Week 2026</h1>
         <p className="text-red-200 mt-1 text-sm">
@@ -303,6 +439,13 @@ export function App() {
             }
             onPlanRoutes={handlePlanRoutes}
             loading={planLoading}
+            persistAllowed={persistOk}
+            communityDeviceId={communityDeviceId}
+            excitementTopIds={excitementDisplayIds}
+            favoriteTopIds={favoriteDisplayIds}
+            highlightSource={highlightSource}
+            restaurantsForCommunitySubmit={filtered}
+            onCommunityLeaderboardUpdated={refreshCommunityBoard}
           />
         )}
         {step === 3 && plan && (

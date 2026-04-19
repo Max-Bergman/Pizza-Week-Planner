@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import type { BrowseFilters } from "../lib/browseFilter";
 import type { Restaurant, Rating, RatingsMap, UserPreferences } from "../types";
 import { BrowseFiltersBar } from "./BrowseFiltersBar";
@@ -9,6 +9,11 @@ import {
   browseMapRadiusZones,
   distanceFromNearestBrowseAnchor,
 } from "../lib/planningContext";
+import {
+  hasSentExcitementLocally,
+  isCommunityBackendConfigured,
+  submitCommunityExcitement,
+} from "../lib/communityLeaderboard";
 
 interface RestaurantListProps {
   prefs: UserPreferences;
@@ -21,6 +26,13 @@ interface RestaurantListProps {
   onRatingChange: (id: string, rating: Rating) => void;
   onPlanRoutes: () => void;
   loading: boolean;
+  persistAllowed: boolean;
+  communityDeviceId: string | null;
+  excitementTopIds: string[];
+  favoriteTopIds: string[];
+  highlightSource: "community" | "local";
+  restaurantsForCommunitySubmit: Restaurant[];
+  onCommunityLeaderboardUpdated?: () => void;
 }
 
 export function RestaurantList({
@@ -33,8 +45,40 @@ export function RestaurantList({
   onRatingChange,
   onPlanRoutes,
   loading,
+  persistAllowed,
+  communityDeviceId,
+  excitementTopIds,
+  favoriteTopIds,
+  highlightSource,
+  restaurantsForCommunitySubmit,
+  onCommunityLeaderboardUpdated,
 }: RestaurantListProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+
+  const excitementSet = useMemo(() => new Set(excitementTopIds), [excitementTopIds]);
+  const favoriteSet = useMemo(() => new Set(favoriteTopIds), [favoriteTopIds]);
+
+  useEffect(() => {
+    if (!persistAllowed || !communityDeviceId) return;
+    if (!isCommunityBackendConfigured() || hasSentExcitementLocally()) return;
+    const ids = restaurantsForCommunitySubmit
+      .filter((r) => ratings.get(r.id) === "must_eat")
+      .map((r) => r.id);
+    if (ids.length === 0) return;
+    const t = window.setTimeout(() => {
+      void (async () => {
+        const ok = await submitCommunityExcitement(communityDeviceId, ids);
+        if (ok) onCommunityLeaderboardUpdated?.();
+      })();
+    }, 4500);
+    return () => window.clearTimeout(t);
+  }, [
+    persistAllowed,
+    communityDeviceId,
+    restaurantsForCommunitySubmit,
+    ratings,
+    onCommunityLeaderboardUpdated,
+  ]);
 
   const mustEatCount = useMemo(
     () => restaurants.filter((r) => ratings.get(r.id) === "must_eat").length,
@@ -76,6 +120,13 @@ export function RestaurantList({
   return (
     <div className="flex flex-col h-full">
       <BrowseFiltersBar value={browseFilters} onChange={onBrowseFiltersChange} />
+
+      {isCommunityBackendConfigured() && (
+        <p className="text-[11px] text-gray-500 mb-2 leading-snug">
+          Community ribbons use anonymous totals. Your must-eat list is sent <strong>once per browser</strong> (after
+          a short pause) so spots cannot be boosted by simply refreshing the page.
+        </p>
+      )}
 
       {/* Header bar */}
       <div className="flex flex-wrap justify-between items-center gap-3 mb-4 bg-white rounded-xl border border-orange-100 shadow-sm p-3">
@@ -146,6 +197,8 @@ export function RestaurantList({
                 onRatingChange={(rating) => onRatingChange(r.id, rating)}
                 highlighted={hoveredId === r.id}
                 onHover={setHoveredId}
+                bannerExcitement={excitementSet.has(r.id) ? highlightSource : null}
+                bannerFavorite={favoriteSet.has(r.id) ? highlightSource : null}
               />
             ))
           )}

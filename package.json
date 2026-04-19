@@ -10,6 +10,7 @@
     "scrape:pizza-week": "node scripts/scrape-everout-pizza-week.mjs"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.103.3",
     "html2canvas": "^1.4.1",
     "jspdf": "^4.2.1",
     "leaflet": "^1.9.4",
