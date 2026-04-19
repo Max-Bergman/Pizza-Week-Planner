@@ -32,5 +32,5 @@ export function useRoutePlanner() {
 
   const clearPlan = useCallback(() => setPlan(null), []);
 
-  return { plan, loading, error, generatePlan, clearPlan };
+  return { plan, setPlan, loading, error, generatePlan, clearPlan };
 }

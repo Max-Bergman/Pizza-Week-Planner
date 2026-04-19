@@ -3,6 +3,7 @@ import type { AppStep } from "../types";
 interface StepperProps {
   currentStep: AppStep;
   onStepClick: (step: AppStep) => void;
+  className?: string;
 }
 
 const STEPS: { step: AppStep; label: string }[] = [
@@ -11,7 +12,7 @@ const STEPS: { step: AppStep; label: string }[] = [
   { step: 3, label: "Your Routes" },
 ];
 
-export function Stepper({ currentStep, onStepClick }: StepperProps) {
+export function Stepper({ currentStep, onStepClick, className = "" }: StepperProps) {
   // TODO: Implement a horizontal step indicator with clickable steps.
   // Steps before currentStep should look "completed" (filled circle, green).
   // Current step should look "active" (filled circle, orange).
@@ -19,7 +20,7 @@ export function Stepper({ currentStep, onStepClick }: StepperProps) {
   // Clicking a past step navigates back; clicking a future step does nothing.
 
   return (
-    <nav className="flex justify-center gap-8 py-4 bg-white shadow-sm">
+    <nav className={`flex justify-center gap-8 py-4 bg-white shadow-sm ${className}`}>
       {STEPS.map(({ step, label }) => (
         <button
           key={step}

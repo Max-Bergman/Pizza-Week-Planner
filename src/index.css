@@ -1,2 +1,15 @@
 @import "tailwindcss";
 @import "leaflet/dist/leaflet.css";
+
+@media print {
+  header,
+  nav {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+  }
+  .print-hidden {
+    display: none !important;
+  }
+}

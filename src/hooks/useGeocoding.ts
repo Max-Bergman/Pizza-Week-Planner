@@ -10,7 +10,7 @@ export function useGeocoding(query: string, debounceMs = 500) {
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
-    if (query.length < 3) {
+    if (query.length < 2) {
       setResults([]);
       return;
     }

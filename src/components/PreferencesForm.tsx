@@ -1,6 +1,7 @@
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import type { UserPreferences, DietaryTag } from "../types";
 import { PIZZA_WEEK_GRID_DAYS } from "../constants/pizzaWeek";
+import { normalizeSelectedDayDates } from "../lib/calendarDates";
 import {
   mergeAdvancedIntoSimpleBaseline,
   prefsHasValidLocations,
@@ -32,6 +33,9 @@ export function PreferencesForm({
   onSubmit,
   matchCount,
 }: PreferencesFormProps) {
+  const prefsRef = useRef(prefs);
+  prefsRef.current = prefs;
+
   const sortedSelectedDays = useMemo(
     () => [...prefs.selectedDays].sort((a, b) => a.getTime() - b.getTime()),
     [prefs.selectedDays]
@@ -41,29 +45,34 @@ export function PreferencesForm({
     prefs.selectedDays.some((d) => d.toDateString() === date.toDateString());
 
   const setPlanningMode = (mode: "simple" | "advanced") => {
-    if (mode === prefs.planningMode) return;
+    const base = prefsRef.current;
+    if (mode === base.planningMode) return;
     if (mode === "advanced") {
       onChange({
-        ...prefs,
+        ...base,
         planningMode: "advanced",
-        advancedDayPrefs: seedAdvancedDayPrefsFromSimple(prefs),
+        advancedDayPrefs: seedAdvancedDayPrefsFromSimple(base),
       });
     } else {
       onChange({
-        ...prefs,
+        ...base,
         planningMode: "simple",
-        ...mergeAdvancedIntoSimpleBaseline(prefs),
+        ...mergeAdvancedIntoSimpleBaseline(base),
       });
     }
   };
 
   const toggleDay = (date: Date) => {
-    const selected = isDaySelected(date);
-    const newDays = selected
-      ? prefs.selectedDays.filter((d) => d.toDateString() !== date.toDateString())
-      : [...prefs.selectedDays, date].sort((a, b) => a.getTime() - b.getTime());
+    const base = prefsRef.current;
+    const selected = base.selectedDays.some(
+      (d) => d.toDateString() === date.toDateString()
+    );
+    const newDaysRaw = selected
+      ? base.selectedDays.filter((d) => d.toDateString() !== date.toDateString())
+      : [...base.selectedDays, date];
+    const newDays = normalizeSelectedDayDates(newDaysRaw);
 
-    let next: UserPreferences = { ...prefs, selectedDays: newDays };
+    let next: UserPreferences = { ...base, selectedDays: newDays };
     if (next.planningMode === "simple") {
       next = applyGlobalStopsToSelectedDays(
         next,
@@ -144,8 +153,11 @@ export function PreferencesForm({
             <button
               type="button"
               onClick={() => {
-                const newDays = PIZZA_WEEK_GRID_DAYS.map((d) => d.date);
-                let next: UserPreferences = { ...prefs, selectedDays: newDays };
+                const base = prefsRef.current;
+                const newDays = normalizeSelectedDayDates(
+                  PIZZA_WEEK_GRID_DAYS.map((d) => d.date)
+                );
+                let next: UserPreferences = { ...base, selectedDays: newDays };
                 if (next.planningMode === "simple") {
                   next = applyGlobalStopsToSelectedDays(
                     next,
@@ -153,16 +165,16 @@ export function PreferencesForm({
                     next.simpleStops.max
                   );
                 } else {
-                  const adv = { ...prefs.advancedDayPrefs };
+                  const adv = { ...base.advancedDayPrefs };
                   for (const d of newDays) {
                     const k = dayKeyLocal(d);
                     if (!adv[k]) {
                       adv[k] = {
-                        address: prefs.address,
-                        location: prefs.location,
-                        radiusMiles: prefs.radiusMiles,
-                        minStops: prefs.simpleStops.min,
-                        maxStops: prefs.simpleStops.max,
+                        address: base.address,
+                        location: base.location,
+                        radiusMiles: base.radiusMiles,
+                        minStops: base.simpleStops.min,
+                        maxStops: base.simpleStops.max,
                       };
                     }
                   }
@@ -177,7 +189,9 @@ export function PreferencesForm({
             <span className="text-gray-300">|</span>
             <button
               type="button"
-              onClick={() => onChange({ ...prefs, selectedDays: [] })}
+              onClick={() =>
+                onChange({ ...prefsRef.current, selectedDays: [] })
+              }
               className="text-xs text-gray-400 hover:underline"
             >
               None
@@ -227,10 +241,10 @@ export function PreferencesForm({
               address={prefs.address}
               location={prefs.location}
               onChange={({ address, location }) =>
-                onChange({ ...prefs, address, location })
+                onChange({ ...prefsRef.current, address, location })
               }
               onConfirm={({ address, location }) =>
-                onChange({ ...prefs, address, location })
+                onChange({ ...prefsRef.current, address, location })
               }
             />
           </section>
@@ -246,7 +260,10 @@ export function PreferencesForm({
               max={20}
               value={prefs.radiusMiles}
               onChange={(e) =>
-                onChange({ ...prefs, radiusMiles: Number(e.target.value) })
+                onChange({
+                  ...prefsRef.current,
+                  radiusMiles: Number(e.target.value),
+                })
               }
               className="w-full accent-red-700"
             />
@@ -270,7 +287,11 @@ export function PreferencesForm({
                   type="button"
                   onClick={() =>
                     onChange(
-                      setSimpleStopsBounds(prefs, prefs.simpleStops.min - 1, prefs.simpleStops.max)
+                      setSimpleStopsBounds(
+                        prefsRef.current,
+                        prefsRef.current.simpleStops.min - 1,
+                        prefsRef.current.simpleStops.max
+                      )
                     )
                   }
                   className="w-8 h-8 rounded-lg border-2 border-gray-200 text-gray-600 font-bold hover:border-orange-400"
@@ -282,7 +303,11 @@ export function PreferencesForm({
                   type="button"
                   onClick={() =>
                     onChange(
-                      setSimpleStopsBounds(prefs, prefs.simpleStops.min + 1, prefs.simpleStops.max)
+                      setSimpleStopsBounds(
+                        prefsRef.current,
+                        prefsRef.current.simpleStops.min + 1,
+                        prefsRef.current.simpleStops.max
+                      )
                     )
                   }
                   className="w-8 h-8 rounded-lg border-2 border-gray-200 text-gray-600 font-bold hover:border-orange-400"
@@ -296,7 +321,11 @@ export function PreferencesForm({
                   type="button"
                   onClick={() =>
                     onChange(
-                      setSimpleStopsBounds(prefs, prefs.simpleStops.min, prefs.simpleStops.max - 1)
+                      setSimpleStopsBounds(
+                        prefsRef.current,
+                        prefsRef.current.simpleStops.min,
+                        prefsRef.current.simpleStops.max - 1
+                      )
                     )
                   }
                   className="w-8 h-8 rounded-lg border-2 border-gray-200 text-gray-600 font-bold hover:border-orange-400"
@@ -308,7 +337,11 @@ export function PreferencesForm({
                   type="button"
                   onClick={() =>
                     onChange(
-                      setSimpleStopsBounds(prefs, prefs.simpleStops.min, prefs.simpleStops.max + 1)
+                      setSimpleStopsBounds(
+                        prefsRef.current,
+                        prefsRef.current.simpleStops.min,
+                        prefsRef.current.simpleStops.max + 1
+                      )
                     )
                   }
                   className="w-8 h-8 rounded-lg border-2 border-gray-200 text-gray-600 font-bold hover:border-orange-400"
@@ -349,14 +382,17 @@ export function PreferencesForm({
                       month: "short",
                       day: "numeric",
                     });
-                const patch = (partial: Partial<typeof row>) =>
+                const patch = (partial: Partial<typeof row>) => {
+                  const base = prefsRef.current;
+                  const cur = base.advancedDayPrefs[key] ?? row;
                   onChange({
-                    ...prefs,
+                    ...base,
                     advancedDayPrefs: {
-                      ...prefs.advancedDayPrefs,
-                      [key]: { ...row, ...partial },
+                      ...base.advancedDayPrefs,
+                      [key]: { ...cur, ...partial },
                     },
                   });
+                };
 
                 return (
                   <div
@@ -472,12 +508,13 @@ export function PreferencesForm({
                 key={value}
                 type="button"
                 onClick={() => {
-                  const has = prefs.dietaryFilters.includes(value);
+                  const base = prefsRef.current;
+                  const has = base.dietaryFilters.includes(value);
                   onChange({
-                    ...prefs,
+                    ...base,
                     dietaryFilters: has
-                      ? prefs.dietaryFilters.filter((t) => t !== value)
-                      : [...prefs.dietaryFilters, value],
+                      ? base.dietaryFilters.filter((t) => t !== value)
+                      : [...base.dietaryFilters, value],
                   });
                 }}
                 className={`px-4 py-2 rounded-full border-2 text-sm font-medium transition-colors ${
