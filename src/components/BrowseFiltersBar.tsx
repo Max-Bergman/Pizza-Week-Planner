@@ -42,6 +42,10 @@ export function BrowseFiltersBar({ value, onChange }: BrowseFiltersBarProps) {
 
       <div>
         <p className="text-xs text-gray-600 mb-1.5">Slice / whole pie</p>
+        <p className="text-xs text-gray-400 mb-1.5">
+          Slice or Whole pie includes places that offer both. Use &quot;Both&quot; for both-only
+          listings.
+        </p>
         <div className="flex flex-wrap gap-1.5">
           {SERVING.map(({ value: v, label }) => {
             const on = value.serving.includes(v);
