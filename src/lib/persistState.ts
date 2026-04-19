@@ -1,15 +1,19 @@
-import type { AppStep, UserPreferences, Rating, RoutePlan } from "../types";
+import type { AppStep, UserPreferences, Rating, RoutePlan, RestaurantVisitEntry } from "../types";
 import type { BrowseFilters } from "./browseFilter";
+import { EMPTY_BROWSE_FILTERS } from "./browseFilter";
+import { sanitizeVisitLogRecord } from "./visitLogHelpers";
 
 const STORAGE_KEY = "pizza-week-planner-state-v2";
 
 export interface PersistedAppState {
-  v: 2;
+  v: 3;
   step: AppStep;
   prefs: UserPreferences;
   ratings: Record<string, Rating>;
   browseFilters: BrowseFilters;
   plan: RoutePlan | null;
+  /** Local-only diary: restaurants you have visited with optional score (0–10) and review. */
+  visitLog: Record<string, RestaurantVisitEntry>;
 }
 
 function reviveCalendarDate(d: unknown): Date {
@@ -48,12 +52,25 @@ export function loadPersistedState(): PersistedAppState | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
-    const data = JSON.parse(raw) as PersistedAppState;
-    if (data.v !== 2 || !data.prefs) return null;
+    const data = JSON.parse(raw) as {
+      v?: number;
+      prefs?: UserPreferences;
+      ratings?: Record<string, Rating>;
+      browseFilters?: BrowseFilters;
+      plan?: RoutePlan | null;
+      visitLog?: unknown;
+      step?: AppStep;
+    };
+    if ((data.v !== 2 && data.v !== 3) || !data.prefs) return null;
+    const visitLog = sanitizeVisitLogRecord(data.visitLog);
     return {
-      ...data,
+      v: 3,
+      step: data.step ?? 1,
       prefs: rehydrateUserPreferences(data.prefs),
-      plan: revivePlan(data.plan),
+      ratings: data.ratings ?? {},
+      browseFilters: data.browseFilters ?? EMPTY_BROWSE_FILTERS,
+      plan: revivePlan(data.plan ?? null),
+      visitLog,
     };
   } catch {
     return null;

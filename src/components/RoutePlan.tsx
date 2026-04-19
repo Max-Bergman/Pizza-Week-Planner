@@ -1,14 +1,26 @@
-import type { Restaurant, RoutePlan as RoutePlanType, RatingsMap } from "../types";
+import { useMemo } from "react";
+import type {
+  Restaurant,
+  RoutePlan as RoutePlanType,
+  RatingsMap,
+  RestaurantVisitPatch,
+  VisitLogMap,
+} from "../types";
+import { collectPlanRestaurants } from "../lib/visitLogHelpers";
 import { DayItinerary } from "./DayItinerary";
+import { VisitTracker } from "./VisitTracker";
 
 interface RoutePlanProps {
   plan: RoutePlanType;
   filteredRestaurants: Restaurant[];
   ratings: RatingsMap;
+  visitLog: VisitLogMap;
+  onPatchVisit: (restaurantId: string, patch: RestaurantVisitPatch) => void;
   onDayStopsChange: (dayIndex: number, restaurants: Restaurant[]) => void;
   onBack: () => void;
   onPrint: () => void;
-  onDownloadJson: () => void;
+  onDownloadPdf: () => void;
+  onDownloadPng: () => void;
   onCopyShareLink: () => void;
 }
 
@@ -16,15 +28,28 @@ export function RoutePlan({
   plan,
   filteredRestaurants,
   ratings,
+  visitLog,
+  onPatchVisit,
   onDayStopsChange,
   onBack,
   onPrint,
-  onDownloadJson,
+  onDownloadPdf,
+  onDownloadPng,
   onCopyShareLink,
 }: RoutePlanProps) {
   const hours = Math.floor(plan.totalDriveMinutes / 60);
   const mins = plan.totalDriveMinutes % 60;
   const driveLabel = hours > 0 ? `${hours}h ${mins}m` : `${mins} min`;
+
+  const planRestaurants = useMemo(() => collectPlanRestaurants(plan), [plan]);
+  const planIds = useMemo(() => new Set(planRestaurants.map((r) => r.id)), [planRestaurants]);
+  const extraRestaurants = useMemo(
+    () =>
+      filteredRestaurants
+        .filter((r) => !planIds.has(r.id))
+        .sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: "base" })),
+    [filteredRestaurants, planIds]
+  );
 
   return (
     <div id="route-plan-print-root">
@@ -36,7 +61,7 @@ export function RoutePlan({
               April 20–26, 2026 &middot; $4 slices &middot; $25 whole pies
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 export-exclude">
             <button
               type="button"
               onClick={onPrint}
@@ -46,10 +71,17 @@ export function RoutePlan({
             </button>
             <button
               type="button"
-              onClick={onDownloadJson}
+              onClick={onDownloadPdf}
               className="px-3 py-2 rounded-xl border-2 border-gray-200 text-gray-800 text-sm font-medium hover:border-orange-300"
             >
-              Download JSON
+              Download PDF
+            </button>
+            <button
+              type="button"
+              onClick={onDownloadPng}
+              className="px-3 py-2 rounded-xl border-2 border-gray-200 text-gray-800 text-sm font-medium hover:border-orange-300"
+            >
+              Download PNG
             </button>
             <button
               type="button"
@@ -69,8 +101,9 @@ export function RoutePlan({
         </div>
 
         <p className="text-xs text-gray-500 mt-3">
-          Edit: reorder with arrows, remove with ✕, or add stops from your in-range list. Changes save in this
-          browser automatically.
+          Edit: reorder with arrows, remove with ✕, or add stops from your in-range list. Use{" "}
+          <strong>Google Maps</strong> or <strong>Apple Maps</strong> on each day to send stops to your phone.
+          Download PDF or PNG for an offline copy. Changes save in this browser automatically.
         </p>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
@@ -118,6 +151,13 @@ export function RoutePlan({
           />
         ))}
       </div>
+
+      <VisitTracker
+        planRestaurants={planRestaurants}
+        extraRestaurants={extraRestaurants}
+        visitLog={visitLog}
+        onPatchVisit={onPatchVisit}
+      />
     </div>
   );
 }

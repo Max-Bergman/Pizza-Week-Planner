@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { DayRoute, Restaurant, RatingsMap } from "../types";
 import { pizzaServingLabel } from "../lib/pizzaServing";
+import { appleMapsDayUrl, googleMapsDayUrl } from "../lib/mapsDeepLinks";
 import { RouteMap } from "./RouteMap";
 
 interface DayItineraryProps {
@@ -90,10 +91,15 @@ export function DayItinerary({
   const showMapToggleInHeader =
     (routeEditing && hasMapContent) || (!routeEditing && day.stops.length > 0);
 
+  const googleUrl = googleMapsDayUrl(day);
+  const appleUrl = appleMapsDayUrl(day);
+  const showMapsLinks = Boolean(googleUrl && appleUrl);
+  const showHeaderActions = showMapToggleInHeader || showMapsLinks;
+
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-orange-100 overflow-hidden">
-      <div className="flex justify-between items-center px-5 py-4 bg-red-700 text-white">
-        <div>
+      <div className="flex flex-wrap justify-between items-start gap-3 px-5 py-4 bg-red-700 text-white">
+        <div className="min-w-0 flex-1">
           <h3 className="text-lg font-bold">{dayLabel}</h3>
           <p className="text-red-200 text-sm mt-0.5">
             {day.stops.length} stop{day.stops.length !== 1 ? "s" : ""}
@@ -105,19 +111,43 @@ export function DayItinerary({
             )}
           </p>
         </div>
-        {showMapToggleInHeader && (
-          <button
-            type="button"
-            onClick={toggleShowMap}
-            className="text-red-100 hover:text-white text-sm underline"
-          >
-            {showMap || mapPickMode ? "Hide map" : "Show map"}
-          </button>
+        {showHeaderActions && (
+          <div className="flex flex-col items-end gap-2 shrink-0">
+            {showMapToggleInHeader && (
+              <button
+                type="button"
+                onClick={toggleShowMap}
+                className="text-red-100 hover:text-white text-sm underline"
+              >
+                {showMap || mapPickMode ? "Hide map" : "Show map"}
+              </button>
+            )}
+            {showMapsLinks && (
+              <div className="flex flex-wrap justify-end gap-1.5">
+                <a
+                  href={googleUrl!}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-white/15 hover:bg-white/25 text-white border border-white/20 transition-colors"
+                >
+                  Google Maps
+                </a>
+                <a
+                  href={appleUrl!}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-white/15 hover:bg-white/25 text-white border border-white/20 transition-colors"
+                >
+                  Apple Maps
+                </a>
+              </div>
+            )}
+          </div>
         )}
       </div>
 
       {mapVisible && (
-        <div className="relative h-64 border-b border-orange-100">
+        <div className="relative h-64 border-b border-orange-100 route-plan-leaflet-map">
           {mapPickMode && routeEditing && (
             <div className="absolute top-2 left-2 right-2 z-[500] pointer-events-none flex justify-center px-2">
               <p className="text-[11px] font-medium text-white/95 bg-black/55 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm border border-white/10 max-w-md text-center leading-snug">
@@ -137,7 +167,7 @@ export function DayItinerary({
       )}
 
       {routeEditing && (
-        <div className="px-5 py-3 bg-orange-50/90 border-b border-orange-100 flex flex-wrap gap-3 items-center text-sm">
+        <div className="px-5 py-3 bg-orange-50/90 border-b border-orange-100 flex flex-wrap gap-3 items-center text-sm export-exclude">
           <span className="font-medium text-gray-700">Edit route</span>
           {hasMapContent && (
             <button
@@ -260,7 +290,7 @@ export function DayItinerary({
 
               <div className="flex flex-col items-end gap-2 shrink-0">
                 {routeEditing && (
-                  <div className="flex gap-1">
+                  <div className="flex gap-1 export-exclude">
                     <button
                       type="button"
                       title="Move up"

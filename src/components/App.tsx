@@ -1,5 +1,14 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from "react";
-import type { AppStep, UserPreferences, RatingsMap, DietaryTag, Rating, Restaurant } from "../types";
+import type {
+  AppStep,
+  UserPreferences,
+  RatingsMap,
+  DietaryTag,
+  Rating,
+  Restaurant,
+  RestaurantVisitPatch,
+  VisitLogMap,
+} from "../types";
 import { useRestaurants } from "../hooks/useRestaurants";
 import { useRoutePlanner } from "../hooks/useRoutePlanner";
 import {
@@ -21,6 +30,7 @@ import {
   aggregateRoutePlanTotals,
   rebuildDayRouteFromStops,
 } from "../lib/routeRebuild";
+import { clampVisitScore } from "../lib/visitLogHelpers";
 import { Stepper } from "./Stepper";
 import { PreferencesForm } from "./PreferencesForm";
 import { RestaurantList } from "./RestaurantList";
@@ -42,6 +52,7 @@ export function App() {
   const [step, setStep] = useState<AppStep>(1);
   const [prefs, setPrefs] = useState<UserPreferences>(DEFAULT_PREFS);
   const [ratings, setRatings] = useState<RatingsMap>(new Map());
+  const [visitLog, setVisitLog] = useState<VisitLogMap>(new Map());
   const [browseFilters, setBrowseFilters] = useState<BrowseFilters>(EMPTY_BROWSE_FILTERS);
 
   const hydrationDone = useRef(false);
@@ -82,6 +93,7 @@ export function App() {
         setBrowseFilters(payload.browseFilters ?? EMPTY_BROWSE_FILTERS);
         setStep(payload.step ?? 1);
         setPlan(null);
+        setVisitLog(new Map());
         hydrationDone.current = true;
         allowSave.current = true;
         return;
@@ -92,6 +104,7 @@ export function App() {
     if (saved) {
       setPrefs(saved.prefs);
       setRatings(new Map(Object.entries(saved.ratings)));
+      setVisitLog(new Map(Object.entries(saved.visitLog)));
       setBrowseFilters(saved.browseFilters);
       if (saved.plan) setPlan(saved.plan);
       setStep(saved.step);
@@ -104,16 +117,17 @@ export function App() {
     if (!allowSave.current || restaurantsLoading) return;
     const t = window.setTimeout(() => {
       savePersistedState({
-        v: 2,
+        v: 3,
         step,
         prefs,
         ratings: Object.fromEntries(ratings),
         browseFilters,
         plan,
+        visitLog: Object.fromEntries(visitLog),
       });
     }, 400);
     return () => clearTimeout(t);
-  }, [step, prefs, ratings, browseFilters, plan, restaurantsLoading]);
+  }, [step, prefs, ratings, visitLog, browseFilters, plan, restaurantsLoading]);
 
   const handlePrefsSubmit = useCallback(() => {
     if (!prefsHasValidLocations(prefs)) return;
@@ -153,22 +167,52 @@ export function App() {
     [plan, mustEatIds, setPlan]
   );
 
-  const handleDownloadJson = useCallback(() => {
-    const data = {
-      v: 2,
-      exportedAt: new Date().toISOString(),
-      prefs,
-      ratings: Object.fromEntries(ratings),
-      browseFilters,
-      plan,
-    };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "pizza-week-routes.json";
-    a.click();
-    URL.revokeObjectURL(a.href);
-  }, [prefs, ratings, browseFilters, plan]);
+  const patchVisitLog = useCallback((id: string, patch: RestaurantVisitPatch) => {
+    setVisitLog((prev) => {
+      const next = new Map(prev);
+      if (patch.visited === false) {
+        next.delete(id);
+        return next;
+      }
+      const prevE = next.get(id);
+      const score =
+        patch.score === null
+          ? undefined
+          : patch.score !== undefined
+            ? clampVisitScore(patch.score)
+            : prevE?.score;
+      const review =
+        patch.review === null
+          ? undefined
+          : patch.review !== undefined
+            ? patch.review.slice(0, 2000) || undefined
+            : prevE?.review;
+      next.set(id, { visited: true, score, review });
+      return next;
+    });
+  }, []);
+
+  const handleDownloadPdf = useCallback(async () => {
+    if (!plan) return;
+    try {
+      const { downloadRoutePlanPdf } = await import("../lib/routePlanExport");
+      await downloadRoutePlanPdf(plan, visitLog, restaurants);
+    } catch (e) {
+      console.error(e);
+      window.alert("Could not build the PDF. Try Print / PDF from your browser instead.");
+    }
+  }, [plan, visitLog, restaurants]);
+
+  const handleDownloadPng = useCallback(async () => {
+    if (!plan) return;
+    try {
+      const { downloadRoutePlanPng } = await import("../lib/routePlanExport");
+      await downloadRoutePlanPng();
+    } catch (e) {
+      console.error(e);
+      window.alert("Could not capture a PNG. Try Print / PDF or Download PDF instead.");
+    }
+  }, [plan]);
 
   const handleCopyShareLink = useCallback(() => {
     const payload = {
@@ -180,7 +224,9 @@ export function App() {
     };
     const enc = encodeSharePayload(payload);
     if (enc.length > 4000) {
-      window.alert("This link would be too long for some browsers. Use Download JSON instead.");
+      window.alert(
+        "This link would be too long for some browsers. Use Download PDF or Download PNG to share your route instead."
+      );
       return;
     }
     const url = `${window.location.origin}${window.location.pathname}#share=${enc}`;
@@ -264,10 +310,13 @@ export function App() {
             plan={plan}
             filteredRestaurants={filtered}
             ratings={ratings}
+            visitLog={visitLog}
+            onPatchVisit={patchVisitLog}
             onDayStopsChange={handleDayStopsChange}
             onBack={() => setStep(2)}
             onPrint={handlePrint}
-            onDownloadJson={handleDownloadJson}
+            onDownloadPdf={handleDownloadPdf}
+            onDownloadPng={handleDownloadPng}
             onCopyShareLink={handleCopyShareLink}
           />
         )}

@@ -105,3 +105,20 @@ export interface RouteStop {
 export type AppStep = 1 | 2 | 3;
 
 export type RatingsMap = Map<string, Rating>;
+
+/** Pizza Week diary: places you have been, optional score / review (local only). */
+export interface RestaurantVisitEntry {
+  visited: true;
+  /** 0–10, typically one decimal (e.g. 8.5). */
+  score?: number;
+  review?: string;
+}
+
+export type VisitLogMap = Map<string, RestaurantVisitEntry>;
+
+/** Partial update for {@link VisitLogMap} (null score/review clears that field). */
+export type RestaurantVisitPatch = {
+  visited?: boolean;
+  score?: number | null;
+  review?: string | null;
+};
