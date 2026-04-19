@@ -67,7 +67,7 @@ export function RestaurantCard({
         <div className="flex flex-col gap-1.5 mb-3 -mt-1">
           {bannerExcitement && (
             <div className="rounded-lg px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-wide text-center bg-gradient-to-r from-red-600 to-rose-500 text-white shadow-sm">
-              Most excited — community picks
+              🔥 Hot — community picks
             </div>
           )}
           {bannerFavorite && (
