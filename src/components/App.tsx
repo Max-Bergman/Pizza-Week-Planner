@@ -39,8 +39,6 @@ import {
   hasSentPlanSnapshotLocally,
   hasSentVisitSnapshotLocally,
   isCommunityBackendConfigured,
-  localTopFavoriteIds,
-  localTopMustEatIds,
   submitCommunityPlanStops,
   submitCommunityVisitSnapshot,
 } from "../lib/communityLeaderboard";
@@ -97,30 +95,17 @@ export function App() {
 
   const communityDeviceId = useMemo(() => getOrCreateDeviceId(), []);
 
-  const localExcitementTop = useMemo(
-    () => localTopMustEatIds(prefs, filtered, ratings),
-    [prefs, filtered, ratings]
-  );
-  const localFavoriteTop = useMemo(() => localTopFavoriteIds(visitLog), [visitLog]);
-
+  /** Ribbons only when Supabase is configured and the aggregate query returned ids. */
   const excitementDisplayIds = useMemo(() => {
-    if (isCommunityBackendConfigured() && lbExcitement.length > 0) return lbExcitement;
-    return localExcitementTop;
-  }, [lbExcitement, localExcitementTop]);
+    if (!isCommunityBackendConfigured() || lbExcitement.length === 0) return [];
+    return lbExcitement;
+  }, [lbExcitement]);
 
   const favoriteDisplayIds = useMemo(() => {
+    if (!isCommunityBackendConfigured() || lbFavorite.length === 0) return [];
     const vis = new Set(visibleRestaurants.map((r) => r.id));
-    const base =
-      isCommunityBackendConfigured() && lbFavorite.length > 0 ? lbFavorite : localFavoriteTop;
-    return base.filter((id) => vis.has(id));
-  }, [lbFavorite, localFavoriteTop, visibleRestaurants]);
-
-  const highlightSource = useMemo((): "community" | "local" => {
-    if (isCommunityBackendConfigured() && (lbExcitement.length > 0 || lbFavorite.length > 0)) {
-      return "community";
-    }
-    return "local";
-  }, [lbExcitement.length, lbFavorite.length]);
+    return lbFavorite.filter((id) => vis.has(id));
+  }, [lbFavorite, visibleRestaurants]);
 
   const refreshCommunityBoard = useCallback(async () => {
     if (!isCommunityBackendConfigured()) return;
@@ -421,7 +406,6 @@ export function App() {
             communityDeviceId={communityDeviceId}
             excitementTopIds={excitementDisplayIds}
             favoriteTopIds={favoriteDisplayIds}
-            highlightSource={highlightSource}
             onCommunityLeaderboardUpdated={refreshCommunityBoard}
           />
         )}

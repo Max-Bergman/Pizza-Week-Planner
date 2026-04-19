@@ -1,6 +1,6 @@
 # Supabase setup (community metrics)
 
-This app **does not require** Supabase. Without it, “community” ribbons fall back to **this device only**.
+This app **does not require** Supabase. Without it (or before any data exists), **community highlight ribbons are hidden** on the browse list.
 
 When configured, the browser sends **anonymous, one-time-per-device** snapshots to your Supabase project so you can see **global** rollups in `community_restaurant_aggregate`.
 

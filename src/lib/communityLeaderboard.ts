@@ -1,13 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type {
-  Rating,
-  Restaurant,
-  RatingsMap,
-  RoutePlan,
-  UserPreferences,
-  VisitLogMap,
-} from "../types";
-import { distanceFromNearestBrowseAnchor } from "./planningContext";
+import type { Rating, RoutePlan } from "../types";
 
 const SENT_INTEREST = "pizza-week-community-interest-sent";
 const SENT_VISIT = "pizza-week-community-visit-sent";
@@ -208,25 +200,4 @@ export function hasSentPlanSnapshotLocally(): boolean {
   } catch {
     return false;
   }
-}
-
-/** Top 5 must-eat among in-range list, nearest anchors first (ties by distance). */
-export function localTopMustEatIds(prefs: UserPreferences, filtered: Restaurant[], ratings: RatingsMap): string[] {
-  const scored = filtered
-    .filter((r) => ratings.get(r.id) === "must_eat")
-    .map((r) => ({
-      id: r.id,
-      d: distanceFromNearestBrowseAnchor(prefs, { lat: r.lat, lng: r.lng }) ?? 1e9,
-    }))
-    .sort((a, b) => a.d - b.d);
-  return scored.slice(0, 5).map((x) => x.id);
-}
-
-/** Top 5 visit scores among restaurants that appear in visit log with a numeric score. */
-export function localTopFavoriteIds(visitLog: VisitLogMap): string[] {
-  const rows = [...visitLog.entries()]
-    .filter(([, v]) => v.score !== undefined && Number.isFinite(v.score))
-    .map(([id, v]) => ({ id, s: v.score as number }))
-    .sort((a, b) => b.s - a.s);
-  return rows.slice(0, 5).map((r) => r.id);
 }

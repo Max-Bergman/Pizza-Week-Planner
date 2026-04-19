@@ -12,10 +12,10 @@ interface RestaurantCardProps {
   onRatingChange: (rating: Rating) => void;
   highlighted?: boolean;
   onHover?: (id: string | null) => void;
-  /** Community or on-device highlight for “most excited” must-eats. */
-  bannerExcitement?: "community" | "local" | null;
-  /** Community or on-device highlight for highest visit scores. */
-  bannerFavorite?: "community" | "local" | null;
+  /** Top community must-eat picks (only when Supabase aggregates exist). */
+  bannerExcitement?: boolean;
+  /** Top community visit-score favorites (only when Supabase aggregates exist). */
+  bannerFavorite?: boolean;
 }
 
 const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -34,8 +34,8 @@ export function RestaurantCard({
   onRatingChange,
   highlighted = false,
   onHover,
-  bannerExcitement = null,
-  bannerFavorite = null,
+  bannerExcitement = false,
+  bannerFavorite = false,
 }: RestaurantCardProps) {
   const distance =
     distanceMilesOverride !== undefined && distanceMilesOverride !== null
@@ -66,29 +66,13 @@ export function RestaurantCard({
       {(bannerExcitement || bannerFavorite) && (
         <div className="flex flex-col gap-1.5 mb-3 -mt-1">
           {bannerExcitement && (
-            <div
-              className={`rounded-lg px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-wide text-center ${
-                bannerExcitement === "community"
-                  ? "bg-gradient-to-r from-red-600 to-rose-500 text-white shadow-sm"
-                  : "bg-red-50 text-red-800 border border-red-200"
-              }`}
-            >
-              {bannerExcitement === "community"
-                ? "Most excited — community picks"
-                : "Your most excited picks (this device)"}
+            <div className="rounded-lg px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-wide text-center bg-gradient-to-r from-red-600 to-rose-500 text-white shadow-sm">
+              Most excited — community picks
             </div>
           )}
           {bannerFavorite && (
-            <div
-              className={`rounded-lg px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-wide text-center ${
-                bannerFavorite === "community"
-                  ? "bg-gradient-to-r from-amber-500 to-yellow-400 text-amber-950 shadow-sm"
-                  : "bg-amber-50 text-amber-900 border border-amber-200"
-              }`}
-            >
-              {bannerFavorite === "community"
-                ? "People’s favorites — community ratings"
-                : "Your highest rated (this device)"}
+            <div className="rounded-lg px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-wide text-center bg-gradient-to-r from-amber-500 to-yellow-400 text-amber-950 shadow-sm">
+              People’s favorites — community ratings
             </div>
           )}
         </div>

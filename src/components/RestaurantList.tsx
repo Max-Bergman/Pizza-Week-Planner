@@ -29,7 +29,6 @@ interface RestaurantListProps {
   communityDeviceId: string | null;
   excitementTopIds: string[];
   favoriteTopIds: string[];
-  highlightSource: "community" | "local";
   onCommunityLeaderboardUpdated?: () => void;
 }
 
@@ -46,7 +45,6 @@ export function RestaurantList({
   communityDeviceId,
   excitementTopIds,
   favoriteTopIds,
-  highlightSource,
   onCommunityLeaderboardUpdated,
 }: RestaurantListProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -189,8 +187,8 @@ export function RestaurantList({
                 onRatingChange={(rating) => onRatingChange(r.id, rating)}
                 highlighted={hoveredId === r.id}
                 onHover={setHoveredId}
-                bannerExcitement={excitementSet.has(r.id) ? highlightSource : null}
-                bannerFavorite={favoriteSet.has(r.id) ? highlightSource : null}
+                bannerExcitement={excitementSet.has(r.id)}
+                bannerFavorite={favoriteSet.has(r.id)}
               />
             ))
           )}
