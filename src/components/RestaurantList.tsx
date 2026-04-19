@@ -26,7 +26,6 @@ interface RestaurantListProps {
   onRatingChange: (id: string, rating: Rating) => void;
   onPlanRoutes: () => void;
   loading: boolean;
-  persistAllowed: boolean;
   communityDeviceId: string | null;
   excitementTopIds: string[];
   favoriteTopIds: string[];
@@ -45,7 +44,6 @@ export function RestaurantList({
   onRatingChange,
   onPlanRoutes,
   loading,
-  persistAllowed,
   communityDeviceId,
   excitementTopIds,
   favoriteTopIds,
@@ -59,7 +57,7 @@ export function RestaurantList({
   const favoriteSet = useMemo(() => new Set(favoriteTopIds), [favoriteTopIds]);
 
   useEffect(() => {
-    if (!persistAllowed || !communityDeviceId) return;
+    if (!communityDeviceId) return;
     if (!isCommunityBackendConfigured() || hasSentExcitementLocally()) return;
     const ids = restaurantsForCommunitySubmit
       .filter((r) => ratings.get(r.id) === "must_eat")
@@ -72,13 +70,7 @@ export function RestaurantList({
       })();
     }, 4500);
     return () => window.clearTimeout(t);
-  }, [
-    persistAllowed,
-    communityDeviceId,
-    restaurantsForCommunitySubmit,
-    ratings,
-    onCommunityLeaderboardUpdated,
-  ]);
+  }, [communityDeviceId, restaurantsForCommunitySubmit, ratings, onCommunityLeaderboardUpdated]);
 
   const mustEatCount = useMemo(
     () => restaurants.filter((r) => ratings.get(r.id) === "must_eat").length,
