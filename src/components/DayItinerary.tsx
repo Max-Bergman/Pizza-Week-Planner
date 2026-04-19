@@ -18,7 +18,8 @@ export function DayItinerary({
   onChangeStops,
   routeEditing = true,
 }: DayItineraryProps) {
-  const [showMap, setShowMap] = useState(true);
+  const [showMap, setShowMap] = useState(() => day.stops.length > 0);
+  const [mapPickMode, setMapPickMode] = useState(false);
 
   const dayLabel = day.date.toLocaleDateString("en-US", {
     weekday: "long",
@@ -54,6 +55,39 @@ export function DayItinerary({
     pushNext([...restaurants, r]);
   };
 
+  const hasMapContent = day.stops.length > 0 || addOptions.length > 0;
+  const mapVisible = routeEditing
+    ? hasMapContent && (showMap || mapPickMode)
+    : day.stops.length > 0 && showMap;
+
+  const toggleShowMap = () => {
+    setShowMap((prev) => {
+      const next = !prev;
+      if (!next) setMapPickMode(false);
+      return next;
+    });
+  };
+
+  const toggleMapPick = () => {
+    setMapPickMode((prev) => {
+      const next = !prev;
+      if (next) setShowMap(true);
+      return next;
+    });
+  };
+
+  const handleMapPick = (restaurantId: string, action: "add" | "remove") => {
+    if (!routeEditing) return;
+    if (action === "add") {
+      addById(restaurantId);
+    } else {
+      pushNext(restaurants.filter((r) => r.id !== restaurantId));
+    }
+  };
+
+  const showMapToggleInHeader =
+    (routeEditing && hasMapContent) || (!routeEditing && day.stops.length > 0);
+
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-orange-100 overflow-hidden">
       <div className="flex justify-between items-center px-5 py-4 bg-red-700 text-white">
@@ -69,26 +103,56 @@ export function DayItinerary({
             )}
           </p>
         </div>
-        {day.stops.length > 0 && (
+        {showMapToggleInHeader && (
           <button
             type="button"
-            onClick={() => setShowMap((v) => !v)}
+            onClick={toggleShowMap}
             className="text-red-100 hover:text-white text-sm underline"
           >
-            {showMap ? "Hide map" : "Show map"}
+            {showMap || mapPickMode ? "Hide map" : "Show map"}
           </button>
         )}
       </div>
 
-      {day.stops.length > 0 && showMap && (
-        <div className="h-64 border-b border-orange-100">
-          <RouteMap day={day} />
+      {mapVisible && (
+        <div className="relative h-64 border-b border-orange-100">
+          {mapPickMode && routeEditing && (
+            <div className="absolute top-2 left-2 right-2 z-[500] pointer-events-none flex justify-center px-2">
+              <p className="text-[11px] font-medium text-white/95 bg-black/55 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm border border-white/10 max-w-md text-center leading-snug">
+                <span className="text-emerald-300">Green +</span> add ·{" "}
+                <span className="text-red-200">numbered</span> remove · then Done picking
+              </p>
+            </div>
+          )}
+          <RouteMap
+            day={day}
+            mapPickMode={routeEditing && mapPickMode}
+            pickCandidates={addOptions}
+            onStopPick={routeEditing ? handleMapPick : undefined}
+          />
         </div>
       )}
 
       {routeEditing && (
         <div className="px-5 py-3 bg-orange-50/90 border-b border-orange-100 flex flex-wrap gap-3 items-center text-sm">
           <span className="font-medium text-gray-700">Edit route</span>
+          {hasMapContent && (
+            <button
+              type="button"
+              onClick={toggleMapPick}
+              aria-pressed={mapPickMode}
+              className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition-colors ${
+                mapPickMode
+                  ? "border-emerald-600 bg-emerald-600 text-white shadow-sm"
+                  : "border-emerald-300/80 bg-white text-emerald-800 hover:bg-emerald-50"
+              }`}
+            >
+              <span className="text-[10px] opacity-90" aria-hidden>
+                {mapPickMode ? "✓" : "◎"}
+              </span>
+              {mapPickMode ? "Done picking" : "Pick on map"}
+            </button>
+          )}
           {addOptions.length > 0 && (
             <label className="flex items-center gap-2 text-gray-600">
               <span className="text-xs">Add stop</span>
