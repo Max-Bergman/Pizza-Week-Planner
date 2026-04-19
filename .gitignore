@@ -14,6 +14,7 @@ npm-debug.log*
 # Env (secrets)
 .env
 .env.*
+!.env.example
 
 # Scraper backup (regenerated locally)
 public/data/restaurants.backup.json
