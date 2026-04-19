@@ -33,13 +33,16 @@ import {
 import { clampVisitScore } from "../lib/visitLogHelpers";
 import { getOrCreateDeviceId } from "../lib/deviceId";
 import {
+  collectPlanRestaurantIds,
   fetchCommunityExcitementTop,
   fetchCommunityFavoriteTop,
-  hasSentFavoritesLocally,
+  hasSentPlanSnapshotLocally,
+  hasSentVisitSnapshotLocally,
   isCommunityBackendConfigured,
   localTopFavoriteIds,
   localTopMustEatIds,
-  submitCommunityFavorites,
+  submitCommunityPlanStops,
+  submitCommunityVisitSnapshot,
 } from "../lib/communityLeaderboard";
 import { Stepper } from "./Stepper";
 import { PreferencesForm } from "./PreferencesForm";
@@ -191,7 +194,7 @@ export function App() {
   useEffect(() => {
     if (!isCommunityBackendConfigured()) return;
     if (step !== 3) return;
-    if (hasSentFavoritesLocally()) return;
+    if (hasSentVisitSnapshotLocally()) return;
     const deviceId = getOrCreateDeviceId();
     if (!deviceId) return;
     const scores: Record<string, number> = {};
@@ -202,12 +205,28 @@ export function App() {
     });
     if (Object.keys(scores).length === 0) return;
     const t = window.setTimeout(() => {
-      void submitCommunityFavorites(deviceId, scores).then((ok) => {
+      void submitCommunityVisitSnapshot(deviceId, scores).then((ok) => {
         if (ok) void refreshCommunityBoard();
       });
     }, 5000);
     return () => window.clearTimeout(t);
   }, [step, visitLog, refreshCommunityBoard]);
+
+  useEffect(() => {
+    if (!isCommunityBackendConfigured()) return;
+    if (step !== 3 || !plan) return;
+    if (hasSentPlanSnapshotLocally()) return;
+    const deviceId = getOrCreateDeviceId();
+    if (!deviceId) return;
+    const ids = collectPlanRestaurantIds(plan);
+    if (ids.length === 0) return;
+    const t = window.setTimeout(() => {
+      void submitCommunityPlanStops(deviceId, ids).then((ok) => {
+        if (ok) void refreshCommunityBoard();
+      });
+    }, 3500);
+    return () => window.clearTimeout(t);
+  }, [step, plan, refreshCommunityBoard]);
 
   useEffect(() => {
     if (!allowSave.current || restaurantsLoading) return;
@@ -403,7 +422,6 @@ export function App() {
             excitementTopIds={excitementDisplayIds}
             favoriteTopIds={favoriteDisplayIds}
             highlightSource={highlightSource}
-            restaurantsForCommunitySubmit={filtered}
             onCommunityLeaderboardUpdated={refreshCommunityBoard}
           />
         )}

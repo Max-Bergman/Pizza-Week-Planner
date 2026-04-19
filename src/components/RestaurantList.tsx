@@ -10,9 +10,9 @@ import {
   distanceFromNearestBrowseAnchor,
 } from "../lib/planningContext";
 import {
-  hasSentExcitementLocally,
+  hasSentInterestSnapshotLocally,
   isCommunityBackendConfigured,
-  submitCommunityExcitement,
+  submitCommunityInterestSnapshot,
 } from "../lib/communityLeaderboard";
 
 interface RestaurantListProps {
@@ -30,7 +30,6 @@ interface RestaurantListProps {
   excitementTopIds: string[];
   favoriteTopIds: string[];
   highlightSource: "community" | "local";
-  restaurantsForCommunitySubmit: Restaurant[];
   onCommunityLeaderboardUpdated?: () => void;
 }
 
@@ -48,7 +47,6 @@ export function RestaurantList({
   excitementTopIds,
   favoriteTopIds,
   highlightSource,
-  restaurantsForCommunitySubmit,
   onCommunityLeaderboardUpdated,
 }: RestaurantListProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -58,19 +56,20 @@ export function RestaurantList({
 
   useEffect(() => {
     if (!communityDeviceId) return;
-    if (!isCommunityBackendConfigured() || hasSentExcitementLocally()) return;
-    const ids = restaurantsForCommunitySubmit
-      .filter((r) => ratings.get(r.id) === "must_eat")
-      .map((r) => r.id);
-    if (ids.length === 0) return;
+    if (!isCommunityBackendConfigured() || hasSentInterestSnapshotLocally()) return;
+    const payload: Record<string, Rating> = {};
+    ratings.forEach((value, id) => {
+      payload[id] = value;
+    });
+    if (Object.keys(payload).length === 0) return;
     const t = window.setTimeout(() => {
       void (async () => {
-        const ok = await submitCommunityExcitement(communityDeviceId, ids);
+        const ok = await submitCommunityInterestSnapshot(communityDeviceId, payload);
         if (ok) onCommunityLeaderboardUpdated?.();
       })();
     }, 4500);
     return () => window.clearTimeout(t);
-  }, [communityDeviceId, restaurantsForCommunitySubmit, ratings, onCommunityLeaderboardUpdated]);
+  }, [communityDeviceId, ratings, onCommunityLeaderboardUpdated]);
 
   const mustEatCount = useMemo(
     () => restaurants.filter((r) => ratings.get(r.id) === "must_eat").length,
@@ -115,8 +114,9 @@ export function RestaurantList({
 
       {isCommunityBackendConfigured() && (
         <p className="text-[11px] text-gray-500 mb-2 leading-snug">
-          Community ribbons use anonymous totals. Your must-eat list is sent <strong>once per browser</strong> (after
-          a short pause) so spots cannot be boosted by simply refreshing the page.
+          Community stats send your <strong>full interest map</strong> (must eat / interested / neutral / skip){" "}
+          <strong>once per browser</strong> after a short pause—aggregated in Supabase, not for ads. Refreshing alone
+          does not re-submit.
         </p>
       )}
 
