@@ -1,8 +1,15 @@
-import { useState } from "react";
-import type { DayRoute, Restaurant, RatingsMap } from "../types";
+import { useMemo, useState } from "react";
+import type {
+  DayRoute,
+  Restaurant,
+  RatingsMap,
+  RestaurantVisitPatch,
+  VisitLogMap,
+} from "../types";
 import { pizzaServingLabel } from "../lib/pizzaServing";
 import { appleMapsDayUrl, googleMapsDayUrl } from "../lib/mapsDeepLinks";
 import { RouteMap } from "./RouteMap";
+import { VisitStopControls } from "./VisitStopControls";
 
 interface DayItineraryProps {
   day: DayRoute;
@@ -11,6 +18,9 @@ interface DayItineraryProps {
   ratings: RatingsMap;
   onChangeStops: (dayIndex: number, restaurantsInOrder: Restaurant[]) => void;
   routeEditing?: boolean;
+  /** Step 4: mark visits and scores per stop on this day. */
+  visitLog?: VisitLogMap;
+  onPatchVisit?: (restaurantId: string, patch: RestaurantVisitPatch) => void;
 }
 
 export function DayItinerary({
@@ -20,9 +30,17 @@ export function DayItinerary({
   ratings,
   onChangeStops,
   routeEditing = true,
+  visitLog,
+  onPatchVisit,
 }: DayItineraryProps) {
   const [showMap, setShowMap] = useState(() => day.stops.length > 0);
   const [mapPickMode, setMapPickMode] = useState(false);
+
+  const trackOnDay = Boolean(visitLog && onPatchVisit && !routeEditing);
+  const dayVisitedCount = useMemo(() => {
+    if (!trackOnDay || !visitLog) return 0;
+    return day.stops.filter((s) => visitLog.has(s.restaurant.id)).length;
+  }, [day.stops, trackOnDay, visitLog]);
 
   const dayLabel = day.date.toLocaleDateString("en-US", {
     weekday: "long",
@@ -111,6 +129,11 @@ export function DayItinerary({
               </>
             )}
           </p>
+          {trackOnDay && day.stops.length > 0 && (
+            <p className="text-red-100 text-xs font-semibold mt-1.5">
+              {dayVisitedCount} / {day.stops.length} visited
+            </p>
+          )}
         </div>
         {showHeaderActions && (
           <div className="flex flex-col items-end gap-2 shrink-0">
@@ -254,7 +277,7 @@ export function DayItinerary({
                 )}
               </div>
 
-              <div className="flex-1 pb-1 min-w-0">
+              <div className="flex-1 pb-1 min-w-0 flex flex-col gap-0">
                 <p className="font-bold text-gray-900 leading-tight">{stop.restaurant.name}</p>
                 <p className="text-orange-700 text-sm font-medium mt-0.5">
                   {stop.restaurant.special}
@@ -287,6 +310,13 @@ export function DayItinerary({
                   )}
                 </div>
                 <p className="text-xs text-gray-400 mt-1">{stop.restaurant.address}</p>
+                {trackOnDay && visitLog && onPatchVisit && (
+                  <VisitStopControls
+                    restaurantId={stop.restaurant.id}
+                    entry={visitLog.get(stop.restaurant.id)}
+                    onPatchVisit={onPatchVisit}
+                  />
+                )}
               </div>
 
               <div className="flex flex-col items-end gap-2 shrink-0">

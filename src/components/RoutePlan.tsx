@@ -71,7 +71,7 @@ export function RoutePlan({
   const title = routeEditing ? "Edit your routes" : "Your routes";
   const subtitle = routeEditing
     ? "Reorder stops, add from your in-range list, or pick on the map. When you are happy with the plan, lock it in to track visits and export."
-    : "Routes are locked. Use the diary as you go, then export or open each day in Google Maps or Apple Maps on your phone.";
+    : "Routes are locked. On each day, mark stops visited and add scores right under every restaurant, then export or open the day in Google Maps or Apple Maps on your phone.";
 
   return (
     <div id="route-plan-print-root">
@@ -206,16 +206,19 @@ export function RoutePlan({
             ratings={ratings}
             onChangeStops={onDayStopsChange}
             routeEditing={routeEditing}
+            visitLog={showVisitTracker ? visitLog : undefined}
+            onPatchVisit={showVisitTracker ? onPatchVisit : undefined}
           />
         ))}
       </div>
 
-      {showVisitTracker && (
+      {showVisitTracker && extraRestaurants.length > 0 && (
         <VisitTracker
           planRestaurants={planRestaurants}
           extraRestaurants={extraRestaurants}
           visitLog={visitLog}
           onPatchVisit={onPatchVisit}
+          hidePlanStopsList
         />
       )}
     </div>
