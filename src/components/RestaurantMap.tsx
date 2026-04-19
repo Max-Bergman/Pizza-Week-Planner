@@ -1,7 +1,8 @@
 import { MapContainer, TileLayer, CircleMarker, Circle, Popup, useMap } from "react-leaflet";
 import { useEffect, useMemo } from "react";
-import type { Restaurant, RatingsMap, LatLng, Rating } from "../types";
+import type { Restaurant, RatingsMap, LatLng } from "../types";
 import { centroid } from "../lib/geo";
+import { RATING_COLORS, ratingFillOpacity } from "../lib/ratingColors";
 
 export interface MapRadiusZone {
   center: LatLng;
@@ -16,13 +17,6 @@ interface RestaurantMapProps {
   highlightedId?: string | null;
   onMarkerClick?: (id: string) => void;
 }
-
-const RATING_COLORS: Record<Rating, string> = {
-  must_eat: "#DC2626",
-  interested: "#EAB308",
-  neutral: "#D97706",
-  not_interested: "#9CA3AF",
-};
 
 const ZONE_STROKE = ["#EA580C", "#2563EB", "#7C3AED", "#DB2777", "#059669"];
 
@@ -114,8 +108,7 @@ export function RestaurantMap({
             pathOptions={{
               color: color,
               fillColor: color,
-              fillOpacity:
-                rating === "not_interested" ? 0.3 : rating === "neutral" ? 0.72 : 0.85,
+              fillOpacity: ratingFillOpacity(rating),
               weight: isHighlighted ? 3 : 2,
             }}
             eventHandlers={{

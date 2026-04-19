@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { DayRoute, Restaurant } from "../types";
+import type { DayRoute, Restaurant, RatingsMap } from "../types";
 import { pizzaServingLabel } from "../lib/pizzaServing";
 import { RouteMap } from "./RouteMap";
 
@@ -7,6 +7,7 @@ interface DayItineraryProps {
   day: DayRoute;
   dayIndex: number;
   addCandidates: Restaurant[];
+  ratings: RatingsMap;
   onChangeStops: (dayIndex: number, restaurantsInOrder: Restaurant[]) => void;
   routeEditing?: boolean;
 }
@@ -15,6 +16,7 @@ export function DayItinerary({
   day,
   dayIndex,
   addCandidates,
+  ratings,
   onChangeStops,
   routeEditing = true,
 }: DayItineraryProps) {
@@ -119,13 +121,14 @@ export function DayItinerary({
           {mapPickMode && routeEditing && (
             <div className="absolute top-2 left-2 right-2 z-[500] pointer-events-none flex justify-center px-2">
               <p className="text-[11px] font-medium text-white/95 bg-black/55 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm border border-white/10 max-w-md text-center leading-snug">
-                <span className="text-emerald-300">Green +</span> add ·{" "}
-                <span className="text-red-200">numbered</span> remove · then Done picking
+                Colors = your ratings · <span className="text-red-200"># + ring</span> = on route · tap others to
+                add · tap # to remove · Done picking
               </p>
             </div>
           )}
           <RouteMap
             day={day}
+            ratings={ratings}
             mapPickMode={routeEditing && mapPickMode}
             pickCandidates={addOptions}
             onStopPick={routeEditing ? handleMapPick : undefined}

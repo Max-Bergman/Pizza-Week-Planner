@@ -1,9 +1,10 @@
-import type { Restaurant, RoutePlan as RoutePlanType } from "../types";
+import type { Restaurant, RoutePlan as RoutePlanType, RatingsMap } from "../types";
 import { DayItinerary } from "./DayItinerary";
 
 interface RoutePlanProps {
   plan: RoutePlanType;
   filteredRestaurants: Restaurant[];
+  ratings: RatingsMap;
   onDayStopsChange: (dayIndex: number, restaurants: Restaurant[]) => void;
   onBack: () => void;
   onPrint: () => void;
@@ -14,6 +15,7 @@ interface RoutePlanProps {
 export function RoutePlan({
   plan,
   filteredRestaurants,
+  ratings,
   onDayStopsChange,
   onBack,
   onPrint,
@@ -111,6 +113,7 @@ export function RoutePlan({
             day={day}
             dayIndex={dayIndex}
             addCandidates={filteredRestaurants}
+            ratings={ratings}
             onChangeStops={onDayStopsChange}
           />
         ))}

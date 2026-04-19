@@ -9,11 +9,14 @@ import {
   Popup,
   useMap,
 } from "react-leaflet";
-import type { DayRoute, Restaurant } from "../types";
+import type { DayRoute, Restaurant, RatingsMap, Rating } from "../types";
+import { RATING_COLORS, ratingFillOpacity, ratingNumberTextColor } from "../lib/ratingColors";
 
 interface RouteMapProps {
   day: DayRoute;
-  /** When true, tap numbered stops to remove; tap green + pins to add. */
+  /** User ratings — pins use these colors (browse map palette). */
+  ratings: RatingsMap;
+  /** When true, tap numbered stops to remove; tap rating-colored pins to add. */
   mapPickMode?: boolean;
   /** Restaurants in range not currently on this day’s route (shown when mapPickMode). */
   pickCandidates?: Restaurant[];
@@ -28,10 +31,18 @@ function FitBoundsEffect({ bounds }: { bounds: L.LatLngBoundsExpression }) {
   return null;
 }
 
-function makeNumberedIcon(n: number, pickMode: boolean) {
+function makeNumberedIcon(n: number, pickMode: boolean, rating: Rating) {
+  const fill = RATING_COLORS[rating];
+  const text = ratingNumberTextColor(rating);
+  const cursor = pickMode ? "cursor-pointer" : "";
+  // White + brand-red rings mark “on this day’s route” vs unrouted candidates.
+  const ring =
+    pickMode
+      ? "0 0 0 2px #ffffff, 0 0 0 5px #B91C1C, 0 3px 10px rgba(0,0,0,0.45)"
+      : "0 0 0 2px #ffffff, 0 0 0 4px #B91C1C, 0 2px 8px rgba(0,0,0,0.38)";
   return L.divIcon({
-    className: pickMode ? "cursor-pointer" : "",
-    html: `<div style="width:28px;height:28px;border-radius:50%;background:#B91C1C;color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;border:2px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.35)">${n}</div>`,
+    className: cursor,
+    html: `<div style="width:28px;height:28px;border-radius:50%;background:${fill};color:${text};display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;border:2px solid rgba(255,255,255,0.95);box-shadow:${ring}">${n}</div>`,
     iconSize: [28, 28],
     iconAnchor: [14, 14],
   });
@@ -46,6 +57,7 @@ const homeIcon = L.divIcon({
 
 export function RouteMap({
   day,
+  ratings,
   mapPickMode = false,
   pickCandidates = [],
   onStopPick,
@@ -126,36 +138,41 @@ export function RouteMap({
       <Marker position={[home.lat, home.lng]} icon={homeIcon} />
 
       {pickActive &&
-        pickCandidates.map((r) => (
-          <CircleMarker
-            key={`pick-${r.id}`}
-            center={[r.lat, r.lng]}
-            radius={9}
-            pathOptions={{
-              color: "#059669",
-              fillColor: "#34D399",
-              fillOpacity: 0.85,
-              weight: 2,
-              className: "cursor-pointer",
-            }}
-            eventHandlers={{
-              click: () => onStopPick?.(r.id, "add"),
-            }}
-          >
-            <Popup>
-              <div className="text-sm">
-                <p className="font-semibold text-gray-900">{r.name}</p>
-                <p className="text-xs text-emerald-700 mt-1">Tap marker to add to this day</p>
-              </div>
-            </Popup>
-          </CircleMarker>
-        ))}
+        pickCandidates.map((r) => {
+          const rating = ratings.get(r.id) ?? "neutral";
+          const color = RATING_COLORS[rating];
+          return (
+            <CircleMarker
+              key={`pick-${r.id}`}
+              center={[r.lat, r.lng]}
+              radius={9}
+              pathOptions={{
+                color,
+                fillColor: color,
+                fillOpacity: ratingFillOpacity(rating),
+                weight: 2.5,
+                className: "cursor-pointer",
+              }}
+              eventHandlers={{
+                click: () => onStopPick?.(r.id, "add"),
+              }}
+            >
+              <Popup>
+                <div className="text-sm">
+                  <p className="font-semibold text-gray-900">{r.name}</p>
+                  <p className="text-xs text-gray-600 mt-1">Tap to add · color = your rating</p>
+                </div>
+              </Popup>
+            </CircleMarker>
+          );
+        })}
 
       {day.stops.map((stop) => (
         <Marker
           key={stop.restaurant.id}
           position={[stop.restaurant.lat, stop.restaurant.lng]}
-          icon={makeNumberedIcon(stop.order, pickActive)}
+          zIndexOffset={400}
+          icon={makeNumberedIcon(stop.order, pickActive, ratings.get(stop.restaurant.id) ?? "neutral")}
           eventHandlers={
             pickActive
               ? {

@@ -263,6 +263,7 @@ export function App() {
           <RoutePlan
             plan={plan}
             filteredRestaurants={filtered}
+            ratings={ratings}
             onDayStopsChange={handleDayStopsChange}
             onBack={() => setStep(2)}
             onPrint={handlePrint}
