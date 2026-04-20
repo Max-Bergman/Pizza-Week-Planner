@@ -212,6 +212,19 @@ export function RoutePlan({
         ))}
       </div>
 
+      {routeEditing && onLockRoute && (
+        <div className="mt-6 flex justify-end export-exclude">
+          <button
+            type="button"
+            disabled={lockRouteDisabled}
+            onClick={onLockRoute}
+            className="px-4 py-2.5 rounded-xl bg-red-700 text-white text-sm font-semibold shadow hover:bg-red-800 disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            Save &amp; lock route →
+          </button>
+        </div>
+      )}
+
       {showVisitTracker && extraRestaurants.length > 0 && (
         <VisitTracker
           planRestaurants={planRestaurants}

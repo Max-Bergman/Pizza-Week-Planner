@@ -8,20 +8,17 @@ import type {
   LatLng,
 } from "../types";
 import { haversineDistance } from "./geo";
-import { clusterByDay } from "./cluster";
 import { planRestaurantVisitOrder } from "./tsp";
 import { fetchDrivingRoute } from "./routing";
 import { resolveDayRoutingPrefs } from "./planningContext";
-import { greedyAssignByNearestDayStart } from "./dayAssignment";
-import { optimizeAssignmentsForGlobalDriving } from "./assignmentOptimize";
 
 /**
  * Main route planning orchestrator.
  *
- * 1. Separate must-eat vs interested+neutral (drop skipped).
- * 2. Lock constrained must-eats to their only available days.
- * 3. Assign to days: centroid clustering (simple) or nearest-day-start greedy (advanced).
- * 4. Local search on assignments to reduce total NN depot-tour miles (per-day starts).
+ * 1. Fill day capacity by priority: must_eat -> interested -> neutral.
+ * 2. Must-eat is always included when capacity allows (with warning if impossible).
+ * 3. Interested picks are assigned by nearest day start / existing assigned stops.
+ * 4. Neutral picks fill remaining space by minimal add-on route distance.
  * 5. Per day: NN + 2-opt from that day’s start; optionally OSRM for map and drive times.
  */
 export async function planRoutes(
@@ -32,46 +29,24 @@ export async function planRoutes(
 ): Promise<RoutePlan> {
   const warnings: string[] = [];
   const days = prefs.selectedDays;
+  const dayCount = days.length;
+  const maxPerDayByIdx = days.map((d) => resolveDayRoutingPrefs(prefs, d).maxStops);
+  const totalCapacity = maxPerDayByIdx.reduce((sum, n) => sum + n, 0);
 
   // Partition by rating
   const mustEats: Restaurant[] = [];
   const interested: Restaurant[] = [];
+  const neutral: Restaurant[] = [];
 
   for (const r of restaurants) {
     const rating = ratings.get(r.id) ?? "neutral";
     if (rating === "must_eat") mustEats.push(r);
-    else if (rating === "interested" || rating === "neutral") interested.push(r);
+    else if (rating === "interested") interested.push(r);
+    else if (rating === "neutral") neutral.push(r);
     // not_interested → excluded
   }
 
-  // Step 1: Build availability for must-eats
-  const preAssigned = new Map<number, Restaurant[]>();
-  const unlockedMustEats: Restaurant[] = [];
-
-  for (const r of mustEats) {
-    const availableDayIndices = days
-      .map((d, i) => (r.closedDays.includes(d.getDay()) ? -1 : i))
-      .filter((i) => i >= 0);
-
-    if (availableDayIndices.length === 0) {
-      warnings.push(`"${r.name}" is closed on all your selected days.`);
-      continue;
-    }
-
-    if (availableDayIndices.length === 1) {
-      const dayIdx = availableDayIndices[0]!;
-      const existing = preAssigned.get(dayIdx) ?? [];
-      existing.push(r);
-      preAssigned.set(dayIdx, existing);
-    } else {
-      unlockedMustEats.push(r);
-    }
-  }
-
-  // Step 2: Assign to days (centroid clustering in simple mode; nearest-home greedy in advanced)
-  const allForClustering = [...unlockedMustEats, ...interested];
-  const maxPerDayByIdx = days.map((d) => resolveDayRoutingPrefs(prefs, d).maxStops);
-
+  // Resolve day starts and containers
   const dayStarts: LatLng[] = days.map((d) => {
     const r = resolveDayRoutingPrefs(prefs, d);
     const loc = r.location ?? prefs.location;
@@ -83,39 +58,91 @@ export async function planRoutes(
     }
     return loc;
   });
+  const perDayLists: Restaurant[][] = Array.from({ length: dayCount }, () => []);
+  const dayIdSets = perDayLists.map(() => new Set<string>());
+  const dayHasCapacity = (dayIdx: number) => perDayLists[dayIdx]!.length < maxPerDayByIdx[dayIdx]!;
+  const placeOnDay = (dayIdx: number, r: Restaurant) => {
+    if (dayIdSets[dayIdx]!.has(r.id)) return false;
+    if (!dayHasCapacity(dayIdx)) return false;
+    perDayLists[dayIdx]!.push(r);
+    dayIdSets[dayIdx]!.add(r.id);
+    return true;
+  };
 
-  const lockedIds = new Set(
-    Array.from(preAssigned.values())
-      .flat()
-      .map((r) => r.id)
-  );
+  // Step 1: place must-eat first (always preferred unless impossible due closure/capacity)
+  if (mustEats.length > totalCapacity) {
+    warnings.push(
+      `You marked ${mustEats.length} must-eat spots, but your weekly stop capacity is ${totalCapacity}. Not all must-eats can fit.`
+    );
+  }
+  const mustEatByFlex = [...mustEats]
+    .map((r) => ({
+      restaurant: r,
+      openDays: days
+        .map((d, i) => (r.closedDays.includes(d.getDay()) ? -1 : i))
+        .filter((i) => i >= 0),
+    }))
+    .sort((a, b) => a.openDays.length - b.openDays.length);
 
-  let perDayLists: Restaurant[][];
-  if (prefs.planningMode === "advanced") {
-    perDayLists = greedyAssignByNearestDayStart(
-      allForClustering,
-      days,
-      preAssigned,
-      dayStarts,
-      maxPerDayByIdx
-    );
-  } else {
-    const clusters = clusterByDay(
-      allForClustering,
-      days,
-      preAssigned,
-      maxPerDayByIdx
-    );
-    perDayLists = clusters.map((c) => [...c.restaurants]);
+  for (const item of mustEatByFlex) {
+    const { restaurant: r, openDays } = item;
+    if (openDays.length === 0) {
+      warnings.push(`"${r.name}" is closed on all your selected days.`);
+      continue;
+    }
+    const candidateDays = openDays.filter((i) => dayHasCapacity(i));
+    if (candidateDays.length === 0) {
+      warnings.push(`Could not fit must-eat "${r.name}" within your day stop limits.`);
+      continue;
+    }
+    let bestDay = candidateDays[0]!;
+    let bestScore = Infinity;
+    for (const dayIdx of candidateDays) {
+      const anchor = nearestDistanceToAssignedOrStart(r, dayIdx, dayStarts, perDayLists);
+      // Slightly prefer balancing across days.
+      const score = anchor + perDayLists[dayIdx]!.length * 0.5;
+      if (score < bestScore) {
+        bestScore = score;
+        bestDay = dayIdx;
+      }
+    }
+    placeOnDay(bestDay, r);
   }
 
-  optimizeAssignmentsForGlobalDriving(
-    dayStarts,
-    days,
-    perDayLists,
-    lockedIds,
-    maxPerDayByIdx
-  );
+  // Step 2: fill with interested by proximity to day start / planned restaurants
+  for (const r of interested) {
+    const bestDay = chooseBestDayByNearestAnchor(r, days, dayStarts, perDayLists, maxPerDayByIdx);
+    if (bestDay !== null) placeOnDay(bestDay, r);
+  }
+
+  // Step 3: fill remaining with neutral by minimal add-on route distance
+  const neutralPool = [...neutral];
+  while (neutralPool.length > 0) {
+    let bestNeutralIndex = -1;
+    let bestDay = -1;
+    let bestDelta = Infinity;
+
+    for (let nIdx = 0; nIdx < neutralPool.length; nIdx++) {
+      const r = neutralPool[nIdx]!;
+      for (let d = 0; d < dayCount; d++) {
+        if (!dayHasCapacity(d)) continue;
+        const day = days[d]!;
+        if (r.closedDays.includes(day.getDay())) continue;
+        const dayRestaurants = perDayLists[d]!;
+        if (dayIdSets[d]!.has(r.id)) continue;
+        const delta = estimateRouteAddOnDistance(dayStarts[d]!, dayRestaurants, r);
+        if (delta < bestDelta) {
+          bestDelta = delta;
+          bestDay = d;
+          bestNeutralIndex = nIdx;
+        }
+      }
+    }
+
+    if (bestNeutralIndex < 0 || bestDay < 0) break;
+    const picked = neutralPool.splice(bestNeutralIndex, 1)[0]!;
+    placeOnDay(bestDay, picked);
+  }
 
   // Step 3: Order stops per day + OSRM
   const dayRoutes: DayRoute[] = [];
@@ -220,6 +247,72 @@ export async function planRoutes(
     mustEatsTotal: mustEats.length,
     warnings,
   };
+}
+
+function chooseBestDayByNearestAnchor(
+  r: Restaurant,
+  days: Date[],
+  dayStarts: LatLng[],
+  perDayLists: Restaurant[][],
+  maxPerDayByIdx: number[]
+): number | null {
+  let bestDay: number | null = null;
+  let bestDistance = Infinity;
+  for (let d = 0; d < days.length; d++) {
+    if (perDayLists[d]!.length >= maxPerDayByIdx[d]!) continue;
+    if (r.closedDays.includes(days[d]!.getDay())) continue;
+    const dist = nearestDistanceToAssignedOrStart(r, d, dayStarts, perDayLists);
+    if (dist < bestDistance) {
+      bestDistance = dist;
+      bestDay = d;
+    }
+  }
+  return bestDay;
+}
+
+function nearestDistanceToAssignedOrStart(
+  r: Restaurant,
+  dayIdx: number,
+  dayStarts: LatLng[],
+  perDayLists: Restaurant[][]
+): number {
+  const p = { lat: r.lat, lng: r.lng };
+  let best = haversineDistance(dayStarts[dayIdx]!, p);
+  for (const existing of perDayLists[dayIdx]!) {
+    const d = haversineDistance({ lat: existing.lat, lng: existing.lng }, p);
+    if (d < best) best = d;
+  }
+  return best;
+}
+
+function estimateRouteAddOnDistance(
+  dayStart: LatLng,
+  dayRestaurants: Restaurant[],
+  candidate: Restaurant
+): number {
+  const c = { lat: candidate.lat, lng: candidate.lng };
+  if (dayRestaurants.length === 0) {
+    // start -> candidate -> start
+    return haversineDistance(dayStart, c) * 2;
+  }
+  const ordered = planRestaurantVisitOrder(dayStart, dayRestaurants);
+  let bestDelta = Infinity;
+  for (let insertIdx = 0; insertIdx <= ordered.length; insertIdx++) {
+    const prev =
+      insertIdx === 0
+        ? dayStart
+        : { lat: ordered[insertIdx - 1]!.lat, lng: ordered[insertIdx - 1]!.lng };
+    const next =
+      insertIdx === ordered.length
+        ? dayStart
+        : { lat: ordered[insertIdx]!.lat, lng: ordered[insertIdx]!.lng };
+    const delta =
+      haversineDistance(prev, c) +
+      haversineDistance(c, next) -
+      haversineDistance(prev, next);
+    if (delta < bestDelta) bestDelta = delta;
+  }
+  return bestDelta;
 }
 
 /** Rough estimate: average 25 mph city driving. */

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, type DragEvent } from "react";
 import type {
   DayRoute,
   Restaurant,
@@ -35,6 +35,8 @@ export function DayItinerary({
 }: DayItineraryProps) {
   const [showMap, setShowMap] = useState(() => day.stops.length > 0);
   const [mapPickMode, setMapPickMode] = useState(false);
+  const [dragFromIndex, setDragFromIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   const trackOnDay = Boolean(visitLog && onPatchVisit && !routeEditing);
   const dayVisitedCount = useMemo(() => {
@@ -62,11 +64,14 @@ export function DayItinerary({
     pushNext(restaurants.filter((_, i) => i !== idx));
   };
 
-  const move = (idx: number, dir: -1 | 1) => {
-    const j = idx + dir;
-    if (j < 0 || j >= restaurants.length) return;
+  const moveTo = (from: number, to: number) => {
+    if (from < 0 || from >= restaurants.length) return;
+    if (to < 0 || to >= restaurants.length) return;
+    if (from === to) return;
     const copy = [...restaurants];
-    [copy[idx], copy[j]] = [copy[j]!, copy[idx]!];
+    const [item] = copy.splice(from, 1);
+    if (!item) return;
+    copy.splice(to, 0, item);
     pushNext(copy);
   };
 
@@ -104,6 +109,33 @@ export function DayItinerary({
     } else {
       pushNext(restaurants.filter((r) => r.id !== restaurantId));
     }
+  };
+
+  const handleDragStart = (idx: number, e: DragEvent<HTMLLIElement>) => {
+    if (!routeEditing) return;
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", String(idx));
+    setDragFromIndex(idx);
+    setDragOverIndex(idx);
+  };
+
+  const handleDragOver = (idx: number, e: DragEvent<HTMLLIElement>) => {
+    if (!routeEditing || dragFromIndex === null) return;
+    e.preventDefault();
+    if (dragOverIndex !== idx) setDragOverIndex(idx);
+  };
+
+  const handleDrop = (idx: number, e: DragEvent<HTMLLIElement>) => {
+    if (!routeEditing || dragFromIndex === null) return;
+    e.preventDefault();
+    moveTo(dragFromIndex, idx);
+    setDragFromIndex(null);
+    setDragOverIndex(null);
+  };
+
+  const clearDrag = () => {
+    setDragFromIndex(null);
+    setDragOverIndex(null);
   };
 
   const showMapToggleInHeader =
@@ -264,7 +296,19 @@ export function DayItinerary({
       ) : (
         <ol className="divide-y divide-orange-50">
           {day.stops.map((stop, idx) => (
-            <li key={stop.restaurant.id} className="flex gap-3 px-5 py-4">
+            <li
+              key={stop.restaurant.id}
+              className={`flex gap-3 px-5 py-4 ${
+                routeEditing && dragOverIndex === idx && dragFromIndex !== idx
+                  ? "bg-orange-50/60"
+                  : ""
+              }`}
+              draggable={routeEditing}
+              onDragStart={(e) => handleDragStart(idx, e)}
+              onDragOver={(e) => handleDragOver(idx, e)}
+              onDrop={(e) => handleDrop(idx, e)}
+              onDragEnd={clearDrag}
+            >
               <div className="flex flex-col items-center shrink-0">
                 <span className="w-7 h-7 rounded-full bg-red-700 text-white flex items-center justify-center text-xs font-bold">
                   {stop.order}
@@ -324,21 +368,10 @@ export function DayItinerary({
                   <div className="flex gap-1 export-exclude">
                     <button
                       type="button"
-                      title="Move up"
-                      disabled={idx === 0}
-                      onClick={() => move(idx, -1)}
-                      className="px-2 py-1 text-xs rounded-lg border border-gray-200 bg-white disabled:opacity-30 hover:border-orange-300"
+                      title="Drag to reorder"
+                      className="px-2 py-1 text-xs rounded-lg border border-gray-200 bg-white text-gray-600 cursor-grab active:cursor-grabbing"
                     >
-                      ↑
-                    </button>
-                    <button
-                      type="button"
-                      title="Move down"
-                      disabled={idx === day.stops.length - 1}
-                      onClick={() => move(idx, 1)}
-                      className="px-2 py-1 text-xs rounded-lg border border-gray-200 bg-white disabled:opacity-30 hover:border-orange-300"
-                    >
-                      ↓
+                      ⋮⋮
                     </button>
                     <button
                       type="button"
