@@ -336,15 +336,15 @@ export function App() {
       step,
     };
     const enc = encodeSharePayload(payload);
+    const url = `${window.location.origin}${window.location.pathname}#share=${enc}`;
     /** Very long URLs can still fail in some environments; PDF/PNG remain the fallback. */
-    const maxHashChars = 60000;
-    if (enc.length > maxHashChars) {
+    const maxUrlChars = 60000;
+    if (url.length > maxUrlChars) {
       window.alert(
         "This link would be too long for some browsers. Use Download PDF or Download PNG to share your route instead."
       );
       return;
     }
-    const url = `${window.location.origin}${window.location.pathname}#share=${enc}`;
 
     const copyWithFallback = async () => {
       try {

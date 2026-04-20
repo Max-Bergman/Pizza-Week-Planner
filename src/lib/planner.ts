@@ -109,10 +109,40 @@ export async function planRoutes(
     placeOnDay(bestDay, r);
   }
 
-  // Step 2: fill with interested by proximity to day start / planned restaurants
-  for (const r of interested) {
-    const bestDay = chooseBestDayByNearestAnchor(r, days, dayStarts, perDayLists, maxPerDayByIdx);
-    if (bestDay !== null) placeOnDay(bestDay, r);
+  // Step 2: fill with interested by strongest global proximity first.
+  // This avoids input-order bias when interested count exceeds available slots.
+  const interestedPool = [...interested];
+  while (interestedPool.length > 0) {
+    let bestInterestedIndex = -1;
+    let bestDay = -1;
+    let bestDistance = Infinity;
+    let bestLoad = Infinity;
+
+    for (let i = 0; i < interestedPool.length; i++) {
+      const r = interestedPool[i]!;
+      for (let d = 0; d < dayCount; d++) {
+        if (!dayHasCapacity(d)) continue;
+        const day = days[d]!;
+        if (r.closedDays.includes(day.getDay())) continue;
+        if (dayIdSets[d]!.has(r.id)) continue;
+
+        const dist = nearestDistanceToAssignedOrStart(r, d, dayStarts, perDayLists);
+        const load = perDayLists[d]!.length;
+        if (
+          dist < bestDistance ||
+          (dist === bestDistance && load < bestLoad)
+        ) {
+          bestDistance = dist;
+          bestLoad = load;
+          bestDay = d;
+          bestInterestedIndex = i;
+        }
+      }
+    }
+
+    if (bestInterestedIndex < 0 || bestDay < 0) break;
+    const picked = interestedPool.splice(bestInterestedIndex, 1)[0]!;
+    placeOnDay(bestDay, picked);
   }
 
   // Step 3: fill remaining with neutral by minimal add-on route distance
@@ -247,27 +277,6 @@ export async function planRoutes(
     mustEatsTotal: mustEats.length,
     warnings,
   };
-}
-
-function chooseBestDayByNearestAnchor(
-  r: Restaurant,
-  days: Date[],
-  dayStarts: LatLng[],
-  perDayLists: Restaurant[][],
-  maxPerDayByIdx: number[]
-): number | null {
-  let bestDay: number | null = null;
-  let bestDistance = Infinity;
-  for (let d = 0; d < days.length; d++) {
-    if (perDayLists[d]!.length >= maxPerDayByIdx[d]!) continue;
-    if (r.closedDays.includes(days[d]!.getDay())) continue;
-    const dist = nearestDistanceToAssignedOrStart(r, d, dayStarts, perDayLists);
-    if (dist < bestDistance) {
-      bestDistance = dist;
-      bestDay = d;
-    }
-  }
-  return bestDay;
 }
 
 function nearestDistanceToAssignedOrStart(
